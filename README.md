@@ -1,4 +1,7 @@
 # arch-setup
 
-# bootstrap
+#### bootstrap
+
+```bash
 curl -L https://git.io/Jvdtl | bash
+```
