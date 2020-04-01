@@ -2,6 +2,6 @@
 
 git clone https://aur.archlinux.org/yay.git
 cd yay
-makepkg -si --noconfirm
+makepkg -ris --noconfirm
 cd ..
 rm -rf yay
