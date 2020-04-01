@@ -19,7 +19,7 @@ echo ';' | sfdisk /dev/sda
 yes | mkfs.ext4 -L system /dev/sda1
 mount /dev/sda1 /mnt
 
-sed -i "/yandex/p" -i /etc/pacman.d/mirrorlist
+sed -n "/yandex/p" -i /etc/pacman.d/mirrorlist
 yes '' | pacstrap /mnt base base-devel linux linux-firmware intel-ucode
 genfstab -U /mnt >> /mnt/etc/fstab
 
