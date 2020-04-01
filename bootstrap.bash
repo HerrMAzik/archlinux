@@ -13,20 +13,7 @@ hostname="$DIALOG_RESULT"
 bootstrapper_dialog --title "Root password" --passwordbox "Please enter a strong password for the root user.\n" 8 60
 root_password="$DIALOG_RESULT"
 
-ip -o link show | awk -F': ' '{print $2}'
-
-bootstrapper_dialog --title "Wireless device" --inputbox "Please enter a wireless device name.\n" 8 60
-device_name="$DIALOG_RESULT"
-
-bootstrapper_dialog --title "Wireless network" --inputbox "Please enter a wireless network name.\n" 8 60
-network_name="$DIALOG_RESULT"
-
-bootstrapper_dialog --title "$network_name password" --passwordbox "Please enter a $network_name password.\n" 8 60
-network_password="$DIALOG_RESULT"
-
 reset
-wpa_supplicant -B -i $device_name -c <(wpa_passphrase $network_name $network_password)
-dhcpcd interface
 
 echo ';' | sfdisk /dev/sda
 yes | mkfs.ext4 -L system /dev/sda1
