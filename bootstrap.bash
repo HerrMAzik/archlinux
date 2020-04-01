@@ -25,19 +25,29 @@ genfstab -U /mnt >> /mnt/etc/fstab
 
 arch-chroot /mnt /bin/bash <<EOF
 echo "$hostname" > /etc/hostname
-echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen
-echo 'en_GB.UTF-8 UTF-8' >> /etc/locale.gen
-echo 'ru_RU.UTF-8 UTF-8' >> /etc/locale.gen
+cat << EOF2 > /etc/locale.gen
+en_US.UTF-8 UTF-8
+en_GB.UTF-8 UTF-8
+ru_RU.UTF-8 UTF-8
+EOF2
 locale-gen
 export LANG=en_US.UTF-8
 echo 'LANG=en_US.UTF-8' > /etc/locale.conf
 echo 'KEYMAP=us' > /etc/vconsole.conf
 ln -s /usr/share/zoneinfo/Europe/Samara /etc/localtime
-echo '127.0.0.1   localhost' > /etc/hosts
-echo '::1         localhost ip6-localhost ip6-loopback' >> /etc/hosts
-echo "127.0.1.1   $hostname" >> /etc/hosts
-pacman --noconfirm -S wpa_supplicant dhcpcd
+cat << EOF2 > /etc/hosts
+127.0.0.1   localhost
+::1         localhost ip6-localhost ip6-loopback
+127.0.1.1   $hostname
+EOF2
+pacman --noconfirm -S networkmanager dnscrypt-proxy
+mkdir -p /etc/NetworkManager/conf.d
+cat <<EOF2 > /etc/NetworkManager/conf.d/dns-servers.conf
+[global-dns-domain-*]
+servers=127.0.0.1
+EOF2
 mkinitcpio -P
+echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel
 echo "root:${root_password}" | chpasswd
 EOF
 
