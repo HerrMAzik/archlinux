@@ -46,5 +46,3 @@ grub-mkconfig -o /boot/grub/grub.cfg
 EOF
 
 umount /mnt
-reboot
-
