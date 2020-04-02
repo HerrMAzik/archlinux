@@ -37,6 +37,8 @@ pacman --needed --noconfirm -S systemd-swap redshift
 pacman --needed --noconfirm -S git gcc gdb cmake
 EOF
 
+systemctl --user enable --now redshift.service
+
 sudo sed -i 's/^[\s\t]*COMPRESSION\s*=\s*"/#COMPRESSION="/g' /etc/mkinitcpio.conf
 sudo sed -i 's/^#COMPRESSION="lz4/COMPRESSION="lz4/g' /etc/mkinitcpio.conf
 sudo mkinitcpio -P
@@ -57,8 +59,8 @@ systemctl enable systemd-swap.service
 EOF
 
 echo 'SSH_AUTH_SOCK DEFAULT="${XDG_RUNTIME_DIR}/ssh-agent.socket"' > $HOME/.pam_environment
-mkdir -p $HOME/.config/systemd/user
-cat <<EOF > $HOME/.config/systemd/user/ssh-agent.service
+mkdir -p $XDG_CONFIG_HOME/systemd/user
+cat <<EOF > $XDG_CONFIG_HOME/systemd/user/ssh-agent.service
 [Unit]
 Description=SSH key agent
 
