@@ -27,7 +27,7 @@ echo 'vm.swappiness = 10' > /etc/sysctl.d/90-swappiness.conf
 EOF
 
 sudo sh <<EOF
-pacman --needed --noconfirm -S alsa-utils pulseaudio-alsa pulsemixer
+pacman --needed --noconfirm -S alsa-utils pulseaudio-alsa
 pacman --needed --noconfirm -S xorg-server xorg-xprop bspwm sxhkd xdg-user-dirs feh
 pacman --needed --noconfirm -S mpv
 pacman --needed --noconfirm -S ttf-jetbrains-mono
@@ -37,9 +37,9 @@ pacman --needed --noconfirm -S systemd-swap redshift
 pacman --needed --noconfirm -S git gcc gdb cmake
 EOF
 
-sed -i 's/^[\s\t]*COMPRESSION\s*=\s*"/#COMPRESSION="/g' /etc/mkinitcpio.conf
-sed -i 's/^#COMPRESSION="lz4/COMPRESSION="lz4/g' /etc/mkinitcpio.conf
-mkinitcpio -P
+sudo sed -i 's/^[\s\t]*COMPRESSION\s*=\s*"/#COMPRESSION="/g' /etc/mkinitcpio.conf
+sudo sed -i 's/^#COMPRESSION="lz4/COMPRESSION="lz4/g' /etc/mkinitcpio.conf
+sudo mkinitcpio -P
 
 # yay
 cd conf
@@ -49,9 +49,10 @@ cd ..
 yay --needed --noconfirm -S polybar
 
 sudo sh <<EOF
-cp -f /etc/systemd/swap.conf /etc/systemd/swap.conf.bak
-sed -i 's/^\(swapfc_force_preallocated=\)[[:digit:]]\(.*\)$/\11\2/' /etc/systemd/swap.conf
-sed -i 's/\(swapfc_enabled=\)[[:digit:]]\(.*\)$/\11\2/' /etc/systemd/swap.conf
+cat <<EOF2 > /etc/systemd/swap.conf.d/swap.conf
+swapfc_force_preallocated=1
+swapfc_enabled=1
+EOF2
 systemctl enable systemd-swap.service
 EOF
 
@@ -74,4 +75,11 @@ systemctl --user enable --now ssh-agent.service
 feh --bg-scale $HOME/conf/lancer.jpg
 
 yay --needed --noconfirm -S sddm-theme-clairvoyance
-sudo sd -f mc '(^\[Theme\][^\[]*Current=)(\w*)([^\[]*\[?)' '${1}clairvoyance$3' /etc/sddm.conf
+# sudo sd -f mc '(^\[Theme\][^\[]*Current=)(\w*)([^\[]*\[?)' '${1}clairvoyance$3' /etc/sddm.conf
+sudo sh <<EOF
+mkdir -p /etc/sddm.conf.d
+cat <<EOF2 > /etc/sddm.conf.d/sddm.conf
+[Theme]
+Current=clairvoyance
+EOF2
+EOF
