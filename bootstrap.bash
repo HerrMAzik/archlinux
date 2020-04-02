@@ -13,6 +13,12 @@ hostname="$DIALOG_RESULT"
 bootstrapper_dialog --title "Root password" --passwordbox "Please enter a strong password for the root user.\n" 8 60
 root_password="$DIALOG_RESULT"
 
+bootstrapper_dialog --title "User name" --inputbox "Please enter a user name.\n" 8 60
+user_name="$DIALOG_RESULT"
+
+bootstrapper_dialog --title "$user_name password" --passwordbox "Please enter a strong password for ${user_name}.\n" 8 60
+user_password="$DIALOG_RESULT"
+
 reset
 
 echo ';' | sfdisk /dev/sda
@@ -40,7 +46,7 @@ cat << EOF2 > /etc/hosts
 ::1         localhost ip6-localhost ip6-loopback
 127.0.1.1   $hostname
 EOF2
-pacman --noconfirm -S networkmanager dnscrypt-proxy
+pacman --noconfirm -S networkmanager dnscrypt-proxy zsh
 mkdir -p /etc/NetworkManager/conf.d
 cat <<EOF2 > /etc/NetworkManager/conf.d/dns-servers.conf
 [global-dns-domain-*]
@@ -49,6 +55,10 @@ EOF2
 mkinitcpio -P
 echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel
 echo "root:${root_password}" | chpasswd
+useradd -m -g users -G audio,video,power,storage,wheel -s /bin/zsh $user_name
+echo "${user_name}:${user_password}" | chpasswd
+curl -L https://git.io/JvdKo > /home/$user_name/config.bash
+chmod 0700 /home/$user_name/config.bash
 EOF
 
 arch-chroot /mnt /bin/bash <<EOF
