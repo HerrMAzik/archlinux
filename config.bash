@@ -83,3 +83,14 @@ cat <<EOF2 > /etc/sddm.conf.d/sddm.conf
 Current=clairvoyance
 EOF2
 EOF
+
+mkdir -p $XDG_CONFIG_HOME/pacman
+cat <<EOF > $XDG_CONFIG_HOME/pacman/makepkg.conf
+CFLAGS="-march=native -O2 -pipe -fstack-protector-strong -fno-plt"
+CXXFLAGS="\${CFLAGS}"
+MAKEFLAGS="-j\$(nproc)"
+COMPRESSGZ=(pigz -c -f -n)
+COMPRESSBZ2=(pbzip2 -c -f)
+COMPRESSXZ=(xz -c -z - --threads=0)
+COMPRESSZST=(zstd -c -z -q - --threads=0)
+EOF
