@@ -6,8 +6,10 @@ sudo systemctl enable --now dnscrypt-proxy.service
 
 nmtui
 
-# figure out how to enable multilib in /etc/pacman.conf using cli
 sudo pacman --noconfirm -Syyuu
+
+# figure out how to enable multilib in /etc/pacman.conf using cli
+sudo pacman --noconfirm -Syu python
 
 sudo sh <<EOF
 cat <<EOF2 > /etc/modprobe.d/blacklist.conf
