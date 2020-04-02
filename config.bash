@@ -27,14 +27,16 @@ EOF2
 echo 'vm.swappiness = 10' > /etc/sysctl.d/90-swappiness.conf
 EOF
 
-sudo pacman --needed --noconfirm -S alsa-utils pulseaudio-alsa pulsemixer
-sudo pacman --needed --noconfirm -S xorg-server xorg-xprop bspwm sxhkd xdg-user-dirs
-sudo pacman --needed --noconfirm -S mpv
-sudo pacman --needed --noconfirm -S ttf-jetbrains-mono
-sudo pacman --needed --noconfirm -S ranger pass oath-toolkit mc curl wget
-sudo pacman --needed --noconfirm -S exa ripgrep fd bat alacritty
-sudo pacman --needed --noconfirm -S systemd-swap redshift
-sudo pacman --needed --noconfirm -S git gcc gdb cmake
+sudo sh <<EOF
+pacman --needed --noconfirm -S alsa-utils pulseaudio-alsa pulsemixer
+pacman --needed --noconfirm -S xorg-server xorg-xprop bspwm sxhkd xdg-user-dirs
+pacman --needed --noconfirm -S mpv
+pacman --needed --noconfirm -S ttf-jetbrains-mono
+pacman --needed --noconfirm -S ranger pass oath-toolkit mc curl wget
+pacman --needed --noconfirm -S exa ripgrep fd bat alacritty
+pacman --needed --noconfirm -S systemd-swap redshift
+pacman --needed --noconfirm -S git gcc gdb cmake
+EOF
 
 # yay
 curl -L https://git.io/Jvd0P | bash
