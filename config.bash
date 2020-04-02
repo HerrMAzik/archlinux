@@ -6,10 +6,9 @@ sudo systemctl enable --now dnscrypt-proxy.service
 
 nmtui
 
-sudo pacman --noconfirm -Syyuu
+sudo pacman --needed --noconfirm -Syyuu unzip zip p7zip pigz pbzip2 xz python
 
 # figure out how to enable multilib in /etc/pacman.conf using cli
-sudo pacman --noconfirm -Syu python
 
 sudo sh <<EOF
 cat <<EOF2 > /etc/modprobe.d/blacklist.conf
@@ -28,7 +27,6 @@ sudo pacman --needed --noconfirm -S ttf-jetbrains-mono
 sudo pacman --needed --noconfirm -S ranger pass oath-toolkit mc curl wget
 sudo pacman --needed --noconfirm -S exa ripgrep fd bat alacritty
 sudo pacman --needed --noconfirm -S systemd-swap redshift
-sudo pacman --needed --noconfirm -S unzip zip p7zip pigz pbzip2 xz
 sudo pacman --needed --noconfirm -S git gcc gdb cmake
 
 # yay
