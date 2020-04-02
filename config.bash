@@ -15,7 +15,6 @@ git clone https://github.com/HerrMAzik/arch-setup.git conf
 cd conf
 sudo python config.py
 cd ..
-rm -rf conf
 
 sudo sh <<EOF
 cat <<EOF2 > /etc/modprobe.d/blacklist.conf
@@ -29,19 +28,25 @@ EOF
 
 sudo sh <<EOF
 pacman --needed --noconfirm -S alsa-utils pulseaudio-alsa pulsemixer
-pacman --needed --noconfirm -S xorg-server xorg-xprop bspwm sxhkd xdg-user-dirs
+pacman --needed --noconfirm -S xorg-server xorg-xprop bspwm sxhkd xdg-user-dirs feh
 pacman --needed --noconfirm -S mpv
 pacman --needed --noconfirm -S ttf-jetbrains-mono
 pacman --needed --noconfirm -S ranger pass oath-toolkit mc curl wget
-pacman --needed --noconfirm -S exa ripgrep fd bat alacritty
+pacman --needed --noconfirm -S exa ripgrep fd sd bat alacritty
 pacman --needed --noconfirm -S systemd-swap redshift
 pacman --needed --noconfirm -S git gcc gdb cmake
 EOF
 
-# yay
-curl -L https://git.io/Jvd0P | bash
+sed -i 's/^[\s\t]*COMPRESSION\s*=\s*"/#COMPRESSION="/g' /etc/mkinitcpio.conf
+sed -i 's/^#COMPRESSION="lz4/COMPRESSION="lz4/g' /etc/mkinitcpio.conf
+mkinitcpio -P
 
-yay -S polybar --needed --noconfirm
+# yay
+cd conf
+bash yay.bash
+cd ..
+
+yay --needed --noconfirm -S polybar
 
 sudo sh <<EOF
 cp -f /etc/systemd/swap.conf /etc/systemd/swap.conf.bak
@@ -65,3 +70,8 @@ ExecStart=/usr/bin/ssh-agent -D -a \$SSH_AUTH_SOCK
 WantedBy=default.target
 EOF
 systemctl --user enable --now ssh-agent.service
+
+feh --bg-scale $HOME/conf/lancer.jpg
+
+yay --needed --noconfirm -S sddm-theme-clairvoyance
+sudo sd -f mc '(^\[Theme\][^\[]*Current=)(\w*)([^\[]*\[?)' '${1}clairvoyance$3' /etc/sddm.conf
