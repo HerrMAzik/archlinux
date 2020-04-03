@@ -1,5 +1,8 @@
 #!/bin/sh
 
+rm .bashrc
+rm .bash_{logout,profile}
+
 sudo sh <<EOF
 systemctl enable --now NetworkManager.service
 systemctl disable --now NetworkManager-wait-online.service
@@ -9,14 +12,7 @@ EOF
 
 nmtui
 
-sudo pacman --needed --noconfirm -Syyuu unzip zip p7zip pigz pbzip2 xz python git
-
-git clone https://github.com/HerrMAzik/arch-setup.git conf
-cd conf
-sudo python config.py
-cd ..
-
-sudo pacman --needed --noconfirm -Syu
+sudo pacman --needed --noconfirm -Syyuu unzip zip p7zip pigz pbzip2 xz
 
 sudo sh <<EOF
 cat <<EOF2 > /etc/modprobe.d/blacklist.conf
@@ -36,7 +32,7 @@ pacman --needed --noconfirm -S ttf-jetbrains-mono
 pacman --needed --noconfirm -S ranger pass oath-toolkit mc curl wget
 pacman --needed --noconfirm -S exa ripgrep fd sd bat alacritty
 pacman --needed --noconfirm -S systemd-swap redshift
-pacman --needed --noconfirm -S git gcc gdb cmake
+pacman --needed --noconfirm -S git gcc gdb cmake git
 EOF
 
 systemctl --user enable --now redshift.service
@@ -45,10 +41,22 @@ sudo sed -i 's/^[\s\t]*COMPRESSION\s*=\s*"/#COMPRESSION="/g' /etc/mkinitcpio.con
 sudo sed -i 's/^#COMPRESSION="lz4/COMPRESSION="lz4/g' /etc/mkinitcpio.conf
 sudo mkinitcpio -P
 
+mkdir -p $XDG_CONFIG_HOME/pacman
+cat <<EOF > $XDG_CONFIG_HOME/pacman/makepkg.conf
+CFLAGS="-march=native -O2 -pipe -fstack-protector-strong -fno-plt"
+CXXFLAGS="\${CFLAGS}"
+MAKEFLAGS="-j\$(nproc)"
+COMPRESSGZ=(pigz -c -f -n)
+COMPRESSBZ2=(pbzip2 -c -f)
+COMPRESSXZ=(xz -c -z - --threads=0)
+COMPRESSZST=(zstd -c -z -q - --threads=0)
+EOF
+
 # yay
-cd conf
+mkdir repo
+git clone https://github.com/HerrMAzik/arch-setup.git $HOME/repo/arch-setup
+cd $HOME/repo/arch-setup
 sh yay.sh
-cd ..
 
 yay --needed --noconfirm -S polybar
 
@@ -76,7 +84,7 @@ WantedBy=default.target
 EOF
 systemctl --user enable --now ssh-agent.service
 
-feh --bg-scale $HOME/conf/lancer.jpg
+feh --bg-scale $HOME/repo/arch-setup/lancer.jpg
 
 yay --needed --noconfirm -S sddm-theme-clairvoyance
 # sudo sd -f mc '(^\[Theme\][^\[]*Current=)(\w*)([^\[]*\[?)' '${1}clairvoyance$3' /etc/sddm.conf
@@ -86,15 +94,4 @@ cat <<EOF2 > /etc/sddm.conf.d/sddm.conf
 [Theme]
 Current=clairvoyance
 EOF2
-EOF
-
-mkdir -p $XDG_CONFIG_HOME/pacman
-cat <<EOF > $XDG_CONFIG_HOME/pacman/makepkg.conf
-CFLAGS="-march=native -O2 -pipe -fstack-protector-strong -fno-plt"
-CXXFLAGS="\${CFLAGS}"
-MAKEFLAGS="-j\$(nproc)"
-COMPRESSGZ=(pigz -c -f -n)
-COMPRESSBZ2=(pbzip2 -c -f)
-COMPRESSXZ=(xz -c -z - --threads=0)
-COMPRESSZST=(zstd -c -z -q - --threads=0)
 EOF
