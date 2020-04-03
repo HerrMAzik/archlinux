@@ -54,7 +54,7 @@ COMPRESSZST=(zstd -c -z -q - --threads=0)
 EOF
 
 # yay
-mkdir repo
+mkdir -p $HOME/repo
 git clone https://github.com/HerrMAzik/arch-setup.git $HOME/repo/arch-setup
 cd $HOME/repo/arch-setup
 sh yay.sh
@@ -78,7 +78,7 @@ Description=SSH key agent
 [Service]
 Type=simple
 Environment=SSH_AUTH_SOCK=%t/ssh-agent.socket
-ExecStart=/usr/bin/ssh-agent -D -a \$SSH_AUTH_SOCK
+ExecStart=$(which ssh-agent) -D -a \$SSH_AUTH_SOCK
 
 [Install]
 WantedBy=default.target
