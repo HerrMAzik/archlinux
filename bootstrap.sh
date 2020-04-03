@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 bootstrapper_dialog() {
     DIALOG_RESULT=$(dialog --clear --stdout --backtitle "Arch bootstrapper" --no-shadow "$@" 2>/dev/null)
@@ -57,8 +57,9 @@ echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel
 echo "root:${root_password}" | chpasswd
 useradd -m -g users -G audio,video,power,storage,wheel -s /bin/zsh $user_name
 echo "${user_name}:${user_password}" | chpasswd
-curl -L https://git.io/JvdKo > /home/$user_name/config.bash
-chmod 0700 /home/$user_name/config.bash
+curl -L https://git.io/JvbT6 > /home/$user_name/config.sh
+chown ${user_name}:users /home/$user_name/config.sh
+chmod 0700 /home/$user_name/config.sh
 EOF
 
 arch-chroot /mnt /bin/bash <<EOF
