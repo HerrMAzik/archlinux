@@ -1,7 +1,7 @@
 #!/bin/sh
 
-rm .bashrc
-rm .bash_{logout,profile}
+rm $HOME/.bashrc
+rm $HOME/.bash_{logout,profile}
 
 sudo sh <<EOF
 systemctl enable --now NetworkManager.service
