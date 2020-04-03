@@ -3,8 +3,7 @@
 rm $HOME/.bashrc
 rm $HOME/.bash_{logout,profile}
 
-sudo sh <<EOF
-cat <<EOF2 > /etc/pacman.conf
+cat <<EOF | sudo tee /etc/pacman.conf
 [options]
 HoldPkg      = pacman glibc
 Architecture = auto
@@ -22,7 +21,6 @@ Include = /etc/pacman.d/mirrorlist
 
 [multilib]
 Include = /etc/pacman.d/mirrorlist
-EOF2
 EOF
 
 sudo sh <<EOF
@@ -36,25 +34,69 @@ nmtui
 
 sudo pacman --needed --noconfirm -Syyuu unzip zip p7zip pigz pbzip2 xz
 
-sudo sh <<EOF
-cat <<EOF2 > /etc/modprobe.d/blacklist.conf
+cat <<EOF | sudo tee /etc/modprobe.d/blacklist.conf
 blacklist bluetooth
 blacklist btusb
 blacklist uvcvideo
 blacklist nouveau
-EOF2
-echo 'vm.swappiness = 10' > /etc/sysctl.d/90-swappiness.conf
 EOF
 
-sudo sh <<EOF
-pacman --needed --noconfirm -S alsa-utils pulseaudio-alsa
-pacman --needed --noconfirm -S xorg-server xorg-xprop bspwm sxhkd xdg-user-dirs feh sddm
-pacman --needed --noconfirm -S mpv
-pacman --needed --noconfirm -S ttf-jetbrains-mono noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra
-pacman --needed --noconfirm -S ranger pass oath-toolkit mc curl wget
-pacman --needed --noconfirm -S exa ripgrep fd sd bat alacritty
-pacman --needed --noconfirm -S systemd-swap redshift
-pacman --needed --noconfirm -S git gcc gdb cmake git
+cat <<EOF | sudo tee /etc/sysctl.d/90-swappiness.conf
+vm.swappiness = 10
+EOF
+
+cat <<EOF | sudo pacman --needed --noconfirm -S -
+alsa-utils
+pulseaudio-alsa
+
+xorg-server
+xorg-xprop
+bspwm sxhkd
+xdg-user-dirs
+feh
+sddm
+
+mpv
+
+ttf-jetbrains-mono
+adobe-source-code-pro-fonts
+adobe-source-han-sans-otc-fonts
+adobe-source-han-serif-otc-fonts
+adobe-source-han-sans-cn-fonts
+adobe-source-han-sans-tw-fonts
+adobe-source-han-serif-tw-fonts
+adobe-source-han-sans-hk-fonts
+adobe-source-han-serif-cn-fonts
+adobe-source-sans-pro-fonts
+adobe-source-han-sans-jp-fonts
+adobe-source-han-serif-jp-fonts
+adobe-source-serif-pro-fonts
+adobe-source-han-sans-kr-fonts
+adobe-source-han-serif-kr-fonts
+
+ranger
+pass
+oath-toolkit
+mc
+curl
+wget
+htop
+
+exa
+ripgrep
+fd
+sd
+bat
+alacritty
+
+systemd-swap
+redshift
+
+git
+gcc
+gdb
+cmake
+git
 EOF
 
 systemctl --user enable --now redshift.service
@@ -83,13 +125,12 @@ sh yay.sh
 
 yay --needed --noconfirm -S polybar
 
-sudo sh <<EOF
-cat <<EOF2 > /etc/systemd/swap.conf.d/swap.conf
+sudo mkdir -p /etc/systemd/swap.conf.d
+cat <<EOF | sudo tee /etc/systemd/swap.conf.d/swap.conf
 swapfc_force_preallocated=1
 swapfc_enabled=1
-EOF2
-systemctl enable systemd-swap.service
 EOF
+sudo systemctl enable systemd-swap.service
 
 echo 'SSH_AUTH_SOCK DEFAULT="${XDG_RUNTIME_DIR}/ssh-agent.socket"' > $HOME/.pam_environment
 mkdir -p $XDG_CONFIG_HOME/systemd/user
@@ -111,12 +152,10 @@ feh --bg-scale $HOME/repo/arch-setup/lancer.jpg
 
 yay --needed --noconfirm -S sddm-theme-clairvoyance
 # sudo sd -f mc '(^\[Theme\][^\[]*Current=)(\w*)([^\[]*\[?)' '${1}clairvoyance$3' /etc/sddm.conf
-sudo sh <<EOF
-mkdir -p /etc/sddm.conf.d
-cat <<EOF2 > /etc/sddm.conf.d/sddm.conf
+sudo mkdir -p /etc/sddm.conf.d
+cat <<EOF | sudo tee /etc/sddm.conf.d/sddm.conf
 [Theme]
 Current=clairvoyance
-EOF2
 EOF
 
 sudo sed -i 's/relatime/noatime/' /etc/fstab
