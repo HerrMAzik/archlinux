@@ -96,3 +96,6 @@ cat <<EOF2 > /etc/sddm.conf.d/sddm.conf
 Current=clairvoyance
 EOF2
 EOF
+
+sudo sed -i 's/relatime/noatime/' /etc/fstab
+
