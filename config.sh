@@ -50,7 +50,7 @@ sudo sh <<EOF
 pacman --needed --noconfirm -S alsa-utils pulseaudio-alsa
 pacman --needed --noconfirm -S xorg-server xorg-xprop bspwm sxhkd xdg-user-dirs feh sddm
 pacman --needed --noconfirm -S mpv
-pacman --needed --noconfirm -S ttf-jetbrains-mono
+pacman --needed --noconfirm -S ttf-jetbrains-mono noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra
 pacman --needed --noconfirm -S ranger pass oath-toolkit mc curl wget
 pacman --needed --noconfirm -S exa ripgrep fd sd bat alacritty
 pacman --needed --noconfirm -S systemd-swap redshift
