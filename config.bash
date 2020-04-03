@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 sudo sh <<EOF
 systemctl enable --now NetworkManager.service
@@ -15,6 +15,8 @@ git clone https://github.com/HerrMAzik/arch-setup.git conf
 cd conf
 sudo python config.py
 cd ..
+
+sudo pacman --needed --noconfirm -Syu
 
 sudo sh <<EOF
 cat <<EOF2 > /etc/modprobe.d/blacklist.conf
