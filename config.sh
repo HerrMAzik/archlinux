@@ -4,6 +4,28 @@ rm $HOME/.bashrc
 rm $HOME/.bash_{logout,profile}
 
 sudo sh <<EOF
+cat <<EOF2 > /etc/pacman.conf
+[options]
+HoldPkg      = pacman glibc
+Architecture = auto
+Color
+ILoveCandy
+
+[core]
+Include = /etc/pacman.d/mirrorlist
+
+[extra]
+Include = /etc/pacman.d/mirrorlist
+
+[community]
+Include = /etc/pacman.d/mirrorlist
+
+[multilib]
+Include = /etc/pacman.d/mirrorlist
+EOF2
+EOF
+
+sudo sh <<EOF
 systemctl enable --now NetworkManager.service
 systemctl disable --now NetworkManager-wait-online.service
 systemctl enable --now dnscrypt-proxy.service
