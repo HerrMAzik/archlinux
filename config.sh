@@ -26,7 +26,7 @@ EOF
 
 sudo sh <<EOF
 pacman --needed --noconfirm -S alsa-utils pulseaudio-alsa
-pacman --needed --noconfirm -S xorg-server xorg-xprop bspwm sxhkd xdg-user-dirs feh
+pacman --needed --noconfirm -S xorg-server xorg-xprop bspwm sxhkd xdg-user-dirs feh sddm
 pacman --needed --noconfirm -S mpv
 pacman --needed --noconfirm -S ttf-jetbrains-mono
 pacman --needed --noconfirm -S ranger pass oath-toolkit mc curl wget
@@ -36,6 +36,7 @@ pacman --needed --noconfirm -S git gcc gdb cmake git
 EOF
 
 systemctl --user enable --now redshift.service
+sudo systemctl enable sddm.service
 
 sudo sed -i 's/^[\s\t]*COMPRESSION\s*=\s*"/#COMPRESSION="/g' /etc/mkinitcpio.conf
 sudo sed -i 's/^#COMPRESSION="lz4/COMPRESSION="lz4/g' /etc/mkinitcpio.conf
