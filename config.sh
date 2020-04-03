@@ -47,7 +47,7 @@ sudo mkinitcpio -P
 
 # yay
 cd conf
-bash yay.bash
+sh yay.sh
 cd ..
 
 yay --needed --noconfirm -S polybar
