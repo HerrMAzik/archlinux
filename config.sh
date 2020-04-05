@@ -59,6 +59,7 @@ feh
 sddm
 
 mpv
+firefox
 
 ranger
 pass
@@ -156,6 +157,7 @@ feh --bg-scale $HOME/repo/arch-setup/lancer.jpg
 
 yay --needed --noconfirm -S sddm-theme-clairvoyance
 # sudo sd -f mc '(^\[Theme\][^\[]*Current=)(\w*)([^\[]*\[?)' '${1}clairvoyance$3' /etc/sddm.conf
+# sudo rm -rf /etc/sddm.conf
 sudo mkdir -p /etc/sddm.conf.d
 cat <<EOF | sudo tee /etc/sddm.conf.d/sddm.conf
 [Theme]
