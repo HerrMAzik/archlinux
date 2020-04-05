@@ -55,6 +55,7 @@ xdg-user-dirs
 bspwm
 sxhkd
 rofi
+dunst
 feh
 sddm
 
