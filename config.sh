@@ -13,8 +13,7 @@ rm $HOME/.bashrc
 rm $HOME/.bash_{logout,profile}
 
 cat <<EOF > $HOME/.zprofile
-XDG_CONFIG_HOME="\$HOME/.config"
-export XDG_CONFIG_HOME
+export XDG_CONFIG_HOME="\$HOME/.config"
 EOF
 
 XDG_CONFIG_HOME="$HOME/.config"
@@ -59,6 +58,7 @@ alsa-utils
 pulseaudio-alsa
 
 xorg-server
+xorg-xsetroot
 xdg-user-dirs
 bspwm
 sxhkd
@@ -178,6 +178,7 @@ cat <<EOF > $XDG_CONFIG_HOME/bspwm/bspwmrc
 #!/bin/sh
 sxhkd &
 $HOME/.fehbg &
+xorg-xsetroot -cursor_name left_ptr &
 bspc monitor -d I II III IV V VI VII VIII IX X
 EOF
 chmod 0755 $XDG_CONFIG_HOME/bspwm/bspwmrc
