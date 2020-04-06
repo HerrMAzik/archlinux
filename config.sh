@@ -75,6 +75,7 @@ mc
 curl
 wget
 htop
+neovim
 
 exa
 ripgrep
@@ -160,9 +161,18 @@ WantedBy=default.target
 EOF
 systemctl --user enable --now ssh-agent.service
 
-feh --bg-scale $HOME/repo/arch-setup/lancer.jpg
-
 sudo mkdir -p /etc/sddm.conf.d
+sudo systemctl enable sddm.service
+
+mkdir -p $XDG_CONFIG_HOME/bspwm
+mkdir -p $XDG_CONFIG_HOME/sxhkd
+cat <<EOF > $XDG_CONFIG_HOME/bspwm/bspwmrc
+#!/bin/sh
+sxhkd &
+feh --bg-scale $HOME/repo/arch-setup/lancer.jpg &
+bspc monitor -d I II III IV V VI VII VIII IX X
+EOF
+chmod 0755 $XDG_CONFIG_HOME/bspwm/bspwmrc
 
 sudo sed -i 's/relatime/noatime/' /etc/fstab
 
