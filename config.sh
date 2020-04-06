@@ -136,12 +136,13 @@ mkdir -p $HOME/repo
 git clone https://github.com/HerrMAzik/arch-setup.git $HOME/repo/arch-setup
 
 # yay
-if ! [ hash polybar 2>/dev/null ]; then
+if ! hash polybar 2>/dev/null; then
     cd $HOME/repo/arch-setup
     sh yay.sh
+    cd $HOME
 fi
 
-if ! [ hash polybar 2>/dev/null ]; then
+if ! hash polybar 2>/dev/null; then
     yay --needed --noconfirm -S polybar
 fi
 
@@ -248,4 +249,6 @@ colors:
     cyan:    '#8ec07c'
     white:   '#ebdbb2'
 EOF
+
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
