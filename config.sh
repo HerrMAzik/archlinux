@@ -50,7 +50,6 @@ alsa-utils
 pulseaudio-alsa
 
 xorg-server
-xorg-xprop
 xdg-user-dirs
 bspwm
 sxhkd
