@@ -9,10 +9,11 @@ systemctl enable --now dnscrypt-proxy.service
 systemctl enable --now fstrim.timer
 EOF
 
-rm $HOME/.bashrc
-rm $HOME/.bash_{logout,profile}
+rm $HOME/.bashrc 2> /dev/null
+rm $HOME/.bash_{logout,profile} 2> /dev/null
 
 cat <<EOF > $HOME/.zprofile
+source $HOME/.profile
 export XDG_CONFIG_HOME="\$HOME/.config"
 EOF
 
@@ -115,7 +116,6 @@ adobe-source-han-serif-kr-fonts
 EOF
 
 systemctl --user enable --now redshift.service
-sudo systemctl enable sddm.service
 
 sudo sed -i 's/^[\s\t]*COMPRESSION\s*=\s*"/#COMPRESSION="/g' /etc/mkinitcpio.conf
 sudo sed -i 's/^#COMPRESSION="lz4/COMPRESSION="lz4/g' /etc/mkinitcpio.conf
