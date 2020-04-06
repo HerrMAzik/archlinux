@@ -1,5 +1,12 @@
 #!/bin/sh
 
+sudo sh <<EOF
+systemctl enable --now NetworkManager.service
+systemctl disable --now NetworkManager-wait-online.service
+systemctl enable --now dnscrypt-proxy.service
+systemctl enable --now fstrim.timer
+EOF
+
 rm $HOME/.bashrc
 rm $HOME/.bash_{logout,profile}
 
@@ -21,13 +28,6 @@ Include = /etc/pacman.d/mirrorlist
 
 [multilib]
 Include = /etc/pacman.d/mirrorlist
-EOF
-
-sudo sh <<EOF
-systemctl enable --now NetworkManager.service
-systemctl disable --now NetworkManager-wait-online.service
-systemctl enable --now dnscrypt-proxy.service
-systemctl enable --now fstrim.timer
 EOF
 
 nmtui
