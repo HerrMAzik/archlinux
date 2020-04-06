@@ -12,7 +12,7 @@ EOF
 rm $HOME/.bashrc
 rm $HOME/.bash_{logout,profile}
 
-cat <<EOF > $HOME/.profile
+cat <<EOF > $HOME/.zprofile
 XDG_CONFIG_HOME="\$HOME/.config"
 export XDG_CONFIG_HOME
 EOF
