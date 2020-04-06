@@ -172,8 +172,19 @@ feh --no-fehbg --bg-scale '$HOME/repo/arch-setup/lancer.jpg'
 EOF
 chmod 0754 $HOME/.fehbg
 
-mkdir -p $XDG_CONFIG_HOME/bspwm
 mkdir -p $XDG_CONFIG_HOME/sxhkd
+cat <<EOF > $XDG_CONFIG_HOME/sxhkd/sxhkdrc
+super + Return
+    alacritty
+super + @space
+    rofi -show run
+super + Escape
+    pkill -USR1 -x sxhkd
+super + m
+    bspc desktop -l next
+EOF
+
+mkdir -p $XDG_CONFIG_HOME/bspwm
 cat <<EOF > $XDG_CONFIG_HOME/bspwm/bspwmrc
 #!/bin/sh
 sxhkd &
