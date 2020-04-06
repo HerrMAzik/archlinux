@@ -10,6 +10,13 @@ EOF
 rm $HOME/.bashrc
 rm $HOME/.bash_{logout,profile}
 
+cat <<EOF > $HOME/.profile
+XDG_CONFIG_HOME="\$HOME/.config"
+export XDG_CONFIG_HOME
+EOF
+
+XDG_CONFIG_HOME="$HOME/.config"
+
 cat <<EOF | sudo tee /etc/pacman.conf
 [options]
 HoldPkg      = pacman glibc
@@ -155,14 +162,7 @@ systemctl --user enable --now ssh-agent.service
 
 feh --bg-scale $HOME/repo/arch-setup/lancer.jpg
 
-yay --needed --noconfirm -S sddm-theme-clairvoyance
-# sudo sd -f mc '(^\[Theme\][^\[]*Current=)(\w*)([^\[]*\[?)' '${1}clairvoyance$3' /etc/sddm.conf
-# sudo rm -rf /etc/sddm.conf
 sudo mkdir -p /etc/sddm.conf.d
-cat <<EOF | sudo tee /etc/sddm.conf.d/sddm.conf
-[Theme]
-Current=clairvoyance
-EOF
 
 sudo sed -i 's/relatime/noatime/' /etc/fstab
 
