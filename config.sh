@@ -250,5 +250,19 @@ colors:
     white:   '#ebdbb2'
 EOF
 
+# oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
+# vim gruvbox
+curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+mkdir $XDG_CONFIG_HOME/nvim
+cat <<EOF > $XDG_CONFIG_HOME/nvim/init.vim
+call plug#begin(stdpath('data') . '/plugged')
+
+Plug 'morhetz/gruvbox'
+
+call plug#end()
+
+colorscheme gruvbox
+EOF
+nvim -c ':PlugInstall' -c ':q' -c ':q'
