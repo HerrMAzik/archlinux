@@ -174,14 +174,30 @@ chmod 0754 $HOME/.fehbg
 
 mkdir -p $XDG_CONFIG_HOME/sxhkd
 cat <<EOF > $XDG_CONFIG_HOME/sxhkd/sxhkdrc
+# terminal emulator
 super + Return
     alacritty
+# program launcher
 super + @space
     rofi -show run
+# make sxhkd reload its configuration files:
 super + Escape
     pkill -USR1 -x sxhkd
+# alternate between the tiled and monocle layout
 super + m
     bspc desktop -l next
+# close and kill
+super + {_,shift + }w
+	bspc node -{c,k}
+# focus the node in the given direction
+super + {_,shift + }{h,j,k,l}
+	bspc node -{f,s} {west,south,north,east}
+# swap the current node and the biggest node
+super + g
+	bspc node -s biggest
+# focus or send to the given desktop
+super + {_,shift + }{1-9,0}
+	bspc {desktop -f,node -d} '^{1-9,10}'
 EOF
 
 mkdir -p $XDG_CONFIG_HOME/bspwm
