@@ -132,13 +132,18 @@ COMPRESSXZ=(xz -c -z - --threads=0)
 COMPRESSZST=(zstd -c -z -q - --threads=0)
 EOF
 
-# yay
 mkdir -p $HOME/repo
 git clone https://github.com/HerrMAzik/arch-setup.git $HOME/repo/arch-setup
-cd $HOME/repo/arch-setup
-sh yay.sh
 
-yay --needed --noconfirm -S polybar
+# yay
+if ! [ hash polybar 2>/dev/null ]; then
+    cd $HOME/repo/arch-setup
+    sh yay.sh
+fi
+
+if ! [ hash polybar 2>/dev/null ]; then
+    yay --needed --noconfirm -S polybar
+fi
 
 sudo mkdir -p /etc/systemd/swap.conf.d
 cat <<EOF | sudo tee /etc/systemd/swap.conf.d/swap.conf
