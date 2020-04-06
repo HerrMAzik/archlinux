@@ -1,5 +1,7 @@
 #!/bin/sh
 
+sudo sed -i 's/relatime/noatime/' /etc/fstab
+
 sudo sh <<EOF
 systemctl enable --now NetworkManager.service
 systemctl disable --now NetworkManager-wait-online.service
@@ -164,15 +166,18 @@ systemctl --user enable --now ssh-agent.service
 sudo mkdir -p /etc/sddm.conf.d
 sudo systemctl enable sddm.service
 
+cat <<EOF > $HOME/.fehbg
+#!/bin/sh
+feh --no-fehbg --bg-scale '$HOME/repo/arch-setup/lancer.jpg'
+EOF
+chmod 0754 $HOME/.fehbg
+
 mkdir -p $XDG_CONFIG_HOME/bspwm
 mkdir -p $XDG_CONFIG_HOME/sxhkd
 cat <<EOF > $XDG_CONFIG_HOME/bspwm/bspwmrc
 #!/bin/sh
 sxhkd &
-feh --bg-scale $HOME/repo/arch-setup/lancer.jpg &
+$HOME/.fehbg &
 bspc monitor -d I II III IV V VI VII VIII IX X
 EOF
 chmod 0755 $XDG_CONFIG_HOME/bspwm/bspwmrc
-
-sudo sed -i 's/relatime/noatime/' /etc/fstab
-
