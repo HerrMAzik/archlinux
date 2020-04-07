@@ -321,6 +321,25 @@ chmod 0755 $XDG_CONFIG_HOME/bspwm/bspwmrc
 
 mkdir -p $XDG_CONFIG_HOME/alacritty
 cat <<EOF > $XDG_CONFIG_HOME/alacritty/alacritty.yml
+font:
+  normal:
+    family: Jetbrains Mono
+    style: Regular
+
+  bold:
+    family: Jetbrains Mono
+    style: Bold
+
+  italic:
+    family: Jetbrains Mono
+    style: Bold Italic
+    
+  bold_italic:
+    family: Jetbrains Mono
+    style: Italic
+
+  size: 14.0
+
 # Colors (Gruvbox dark)
 colors:
   # Default colors
@@ -351,6 +370,9 @@ colors:
     magenta: '#d3869b'
     cyan:    '#8ec07c'
     white:   '#ebdbb2'
+
+background_opacity: 0.95
+
 EOF
 
 # oh-my-zsh
