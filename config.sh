@@ -338,7 +338,7 @@ font:
     family: Jetbrains Mono
     style: Italic
 
-  size: 14.0
+  size: 11.0
 
 # Colors (Gruvbox dark)
 colors:
