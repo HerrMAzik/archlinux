@@ -195,6 +195,15 @@ super + w
 # Leave bspwm
 super + control + 0
 	bspc quit
+	
+	
+# Make sxhkd reload its configuration files:
+super + Escape
+    	pkill -USR1 -x sxhkd
+
+# Close and kill
+super + {_,shift + }w
+	bspc node -{c,k}
 
 # Change window in focus
 super + {h, l}
@@ -238,28 +247,28 @@ super + f
 ### Keybindings for programs ###
 # Launch terminal file manager
 super + v
-	$TERMINAL -e ranger
+	\$TERMINAL -e ranger
 # Launch calendar app
 super + c
-	$TERMINAL -e calcurse
+	\$TERMINAL -e calcurse
 # Launch network manager
 super + n
-	$TERMINAL -e nmtui
+	\$TERMINAL -e nmtui
 # Launch application launcher
 super + r
 	rofi -show run
 # Launch terminal
 super + Return
-	$TERMINAL
+	\$TERMINAL
 # Launch web browser
 super + F2
-	$BROWSER
+	\$BROWSER
 # Launch code editor
 super + F3
 	vscodium
 # Launch system monitor
 super + F4
-	$TERMINAL -e htop
+	\$TERMINAL -e htop
 
 ### Screenshot ###
 # Take a full screenshot and copy to clipboard
