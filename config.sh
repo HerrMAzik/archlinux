@@ -192,97 +192,96 @@ cat <<EOF > $XDG_CONFIG_HOME/sxhkd/sxhkdrc
 ### BSPWM config ###
 # Close window
 super + w
-	bspc node -c
+    bspc node -c
 
 # Leave bspwm
 super + control + 0
-	bspc quit
-	
-	
+    bspc quit
+
 # Make sxhkd reload its configuration files:
 super + Escape
-    	pkill -USR1 -x sxhkd
+    pkill -USR1 -x sxhkd
 
 # Close and kill
 super + {_,shift + }w
-	bspc node -{c,k}
+    bspc node -{c,k}
 
 # Change window in focus
 super + {h, l}
-	bspc node -f {west, east}
+    bspc node -f {west, east}
 
 # Focus the next/previous node in the current desktop
 super + {j, k}
-	bspc node -f {next,prev}.local
+    bspc node -f {next,prev}.local
 
 # Move window
 super + control + {h, j, k, l}
-	bspc node -s {west, south, north, east} --follow
+    bspc node -s {west, south, north, east} --follow
 
 # Change to desktop x
 super + {1-8}
-	bspc desktop -f ^{1-8}
+    bspc desktop -f ^{1-8}
 
 # Move x to desktop y
 super + shift + {1-8}
-	bspc node -d ^{1-8}
+    bspc node -d ^{1-8}
 
 # Resize window
 super + {y, u, i, o}
-	bspc node -z {left -10 0, bottom 0 10, top 0 -10, right 10 0}
+    bspc node -z {left -10 0, bottom 0 10, top 0 -10, right 10 0}
 
 super + control + {y, u, i, o}
-	bspc node -z {right -10 0, top 0 10,,bottom 0 -10, left 10 0}
+    bspc node -z {right -10 0, top 0 10,,bottom 0 -10, left 10 0}
 
 # Toggle monocle layout
 super + Tab
-	bspc desktop -l next
+    bspc desktop -l next
 
 # Toggle floating window
 super + control + space
-	bspc node -t "~floating"
+    bspc node -t "~floating"
 
 # Make focused window fullscreen
 super + f
-	bspc node -t "~fullscreen"
+    bspc node -t "~fullscreen"
 
 ### Keybindings for programs ###
 # Launch terminal file manager
 super + v
-	\$TERMINAL -e ranger
+    \$TERMINAL -e ranger
 # Launch calendar app
 super + c
-	\$TERMINAL -e calcurse
+    \$TERMINAL -e calcurse
 # Launch network manager
 super + n
-	\$TERMINAL -e nmtui
+    \$TERMINAL -e nmtui
 # Launch application launcher
 super + r
-	rofi -show run
+    rofi -show run
 # Launch terminal
 super + Return
-	\$TERMINAL
+    \$TERMINAL
 # Launch web browser
 super + F2
-	\$BROWSER
+    \$BROWSER
 # Launch code editor
 super + F3
-	vscodium
+    vscodium
 # Launch system monitor
 super + F4
-	\$TERMINAL -e htop
+    \$TERMINAL -e htop
 
 ### Screenshot ###
 # Take a full screenshot and copy to clipboard
 Print
-	flameshot full -c
+    flameshot full -c
 # Select an area and take a screenshot
 shift + Print
-	flameshot gui
+    flameshot gui
 
 ### Volume Control ###
 super + {Up, Down}
-	pulsemixer --change-volume {+5, -5}
+    pulsemixer {--change-volume +5, --change-volume -5}
 
 EOF
 
@@ -290,7 +289,7 @@ mkdir -p $XDG_CONFIG_HOME/bspwm
 cat <<EOF > $XDG_CONFIG_HOME/bspwm/bspwmrc
 #!/bin/sh
 sxhkd &
-feh --no-fehbg --bg-scale '\$HOME/repo/arch-setup/lancer.jpg' &
+feh --no-fehbg --bg-scale "\$HOME/repo/arch-setup/lancer.jpg" &
 xorg-xsetroot -cursor_name left_ptr &
 
 ### Gaps ###
@@ -358,7 +357,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 
 # vim gruvbox
 curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-mkdir $XDG_CONFIG_HOME/nvim
+mkdir -p $XDG_CONFIG_HOME/nvim
 cat <<EOF > $XDG_CONFIG_HOME/nvim/init.vim
 call plug#begin(stdpath('data') . '/plugged')
 
