@@ -142,7 +142,9 @@ COMPRESSZST=(zstd -c -z -q - --threads=0)
 EOF
 
 mkdir -p $HOME/repo
-git clone https://github.com/HerrMAzik/arch-setup.git $HOME/repo/arch-setup
+if [ ! -d $HOME/repo/arch-setup ]; then
+    git clone https://github.com/HerrMAzik/arch-setup.git $HOME/repo/arch-setup
+fi
 
 # yay
 if ! hash polybar 2>/dev/null; then
