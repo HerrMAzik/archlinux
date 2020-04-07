@@ -289,8 +289,9 @@ mkdir -p $XDG_CONFIG_HOME/bspwm
 cat <<EOF > $XDG_CONFIG_HOME/bspwm/bspwmrc
 #!/bin/sh
 sxhkd &
-feh --no-fehbg --bg-scale "\$HOME/repo/arch-setup/lancer.jpg" &
-xorg-xsetroot -cursor_name left_ptr &
+feh --no-fehbg --bg-scale "\$HOME/repo/arch-setup/lancer.jpg"
+setxkbmap -model pc105 -layout us,ru -option grp:toggle
+xorg-xsetroot -cursor_name left_ptr
 
 ### Gaps ###
 bspc config top_padding        2
