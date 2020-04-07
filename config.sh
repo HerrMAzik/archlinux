@@ -15,6 +15,9 @@ rm $HOME/.bash_{logout,profile} 2> /dev/null
 cat <<EOF > $HOME/.zprofile
 source $HOME/.profile
 export XDG_CONFIG_HOME="\$HOME/.config"
+export EDITOR="nvim"
+export BROWSER="firefox"
+export TERMINAL="alacritty"
 EOF
 
 XDG_CONFIG_HOME="$HOME/.config"
@@ -57,6 +60,7 @@ EOF
 cat <<EOF | sudo pacman --needed --noconfirm -S -
 alsa-utils
 pulseaudio-alsa
+pulsemixer
 
 xorg-server
 xorg-xsetroot
@@ -70,6 +74,11 @@ sddm
 
 mpv
 firefox
+flameshot
+zathura
+zathura-pdf-poppler
+zathura-djvu
+calcurse
 
 ranger
 pass
@@ -146,6 +155,10 @@ if ! hash polybar 2>/dev/null; then
     yay --needed --noconfirm -S polybar
 fi
 
+if ! hash vscodium 2>/dev/null; then
+    yay --needed --noconfirm -S vscodium-bin
+fi
+
 sudo mkdir -p /etc/systemd/swap.conf.d
 cat <<EOF | sudo tee /etc/systemd/swap.conf.d/swap.conf
 swapfc_force_preallocated=1
@@ -172,47 +185,126 @@ systemctl --user enable --now ssh-agent.service
 sudo mkdir -p /etc/sddm.conf.d
 sudo systemctl enable sddm.service
 
-cat <<EOF > $HOME/.fehbg
-#!/bin/sh
-feh --no-fehbg --bg-scale '$HOME/repo/arch-setup/lancer.jpg'
-EOF
-chmod 0754 $HOME/.fehbg
-
 mkdir -p $XDG_CONFIG_HOME/sxhkd
 cat <<EOF > $XDG_CONFIG_HOME/sxhkd/sxhkdrc
-# terminal emulator
+### BSPWM config ###
+# Close window
+super + w
+	bspc node -c
+
+# Leave bspwm
+super + control + 0
+	bspc quit
+
+# Change window in focus
+super + {h, l}
+	bspc node -f {west, east}
+
+# Focus the next/previous node in the current desktop
+super + {j, k}
+	bspc node -f {next,prev}.local
+
+# Move window
+super + control + {h, j, k, l}
+	bspc node -s {west, south, north, east} --follow
+
+# Change to desktop x
+super + {1-8}
+	bspc desktop -f ^{1-8}
+
+# Move x to desktop y
+super + shift + {1-8}
+	bspc node -d ^{1-8}
+
+# Resize window
+super + {y, u, i, o}
+	bspc node -z {left -10 0, bottom 0 10, top 0 -10, right 10 0}
+
+super + control + {y, u, i, o}
+	bspc node -z {right -10 0, top 0 10,,bottom 0 -10, left 10 0}
+
+# Toggle monocle layout
+super + Tab
+	bspc desktop -l next
+
+# Toggle floating window
+super + control + space
+	bspc node -t "~floating"
+
+# Make focused window fullscreen
+super + f
+	bspc node -t "~fullscreen"
+
+### Keybindings for programs ###
+# Launch terminal file manager
+super + v
+	$TERMINAL -e ranger
+# Launch calendar app
+super + c
+	$TERMINAL -e calcurse
+# Launch network manager
+super + n
+	$TERMINAL -e nmtui
+# Launch application launcher
+super + r
+	rofi -show run
+# Launch terminal
 super + Return
-    alacritty
-# program launcher
-super + @space
-    rofi -show run
-# make sxhkd reload its configuration files:
-super + Escape
-    pkill -USR1 -x sxhkd
-# alternate between the tiled and monocle layout
-super + m
-    bspc desktop -l next
-# close and kill
-super + {_,shift + }w
-	bspc node -{c,k}
-# focus the node in the given direction
-super + {_,shift + }{h,j,k,l}
-	bspc node -{f,s} {west,south,north,east}
-# swap the current node and the biggest node
-super + g
-	bspc node -s biggest
-# focus or send to the given desktop
-super + {_,shift + }{1-9,0}
-	bspc {desktop -f,node -d} '^{1-9,10}'
+	$TERMINAL
+# Launch web browser
+super + F2
+	$BROWSER
+# Launch code editor
+super + F3
+	vscodium
+# Launch system monitor
+super + F4
+	$TERMINAL -e htop
+
+### Screenshot ###
+# Take a full screenshot and copy to clipboard
+Print
+	flameshot full -c
+# Select an area and take a screenshot
+shift + Print
+	flameshot gui
+
+### Volume Control ###
+super + {Up, Down}
+	pulsemixer --change-volume {+5, -5}
+
 EOF
 
 mkdir -p $XDG_CONFIG_HOME/bspwm
 cat <<EOF > $XDG_CONFIG_HOME/bspwm/bspwmrc
 #!/bin/sh
 sxhkd &
-$HOME/.fehbg &
+feh --no-fehbg --bg-scale '\$HOME/repo/arch-setup/lancer.jpg' &
 xorg-xsetroot -cursor_name left_ptr &
-bspc monitor -d I II III IV V VI VII VIII IX X
+
+### Gaps ###
+bspc config top_padding        2
+bspc config bottom_padding     2
+bspc config left_padding       2
+bspc config right_padding      2
+bspc config border_width       2
+bspc config window_gap         8
+
+### Focusing behavior ###
+bspc config focus_follows_pointer true
+bspc config history_aware_focus true
+bspc config focus_by_distance true
+
+bspc monitor -d 1 2 3 4 5 6 7 8
+
+bspc config split_ratio          0.5
+bspc config borderless_monocle   true
+bspc config gapless_monocle      true
+
+# Colors
+bspc config normal_border_color "#44475a"
+bspc config active_border_color "#6272a4"
+bspc config focused_border_color "#6272a4"
 EOF
 chmod 0755 $XDG_CONFIG_HOME/bspwm/bspwmrc
 
