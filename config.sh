@@ -5,17 +5,18 @@ sudo sed -i 's/relatime/noatime/' /etc/fstab
 sudo sh <<EOF
 systemctl enable --now NetworkManager.service
 systemctl disable --now NetworkManager-wait-online.service
-systemctl enable --now dnscrypt-proxy.service
 systemctl enable --now fstrim.timer
 EOF
 
 rm $HOME/.bashrc 2> /dev/null
 rm $HOME/.bash_{logout,profile} 2> /dev/null
 
+touch $HOME/.profile
 cat <<EOF > $HOME/.zprofile
 source $HOME/.profile
 export XDG_CONFIG_HOME="\$HOME/.config"
 export EDITOR="nvim"
+export VISUAL="codium"
 export BROWSER="firefox"
 export TERMINAL="alacritty"
 EOF
@@ -44,6 +45,9 @@ EOF
 
 nmtui
 
+systemctl enable --now dnscrypt-proxy.service
+sleep 1
+
 sudo pacman --needed --noconfirm -Syyuu unzip zip p7zip pigz pbzip2 xz
 
 cat <<EOF | sudo tee /etc/modprobe.d/blacklist.conf
@@ -58,6 +62,12 @@ vm.swappiness = 10
 EOF
 
 cat <<EOF | sudo pacman --needed --noconfirm -S -
+noto-fonts
+noto-fonts-extra
+noto-fonts-cjk
+noto-fonts-emoji
+ttf-jetbrains-mono
+
 alsa-utils
 pulseaudio-alsa
 pulsemixer
@@ -65,6 +75,7 @@ pulsemixer
 xorg-server
 xorg-xsetroot
 xdg-user-dirs
+picom
 bspwm
 sxhkd
 rofi
@@ -78,7 +89,6 @@ flameshot
 zathura
 zathura-pdf-poppler
 zathura-djvu
-calcurse
 
 ranger
 pass
@@ -92,7 +102,6 @@ neovim
 exa
 ripgrep
 fd
-sd
 bat
 alacritty
 
@@ -106,8 +115,8 @@ cmake
 git
 EOF
 
+: '
 cat <<EOF | sudo pacman --needed --noconfirm -S -
-ttf-jetbrains-mono
 adobe-source-code-pro-fonts
 adobe-source-han-sans-otc-fonts
 adobe-source-han-serif-otc-fonts
@@ -123,6 +132,7 @@ adobe-source-serif-pro-fonts
 adobe-source-han-sans-kr-fonts
 adobe-source-han-serif-kr-fonts
 EOF
+'
 
 systemctl --user enable --now redshift.service
 
@@ -186,6 +196,9 @@ systemctl --user enable --now ssh-agent.service
 
 sudo mkdir -p /etc/sddm.conf.d
 sudo systemctl enable sddm.service
+
+mkdir -p $XDG_CONFIG_HOME/picom
+cp /etc/xdg/picom.conf $XDG_CONFIG_HOME/picom/
 
 mkdir -p $XDG_CONFIG_HOME/sxhkd
 cat <<EOF > $XDG_CONFIG_HOME/sxhkd/sxhkdrc
@@ -288,6 +301,7 @@ EOF
 mkdir -p $XDG_CONFIG_HOME/bspwm
 cat <<EOF > $XDG_CONFIG_HOME/bspwm/bspwmrc
 #!/bin/sh
+picom -b
 sxhkd &
 feh --no-fehbg --bg-scale "\$HOME/repo/arch-setup/lancer.jpg"
 setxkbmap -model pc105 -layout us,ru -option grp:toggle
@@ -299,7 +313,7 @@ bspc config bottom_padding     2
 bspc config left_padding       2
 bspc config right_padding      2
 bspc config border_width       2
-bspc config window_gap         8
+bspc config window_gap         4
 
 ### Focusing behavior ###
 bspc config focus_follows_pointer true
@@ -388,6 +402,6 @@ Plug 'morhetz/gruvbox'
 
 call plug#end()
 
-colorscheme gruvbox
 EOF
 nvim -c ':PlugInstall' -c ':q' -c ':q'
+echo 'colorscheme gruvbox' >> $XDG_CONFIG_HOME/nvim/init.vim
