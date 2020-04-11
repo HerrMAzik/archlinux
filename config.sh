@@ -45,6 +45,64 @@ EOF
 
 nmtui
 
+cat <<EOF | sudo tee /etc/dnscrypt-proxy/dnscrypt-proxy.toml
+server_names = ['cloudflare', 'adguard-dns-doh', 'adguard-dns', 'v.dnscrypt.uk-ipv4', 'ads-securedns-doh']
+listen_addresses = ['127.0.0.1:53']
+max_clients = 250
+ipv4_servers = true
+ipv6_servers = false
+dnscrypt_servers = true
+doh_servers = true
+require_dnssec = true
+require_nolog = true
+require_nofilter = false
+disabled_server_names = []
+force_tcp = false
+timeout = 5000
+keepalive = 30
+use_syslog = true
+cert_refresh_delay = 240
+fallback_resolvers = ['9.9.9.9:53', '8.8.8.8:53']
+ignore_system_dns = true
+netprobe_timeout = -1
+netprobe_address = '9.9.9.9:53'
+log_files_max_size = 10
+log_files_max_age = 7
+log_files_max_backups = 1
+block_ipv6 = true
+block_unqualified = true
+block_undelegated = true
+reject_ttl = 600
+forwarding_rules = '/etc/dnscrypt-proxy/forwarding-rules.txt'
+cache = true
+cache_size = 4096
+cache_min_ttl = 2400
+cache_max_ttl = 86400
+cache_neg_min_ttl = 60
+cache_neg_max_ttl = 600
+[sources]
+  [sources.'public-resolvers']
+  urls = ['https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v2/public-resolvers.md', 'https://download.dnscrypt.info/resolvers-list/v2/public-resolvers.md']
+  cache_file = '/var/cache/dnscrypt-proxy/public-resolvers.md'
+  minisign_key = 'RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3'
+  prefix = ''
+
+  [sources.'relays']
+  urls = ['https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v2/relays.md', 'https://download.dnscrypt.info/resolvers-list/v2/relays.md']
+  cache_file = '/var/cache/dnscrypt-proxy/relays.md'
+  minisign_key = 'RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3'
+  refresh_delay = 72
+  prefix = ''
+
+[broken_implementations]
+fragments_blocked = ['cisco', 'cisco-ipv6', 'cisco-familyshield', 'cisco-familyshield-ipv6', 'quad9-dnscrypt-ip4-filter-alt', 'quad9-dnscrypt-ip4-filter-pri', 'quad9-dnscrypt-ip4-nofilter-alt', 'quad9-dnscrypt-ip4-nofilter-pri', 'quad9-dnscrypt-ip6-filter-alt', 'quad9-dnscrypt-ip6-filter-pri', 'quad9-dnscrypt-ip6-nofilter-alt', 'quad9-dnscrypt-ip6-nofilter-pri', 'cleanbrowsing-adult', 'cleanbrowsing-family-ipv6', 'cleanbrowsing-family', 'cleanbrowsing-security']
+
+EOF
+
+cat <<EOF | sudo tee /etc/dnscrypt-proxy/forwarding-rules.txt
+ru					77.88.8.8,77.88.8.1,1.1.1.1,8.8.8.8
+EOF
+
 sudo systemctl enable --now dnscrypt-proxy.service
 sleep 1
 
@@ -334,12 +392,6 @@ super + f
 # Launch terminal file manager
 super + v
     \$TERMINAL -e ranger
-# Launch calendar app
-super + c
-    \$TERMINAL -e calcurse
-# Launch network manager
-super + n
-    \$TERMINAL -e nmtui
 # Launch application launcher
 super + r
     rofi -show run
@@ -351,7 +403,7 @@ super + F2
     \$BROWSER
 # Launch code editor
 super + F3
-    vscodium
+    \$VISUAL
 # Launch system monitor
 super + F4
     \$TERMINAL -e htop
