@@ -45,7 +45,7 @@ EOF
 
 nmtui
 
-systemctl enable --now dnscrypt-proxy.service
+sudo systemctl enable --now dnscrypt-proxy.service
 sleep 1
 
 sudo pacman --needed --noconfirm -Syyuu unzip zip p7zip pigz pbzip2 xz
