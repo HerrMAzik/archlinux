@@ -133,6 +133,7 @@ pulsemixer
 
 xorg-server
 xorg-xsetroot
+xorg-xrdb
 xdg-user-dirs
 picom
 bspwm
@@ -255,6 +256,39 @@ systemctl --user enable --now ssh-agent.service
 
 sudo mkdir -p /etc/sddm.conf.d
 sudo systemctl enable sddm.service
+
+cat <<EOF > $HOME/.Xresources
+!!! Gruvbox theme
+! hard contrast: *background: #1d2021
+*background: #282828
+! soft contrast: *background: #32302f
+*foreground: #ebdbb2
+! Black + DarkGrey
+*color0:  #282828
+*color8:  #928374
+! DarkRed + Red
+*color1:  #cc241d
+*color9:  #fb4934
+! DarkGreen + Green
+*color2:  #98971a
+*color10: #b8bb26
+! DarkYellow + Yellow
+*color3:  #d79921
+*color11: #fabd2f
+! DarkBlue + Blue
+*color4:  #458588
+*color12: #83a598
+! DarkMagenta + Magenta
+*color5:  #b16286
+*color13: #d3869b
+! DarkCyan + Cyan
+*color6:  #689d6a
+*color14: #8ec07c
+! LightGrey + White
+*color7:  #a89984
+*color15: #ebdbb2
+
+EOF
 
 mkdir -p $XDG_CONFIG_HOME/picom
 cat <<EOF > $XDG_CONFIG_HOME/picom/picom.conf
@@ -422,6 +456,13 @@ super + {Up, Down}
 
 EOF
 
+mkdir -p $XDG_CONFIG_HOME/ranger
+git clone https://github.com/HerrMAzik/ranger-colorschemes.git $XDG_CONFIG_HOME/ranger/colorschemes
+cat <<EOF > $XDG_CONFIG_HOME/ranger/rc.conf
+set show_hidden true
+set colorscheme grubvox
+EOF
+
 mkdir -p $XDG_CONFIG_HOME/polybar
 cat <<EOF > $XDG_CONFIG_HOME/polybar/launch.sh
 killall -q polybar
@@ -430,15 +471,20 @@ polybar bar1 >> /tmp/polybar1.log 2>&1 &
 EOF
 chmod +x $XDG_CONFIG_HOME/polybar/launch.sh
 
+cat <<EOF > $XDG_CONFIG_HOME/polybar/config
+
+EOF
+
 mkdir -p $XDG_CONFIG_HOME/bspwm
 cat <<EOF > $XDG_CONFIG_HOME/bspwm/bspwmrc
 #!/bin/sh
 picom -b
+xrdb -load \$HOME/.Xresources
 sxhkd &
 feh --no-fehbg --bg-scale "\$HOME/repo/arch-setup/lancer.jpg"
 setxkbmap -model pc105 -layout us,ru -option grp:toggle
 xorg-xsetroot -cursor_name left_ptr
-#$XDG_CONFIG_HOME/polybar/launch.sh
+$XDG_CONFIG_HOME/polybar/launch.sh
 
 ### Gaps ###
 bspc config top_padding        2
@@ -459,10 +505,6 @@ bspc config split_ratio          0.5
 bspc config borderless_monocle   true
 bspc config gapless_monocle      true
 
-# Colors
-bspc config normal_border_color "#44475a"
-bspc config active_border_color "#6272a4"
-bspc config focused_border_color "#6272a4"
 EOF
 chmod 0755 $XDG_CONFIG_HOME/bspwm/bspwmrc
 
