@@ -120,6 +120,10 @@ vm.swappiness = 10
 EOF
 
 cat <<EOF | sudo pacman --needed --noconfirm -S -
+base-devel
+intel-ucode
+dnscrypt-proxy
+
 noto-fonts
 noto-fonts-extra
 noto-fonts-cjk
