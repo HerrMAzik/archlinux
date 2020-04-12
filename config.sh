@@ -76,15 +76,15 @@ sudo mkdir -p /etc/sddm.conf.d
 sudo systemctl enable sddm.service
 
 #*******************************************************************************
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-
-systemctl --user enable redshift.service
-
-
 rm $HOME/.bashrc 2> /dev/null
 rm $HOME/.bash_{logout,profile} 2> /dev/null
 echo > $HOME/.zshrc
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+
+
+systemctl --user enable redshift.service
+systemctl --user enable ssh-agent.service
 
 touch $HOME/.profile
 cat <<EOF > $HOME/.zprofile
@@ -136,7 +136,6 @@ ExecStart=$(which ssh-agent) -D -a \$SSH_AUTH_SOCK
 [Install]
 WantedBy=default.target
 EOF
-systemctl --user enable --now ssh-agent.service
 
 cat <<EOF > $HOME/.Xresources
 !!! Gruvbox theme
