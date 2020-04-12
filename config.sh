@@ -20,7 +20,7 @@ sudo cp -f $CONFIGDIR/etc/pacman.conf /etc/pacman.conf
 sudo pacman --needed --noconfirm -Syu unzip zip p7zip pigz pbzip2 xz
 sudo pacman --needed --noconfirm -S base-devel intel-ucode dnscrypt-proxy chezmoi
 sudo pacman --needed --noconfirm -S noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji
-sudo pacman --needed --noconfirm -S ttf-jetbrains-mono ttf-font-awesome
+sudo pacman --needed --noconfirm -S ttf-jetbrains-mono
 sudo pacman --needed --noconfirm -S alsa-utils pulseaudio-alsa pulsemixer
 sudo pacman --needed --noconfirm -S xorg-server xorg-xsetroot xorg-fonts-encodings xorg-xrdb xdg-user-dirs
 sudo pacman --needed --noconfirm -S picom bspwm sxhkd rofi feh sddm
