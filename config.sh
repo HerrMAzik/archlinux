@@ -75,6 +75,9 @@ sudo systemctl enable systemd-swap.service
 sudo mkdir -p /etc/sddm.conf.d
 sudo systemctl enable sddm.service
 
+sudo cp -f $CONFIGDIR/etc/systemd/system/powertop.service /etc/systemd/system/powertop.service
+sudo systemctl enable powertop.service
+
 ########################################################################################
 rm $HOME/.bashrc 2> /dev/null
 rm $HOME/.bash_{logout,profile} 2> /dev/null
