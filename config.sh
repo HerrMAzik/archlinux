@@ -22,7 +22,7 @@ sudo pacman --needed --noconfirm -S base-devel intel-ucode dnscrypt-proxy chezmo
 sudo pacman --needed --noconfirm -S noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji
 sudo pacman --needed --noconfirm -S ttf-jetbrains-mono ttf-font-awesome
 sudo pacman --needed --noconfirm -S alsa-utils pulseaudio-alsa pulsemixer
-sudo pacman --needed --noconfirm -S xorg-server xorg-xsetroot xorg-xrdb xdg-user-dirs
+sudo pacman --needed --noconfirm -S xorg-server xorg-xsetroot xorg-fonts-encodings xorg-xrdb xdg-user-dirs
 sudo pacman --needed --noconfirm -S picom bspwm sxhkd rofi feh sddm
 sudo pacman --needed --noconfirm -S mpv firefox flameshot zathura zathura-pdf-poppler zathura-djvu
 sudo pacman --needed --noconfirm -S pass oath-toolkit
@@ -92,12 +92,15 @@ if ! hash yay 2>/dev/null; then
     cd $HOME
 fi
 
-if ! hash polybar 2>/dev/null; then
-    yay --needed --noconfirm -S polybar
-fi
+! hash polybar 2>/dev/null && yay --needed --noconfirm -S polybar
+! hash vscodium 2>/dev/null && yay --needed --noconfirm -S vscodium-bin
+! yay -Qi ttf-iosevka > /dev/null 2>&1 && yay --noconfirm --needed -S ttf-iosevka
 
-if ! hash vscodium 2>/dev/null; then
-    yay --needed --noconfirm -S vscodium-bin
-fi
+sudo cp -f $CONFIGDIR/usr/share/fonts/TTF/icomoon.ttf /usr/share/fonts/TTF/icomoon.ttf
+sudo sh <<EOF
+fc-cache -f > /dev/null
+mkfontscale /usr/share/fonts/TTF
+mkfontdir /usr/share/fonts/TTF
+EOF
 
 nvim -c ':PlugInstall' -c ':q' -c ':q'
