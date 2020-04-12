@@ -1,183 +1,34 @@
 #!/bin/sh
 
-sudo sed -i 's/relatime/noatime/' /etc/fstab
-
-sudo sh <<EOF
-systemctl enable --now NetworkManager.service
-systemctl disable --now NetworkManager-wait-online.service
-systemctl enable --now fstrim.timer
-EOF
-
-rm $HOME/.bashrc 2> /dev/null
-rm $HOME/.bash_{logout,profile} 2> /dev/null
-
-touch $HOME/.profile
-cat <<EOF > $HOME/.zprofile
-source $HOME/.profile
-export XDG_CONFIG_HOME="\$HOME/.config"
-export EDITOR="nvim"
-export VISUAL="codium"
-export BROWSER="firefox"
-export TERMINAL="alacritty"
-EOF
-
 XDG_CONFIG_HOME="$HOME/.config"
 
-cat <<EOF | sudo tee /etc/pacman.conf
-[options]
-HoldPkg      = pacman glibc
-Architecture = auto
-Color
-ILoveCandy
-
-[core]
-Include = /etc/pacman.d/mirrorlist
-
-[extra]
-Include = /etc/pacman.d/mirrorlist
-
-[community]
-Include = /etc/pacman.d/mirrorlist
-
-[multilib]
-Include = /etc/pacman.d/mirrorlist
-EOF
+sudo systemctl enable --now NetworkManager.service
+sudo systemctl disable --now NetworkManager-wait-online.service
 
 nmtui
 
-cat <<EOF | sudo tee /etc/dnscrypt-proxy/dnscrypt-proxy.toml
-server_names = ['cloudflare', 'adguard-dns-doh', 'adguard-dns', 'v.dnscrypt.uk-ipv4', 'ads-securedns-doh']
-listen_addresses = ['127.0.0.1:53']
-max_clients = 250
-ipv4_servers = true
-ipv6_servers = false
-dnscrypt_servers = true
-doh_servers = true
-require_dnssec = true
-require_nolog = true
-require_nofilter = false
-disabled_server_names = []
-force_tcp = false
-timeout = 5000
-keepalive = 30
-use_syslog = true
-cert_refresh_delay = 240
-fallback_resolvers = ['9.9.9.9:53', '8.8.8.8:53']
-ignore_system_dns = true
-netprobe_timeout = -1
-netprobe_address = '9.9.9.9:53'
-log_files_max_size = 10
-log_files_max_age = 7
-log_files_max_backups = 1
-block_ipv6 = true
-block_unqualified = true
-block_undelegated = true
-reject_ttl = 600
-forwarding_rules = '/etc/dnscrypt-proxy/forwarding-rules.txt'
-cache = true
-cache_size = 4096
-cache_min_ttl = 2400
-cache_max_ttl = 86400
-cache_neg_min_ttl = 60
-cache_neg_max_ttl = 600
-[sources]
-  [sources.'public-resolvers']
-  urls = ['https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v2/public-resolvers.md', 'https://download.dnscrypt.info/resolvers-list/v2/public-resolvers.md']
-  cache_file = '/var/cache/dnscrypt-proxy/public-resolvers.md'
-  minisign_key = 'RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3'
-  prefix = ''
+sudo pacman --needed --noconfirm -Syyuu git
 
-  [sources.'relays']
-  urls = ['https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v2/relays.md', 'https://download.dnscrypt.info/resolvers-list/v2/relays.md']
-  cache_file = '/var/cache/dnscrypt-proxy/relays.md'
-  minisign_key = 'RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3'
-  refresh_delay = 72
-  prefix = ''
+mkdir -p $HOME/repo
+if [ ! -d $HOME/repo/archlinux ]; then
+    git clone https://github.com/HerrMAzik/archlinux.git $HOME/repo/archlinux
+fi
+CONFIGDIR=$HOME/repo/archlinux
+sh -c "cd ${CONFIGDIR}; git pull"
+sudo cp -f $CONFIGDIR/etc/pacman.conf /etc/pacman.conf
 
-[broken_implementations]
-fragments_blocked = ['cisco', 'cisco-ipv6', 'cisco-familyshield', 'cisco-familyshield-ipv6', 'quad9-dnscrypt-ip4-filter-alt', 'quad9-dnscrypt-ip4-filter-pri', 'quad9-dnscrypt-ip4-nofilter-alt', 'quad9-dnscrypt-ip4-nofilter-pri', 'quad9-dnscrypt-ip6-filter-alt', 'quad9-dnscrypt-ip6-filter-pri', 'quad9-dnscrypt-ip6-nofilter-alt', 'quad9-dnscrypt-ip6-nofilter-pri', 'cleanbrowsing-adult', 'cleanbrowsing-family-ipv6', 'cleanbrowsing-family', 'cleanbrowsing-security']
-
-EOF
-
-cat <<EOF | sudo tee /etc/dnscrypt-proxy/forwarding-rules.txt
-ru					77.88.8.8,77.88.8.1,1.1.1.1,8.8.8.8
-EOF
-
-sudo systemctl enable --now dnscrypt-proxy.service
-sleep 1
-
-sudo pacman --needed --noconfirm -Syyuu unzip zip p7zip pigz pbzip2 xz
-
-cat <<EOF | sudo tee /etc/modprobe.d/blacklist.conf
-blacklist bluetooth
-blacklist btusb
-blacklist uvcvideo
-blacklist nouveau
-EOF
-
-cat <<EOF | sudo tee /etc/sysctl.d/90-swappiness.conf
-vm.swappiness = 10
-EOF
-
-cat <<EOF | sudo pacman --needed --noconfirm -S -
-base-devel
-intel-ucode
-dnscrypt-proxy
-
-noto-fonts
-noto-fonts-extra
-noto-fonts-cjk
-noto-fonts-emoji
-ttf-jetbrains-mono
-ttf-font-awesome
-
-alsa-utils
-pulseaudio-alsa
-pulsemixer
-
-xorg-server
-xorg-xsetroot
-xorg-xrdb
-xdg-user-dirs
-picom
-bspwm
-sxhkd
-rofi
-dunst
-feh
-sddm
-
-mpv
-firefox
-flameshot
-zathura
-zathura-pdf-poppler
-zathura-djvu
-
-ranger
-pass
-oath-toolkit
-mc
-curl
-wget
-htop
-neovim
-
-exa
-ripgrep
-fd
-bat
-alacritty
-
-systemd-swap
-redshift
-
-git
-gcc
-gdb
-cmake
-git
-EOF
+sudo pacman --needed --noconfirm -Syu unzip zip p7zip pigz pbzip2 xz
+sudo pacman --needed --noconfirm -S base-devel intel-ucode dnscrypt-proxy chezmoi
+sudo pacman --needed --noconfirm -S noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji
+sudo pacman --needed --noconfirm -S ttf-jetbrains-mono ttf-font-awesome
+sudo pacman --needed --noconfirm -S alsa-utils pulseaudio-alsa pulsemixer
+sudo pacman --needed --noconfirm -S xorg-server xorg-xsetroot xorg-xrdb xdg-user-dirs
+sudo pacman --needed --noconfirm -S picom bspwm sxhkd rofi feh sddm
+sudo pacman --needed --noconfirm -S mpv firefox flameshot zathura zathura-pdf-poppler zathura-djvu
+sudo pacman --needed --noconfirm -S pass oath-toolkit
+sudo pacman --needed --noconfirm -S ranger mc curl wget htop neovim
+sudo pacman --needed --noconfirm -S exa ripgrep fd bat alacritty systemd-swap redshift
+sudo pacman --needed --noconfirm -S git gcc gdb cmake git
 
 : '
 cat <<EOF | sudo pacman --needed --noconfirm -S -
@@ -198,11 +49,52 @@ adobe-source-han-serif-kr-fonts
 EOF
 '
 
-systemctl --user enable --now redshift.service
-
 sudo sed -i 's/^[\s\t]*COMPRESSION\s*=\s*"/#COMPRESSION="/g' /etc/mkinitcpio.conf
 sudo sed -i 's/^#COMPRESSION="lz4/COMPRESSION="lz4/g' /etc/mkinitcpio.conf
 sudo mkinitcpio -P
+
+sudo mkdir -p /etc/modprobe.d
+sudo cp -f $CONFIGDIR/etc/modprobe.d/blacklist.conf /etc/modprobe.d/blacklist.conf
+
+sudo mkdir -p /etc/dnscrypt-proxy
+sudo cp -f $CONFIGDIR/etc/dnscrypt-proxy/dnscrypt-proxy.toml /etc/dnscrypt-proxy/dnscrypt-proxy.toml
+sudo cp -f $CONFIGDIR/etc/dnscrypt-proxy/forwarding-rules.txt etc/dnscrypt-proxy/forwarding-rules.txt
+sudo cp -f $CONFIGDIR/etc/NetworkManager/conf.d/dns-servers.conf /etc/NetworkManager/conf.d/dns-servers.conf
+sudo systemctl enable dnscrypt-proxy.service
+
+sudo sed -i 's/relatime/noatime/' /etc/fstab
+sudo systemctl enable --now fstrim.timer
+
+sudo mkdir -p /etc/sysctl.d
+sudo cp -f $CONFIGDIR/etc/sysctl.d/90-swappiness.conf /etc/sysctl.d/90-swappiness.conf
+
+sudo mkdir -p /etc/systemd/swap.conf.d
+sudo cp -f $CONFIGDIR/etc/systemd/swap.conf.d/swap.conf /etc/systemd/swap.conf.d/swap.conf
+sudo systemctl enable systemd-swap.service
+
+sudo mkdir -p /etc/sddm.conf.d
+sudo systemctl enable sddm.service
+
+#*******************************************************************************
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+
+systemctl --user enable redshift.service
+
+
+rm $HOME/.bashrc 2> /dev/null
+rm $HOME/.bash_{logout,profile} 2> /dev/null
+echo > $HOME/.zshrc
+
+touch $HOME/.profile
+cat <<EOF > $HOME/.zprofile
+source $HOME/.profile
+export XDG_CONFIG_HOME="\$HOME/.config"
+export EDITOR="nvim"
+export VISUAL="codium"
+export BROWSER="firefox"
+export TERMINAL="alacritty"
+EOF
 
 mkdir -p $XDG_CONFIG_HOME/pacman
 cat <<EOF > $XDG_CONFIG_HOME/pacman/makepkg.conf
@@ -215,14 +107,9 @@ COMPRESSXZ=(xz -c -z - --threads=0)
 COMPRESSZST=(zstd -c -z -q - --threads=0)
 EOF
 
-mkdir -p $HOME/repo
-if [ ! -d $HOME/repo/archlinux ]; then
-    git clone https://github.com/HerrMAzik/archlinux.git $HOME/repo/archlinux
-fi
-
 # yay
-if ! hash polybar 2>/dev/null; then
-    cd $HOME/repo/archlinux
+if ! hash yay 2>/dev/null; then
+    cd $CONFIGDIR
     sh yay.sh
     cd $HOME
 fi
@@ -234,13 +121,6 @@ fi
 if ! hash vscodium 2>/dev/null; then
     yay --needed --noconfirm -S vscodium-bin
 fi
-
-sudo mkdir -p /etc/systemd/swap.conf.d
-cat <<EOF | sudo tee /etc/systemd/swap.conf.d/swap.conf
-swapfc_force_preallocated=1
-swapfc_enabled=1
-EOF
-sudo systemctl enable systemd-swap.service
 
 echo 'SSH_AUTH_SOCK DEFAULT="${XDG_RUNTIME_DIR}/ssh-agent.socket"' > $HOME/.pam_environment
 mkdir -p $XDG_CONFIG_HOME/systemd/user
@@ -257,9 +137,6 @@ ExecStart=$(which ssh-agent) -D -a \$SSH_AUTH_SOCK
 WantedBy=default.target
 EOF
 systemctl --user enable --now ssh-agent.service
-
-sudo mkdir -p /etc/sddm.conf.d
-sudo systemctl enable sddm.service
 
 cat <<EOF > $HOME/.Xresources
 !!! Gruvbox theme
@@ -567,9 +444,6 @@ colors:
 background_opacity: 0.95
 
 EOF
-
-# oh-my-zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 # vim gruvbox
 curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
