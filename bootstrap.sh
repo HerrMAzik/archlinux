@@ -46,12 +46,7 @@ cat << EOF2 > /etc/hosts
 ::1         localhost ip6-localhost ip6-loopback
 127.0.1.1   $hostname
 EOF2
-pacman --noconfirm -S networkmanager dnscrypt-proxy zsh
-mkdir -p /etc/NetworkManager/conf.d
-cat <<EOF2 > /etc/NetworkManager/conf.d/dns-servers.conf
-[global-dns-domain-*]
-servers=127.0.0.1
-EOF2
+pacman --noconfirm -S networkmanager zsh
 mkinitcpio -P
 echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel
 echo "root:${root_password}" | chpasswd
@@ -60,6 +55,8 @@ echo "${user_name}:${user_password}" | chpasswd
 curl -L https://raw.githubusercontent.com/HerrMAzik/arch-setup/master/config.sh > /home/$user_name/config.sh
 chown ${user_name}:users /home/$user_name/config.sh
 chmod 0700 /home/$user_name/config.sh
+echo 'echo 1111111' > /home/$user_name/.zshrc
+chmod 0644 /home/$user_name/.zshrc
 EOF
 
 arch-chroot /mnt /bin/bash <<EOF
