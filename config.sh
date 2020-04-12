@@ -212,13 +212,13 @@ COMPRESSZST=(zstd -c -z -q - --threads=0)
 EOF
 
 mkdir -p $HOME/repo
-if [ ! -d $HOME/repo/arch-setup ]; then
-    git clone https://github.com/HerrMAzik/arch-setup.git $HOME/repo/arch-setup
+if [ ! -d $HOME/repo/archlinux ]; then
+    git clone https://github.com/HerrMAzik/archlinux.git $HOME/repo/archlinux
 fi
 
 # yay
 if ! hash polybar 2>/dev/null; then
-    cd $HOME/repo/arch-setup
+    cd $HOME/repo/archlinux
     sh yay.sh
     cd $HOME
 fi
@@ -481,7 +481,7 @@ cat <<EOF > $XDG_CONFIG_HOME/bspwm/bspwmrc
 picom -b
 xrdb -load \$HOME/.Xresources
 sxhkd &
-feh --no-fehbg --bg-scale "\$HOME/repo/arch-setup/lancer.jpg"
+feh --no-fehbg --bg-scale "\$HOME/repo/archlinux/lancer.jpg"
 setxkbmap -model pc105 -layout us,ru -option grp:toggle
 xorg-xsetroot -cursor_name left_ptr
 $XDG_CONFIG_HOME/polybar/launch.sh
