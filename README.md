@@ -3,5 +3,5 @@
 #### bootstrap
 
 ```bash
-curl -L https://git.io/JvbTX | sh
+curl -L https://git.io/Jvjt4 | sh
 ```
