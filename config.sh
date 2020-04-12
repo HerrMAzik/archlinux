@@ -460,7 +460,7 @@ mkdir -p $XDG_CONFIG_HOME/ranger
 git clone https://github.com/HerrMAzik/ranger-colorschemes.git $XDG_CONFIG_HOME/ranger/colorschemes
 cat <<EOF > $XDG_CONFIG_HOME/ranger/rc.conf
 set show_hidden true
-set colorscheme grubvox
+set colorscheme gruvbox
 EOF
 
 mkdir -p $XDG_CONFIG_HOME/polybar
