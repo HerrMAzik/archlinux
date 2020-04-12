@@ -78,8 +78,7 @@ sudo systemctl enable sddm.service
 ########################################################################################
 rm $HOME/.bashrc 2> /dev/null
 rm $HOME/.bash_{logout,profile} 2> /dev/null
-echo > $HOME/.zshrc
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+rm $HOME/.zshrc
 
 chezmoi init --apply --verbose https://github.com/HerrMAzik/dots.git
 
