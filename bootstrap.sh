@@ -52,7 +52,7 @@ echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel
 echo "root:${root_password}" | chpasswd
 useradd -m -g users -G audio,video,power,storage,wheel -s /bin/zsh $user_name
 echo "${user_name}:${user_password}" | chpasswd
-curl -L https://raw.githubusercontent.com/HerrMAzik/arch-setup/master/config.sh > /home/$user_name/config.sh
+curl -L https://raw.githubusercontent.com/HerrMAzik/archlinux/master/config.sh > /home/$user_name/config.sh
 chown ${user_name}:users /home/$user_name/config.sh
 chmod 0700 /home/$user_name/config.sh
 echo 'echo 1111111' > /home/$user_name/.zshrc
