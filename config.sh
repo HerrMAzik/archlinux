@@ -83,7 +83,7 @@ rm $HOME/.bashrc 2> /dev/null
 rm $HOME/.bash_{logout,profile} 2> /dev/null
 rm $HOME/.zshrc
 
-chezmoi init --apply --verbose https://github.com/HerrMAzik/dots.git
+chezmoi init --apply https://github.com/HerrMAzik/dots.git
 
 systemctl --user enable redshift.service
 systemctl --user enable ssh-agent.service
