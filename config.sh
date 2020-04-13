@@ -107,3 +107,5 @@ mkfontdir /usr/share/fonts/TTF
 EOF
 
 nvim -c ':PlugInstall' -c ':q' -c ':q'
+
+sh <(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs) -y
