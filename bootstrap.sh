@@ -26,7 +26,7 @@ yes | mkfs.ext4 -L system /dev/sda1
 mount /dev/sda1 /mnt
 
 sed -n "/yandex/p" -i /etc/pacman.d/mirrorlist
-yes '' | pacstrap /mnt base linux linux-firmware
+yes '' | pacstrap /mnt base base-devel linux linux-firmware
 genfstab -U /mnt >> /mnt/etc/fstab
 
 arch-chroot /mnt /bin/bash <<EOF
