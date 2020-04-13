@@ -58,7 +58,7 @@ sudo cp -f $CONFIGDIR/etc/modprobe.d/blacklist.conf /etc/modprobe.d/blacklist.co
 
 sudo mkdir -p /etc/dnscrypt-proxy
 sudo cp -f $CONFIGDIR/etc/dnscrypt-proxy/dnscrypt-proxy.toml /etc/dnscrypt-proxy/dnscrypt-proxy.toml
-sudo cp -f $CONFIGDIR/etc/dnscrypt-proxy/forwarding-rules.txt etc/dnscrypt-proxy/forwarding-rules.txt
+sudo cp -f $CONFIGDIR/etc/dnscrypt-proxy/forwarding-rules.txt /etc/dnscrypt-proxy/forwarding-rules.txt
 sudo cp -f $CONFIGDIR/etc/NetworkManager/conf.d/dns-servers.conf /etc/NetworkManager/conf.d/dns-servers.conf
 sudo systemctl enable dnscrypt-proxy.service
 
