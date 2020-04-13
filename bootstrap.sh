@@ -55,7 +55,7 @@ echo "${user_name}:${user_password}" | chpasswd
 curl -L https://raw.githubusercontent.com/HerrMAzik/archlinux/master/config.sh > /home/$user_name/config.sh
 chown ${user_name}:users /home/$user_name/config.sh
 chmod 0700 /home/$user_name/config.sh
-echo 'sh $HOME/config.sh' > /home/$user_name/.zshrc
+echo 'sh \$HOME/config.sh' > /home/$user_name/.zshrc
 chmod 0644 /home/$user_name/.zshrc
 EOF
 
