@@ -21,7 +21,7 @@ sudo pacman --needed --noconfirm -Syu unzip zip p7zip pigz pbzip2 xz
 sudo pacman --needed --noconfirm -S intel-ucode dnscrypt-proxy chezmoi systemd-swap
 sudo pacman --needed --noconfirm -S noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji ttf-jetbrains-mono
 sudo pacman --needed --noconfirm -S xdg-user-dirs plasma-desktop sddm
-sudo pacman --needed --noconfirm -S konsole okular plasma-pa plasma-nm sddm-kcm ark
+sudo pacman --needed --noconfirm -S konsole okular plasma-pa plasma-nm sddm-kcm ark powerdevil
 sudo pacman --needed --noconfirm -S mpv firefox flameshot
 sudo pacman --needed --noconfirm -S pass oath-toolkit keepassxc
 sudo pacman --needed --noconfirm -S ranger mc curl wget htop neovim
@@ -69,5 +69,3 @@ systemctl --user enable ssh-agent.service
 ! hash vscodium 2>/dev/null && yay --needed --noconfirm -S vscodium-bin
 
 nvim -c ':PlugInstall' -c ':q' -c ':q'
-
-sh <(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs) -y
