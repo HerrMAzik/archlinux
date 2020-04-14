@@ -20,9 +20,9 @@ sudo cp -f $CONFIGDIR/etc/pacman.conf /etc/pacman.conf
 sudo pacman --needed --noconfirm -Syu unzip zip p7zip pigz pbzip2 xz
 sudo pacman --needed --noconfirm -S intel-ucode dnscrypt-proxy chezmoi
 sudo pacman --needed --noconfirm -S noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji ttf-jetbrains-mono
-sudo pacman --needed --noconfirm -S alsa-utils pulseaudio-alsa
-sudo pacman --needed --noconfirm -S xorg-server plasma-desktop sddm
-sudo pacman --needed --noconfirm -S mpv firefox flameshot
+sudo pacman --needed --noconfirm -S alsa-utils
+sudo pacman --needed --noconfirm -S plasma-desktop sddm
+sudo pacman --needed --noconfirm -S mpv firefox flameshot konsole okular 
 sudo pacman --needed --noconfirm -S pass oath-toolkit keepassxc
 sudo pacman --needed --noconfirm -S ranger mc curl wget htop neovim
 sudo pacman --needed --noconfirm -S exa ripgrep fd bat systemd-swap
