@@ -21,7 +21,7 @@ sudo pacman --needed --noconfirm -Syu unzip zip p7zip pigz pbzip2 xz
 sudo pacman --needed --noconfirm -S intel-ucode dnscrypt-proxy chezmoi systemd-swap
 sudo pacman --needed --noconfirm -S noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji ttf-jetbrains-mono
 sudo pacman --needed --noconfirm -S xdg-user-dirs plasma-desktop sddm
-sudo pacman --needed --noconfirm -S konsole okular plasma-pa plasma-nm sddm-kcm
+sudo pacman --needed --noconfirm -S konsole okular plasma-pa plasma-nm sddm-kcm ark
 sudo pacman --needed --noconfirm -S mpv firefox flameshot
 sudo pacman --needed --noconfirm -S pass oath-toolkit keepassxc
 sudo pacman --needed --noconfirm -S ranger mc curl wget htop neovim
@@ -42,14 +42,14 @@ sudo cp -f $CONFIGDIR/etc/NetworkManager/conf.d/dns-servers.conf /etc/NetworkMan
 sudo systemctl enable dnscrypt-proxy.service
 
 sudo sed -i 's/relatime/noatime/' /etc/fstab
-sudo systemctl enable --now fstrim.timer
+sudo systemctl enable fstrim.timer
 
 sudo mkdir -p /etc/sysctl.d
 sudo cp -f $CONFIGDIR/etc/sysctl.d/90-swappiness.conf /etc/sysctl.d/90-swappiness.conf
 
 sudo mkdir -p /etc/systemd/swap.conf.d
 sudo cp -f $CONFIGDIR/etc/systemd/swap.conf.d/swap.conf /etc/systemd/swap.conf.d/swap.conf
-sudo systemctl enable systemd-swap.service
+sudo systemctl enable --now systemd-swap.service
 
 sudo mkdir -p /etc/sddm.conf.d
 sudo systemctl enable sddm.service
@@ -64,11 +64,7 @@ chezmoi init --apply https://github.com/HerrMAzik/dots.git
 systemctl --user enable ssh-agent.service
 
 # yay
-if ! hash yay 2>/dev/null; then
-    cd $CONFIGDIR
-    sh yay.sh
-    cd $HOME
-fi
+! hash yay 2>/dev/null && sh $CONFIGDIR/yay.sh
 
 ! hash vscodium 2>/dev/null && yay --needed --noconfirm -S vscodium-bin
 
