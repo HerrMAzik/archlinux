@@ -72,3 +72,5 @@ systemctl --user enable ssh-agent.service
 ! hash vscodium 2>/dev/null && yay --needed --noconfirm -S vscodium-bin
 
 nvim -c ':PlugInstall' -c ':q' -c ':q'
+
+sh -c 'cd $(chezmoi source-path); git remote set-url origin git@github.com:HerrMAzik/dots.git'
