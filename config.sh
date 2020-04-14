@@ -51,6 +51,9 @@ sudo mkdir -p /etc/systemd/swap.conf.d
 sudo cp -f $CONFIGDIR/etc/systemd/swap.conf.d/swap.conf /etc/systemd/swap.conf.d/swap.conf
 sudo systemctl enable --now systemd-swap.service
 
+sudo cp -f $CONFIGDIR/etc/systemd/system/powertop.service /etc/systemd/system/powertop.service
+sudo systemctl enable powertop.service
+
 sudo mkdir -p /etc/sddm.conf.d
 sudo systemctl enable sddm.service
 
