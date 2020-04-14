@@ -18,14 +18,14 @@ sh -c "cd ${CONFIGDIR}; git pull"
 sudo cp -f $CONFIGDIR/etc/pacman.conf /etc/pacman.conf
 
 sudo pacman --needed --noconfirm -Syu unzip zip p7zip pigz pbzip2 xz
-sudo pacman --needed --noconfirm -S intel-ucode dnscrypt-proxy chezmoi
+sudo pacman --needed --noconfirm -S intel-ucode dnscrypt-proxy chezmoi systemd-swap
 sudo pacman --needed --noconfirm -S noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji ttf-jetbrains-mono
-sudo pacman --needed --noconfirm -S alsa-utils
-sudo pacman --needed --noconfirm -S plasma-desktop sddm
-sudo pacman --needed --noconfirm -S mpv firefox flameshot konsole okular 
+sudo pacman --needed --noconfirm -S xdg-user-dirs plasma-desktop sddm
+sudo pacman --needed --noconfirm -S konsole okular plasma-pa plasma-nm sddm-kcm
+sudo pacman --needed --noconfirm -S mpv firefox flameshot
 sudo pacman --needed --noconfirm -S pass oath-toolkit keepassxc
 sudo pacman --needed --noconfirm -S ranger mc curl wget htop neovim
-sudo pacman --needed --noconfirm -S exa ripgrep fd bat systemd-swap
+sudo pacman --needed --noconfirm -S exa ripgrep fd bat
 sudo pacman --needed --noconfirm -S git gcc gdb cmake git go
 
 sudo sed -i 's/^[\s\t]*COMPRESSION\s*=\s*"/#COMPRESSION="/g' /etc/mkinitcpio.conf
