@@ -46,18 +46,15 @@ cat << EOF2 > /etc/hosts
 ::1         localhost ip6-localhost ip6-loopback
 127.0.1.1   $hostname
 EOF2
-pacman --noconfirm -S networkmanager zsh
+pacman --noconfirm -S networkmanager fish
 mkinitcpio -P
 echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel
 echo "root:${root_password}" | chpasswd
-useradd -m -g users -G audio,video,power,storage,wheel -s /bin/zsh $user_name
+useradd -m -g users -G audio,video,power,storage,wheel -s /bin/fish $user_name
 echo "${user_name}:${user_password}" | chpasswd
 curl -L https://raw.githubusercontent.com/HerrMAzik/archlinux/master/config.sh > /home/$user_name/config.sh
 chown ${user_name}:users /home/$user_name/config.sh
 chmod 0700 /home/$user_name/config.sh
-echo 'sh \$HOME/config.sh' > /home/$user_name/.zshrc
-chown ${user_name}:users /home/$user_name/.zshrc
-chmod 0644 /home/$user_name/.zshrc
 EOF
 
 arch-chroot /mnt /bin/bash <<EOF
