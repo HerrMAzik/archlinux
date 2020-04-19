@@ -59,3 +59,5 @@ sudo systemctl enable powertop.service
 
 sudo mkdir -p /etc/sddm.conf.d
 sudo systemctl enable sddm.service
+
+rm $HOME/system.sh
