@@ -1,76 +1,75 @@
 #!/bin/sh
 
-XDG_CONFIG_HOME="$HOME/.config"
+! type git >/dev/null && echo 'install git at first running system.sh' && exit -1
+test ! -d $HOME/repo/archlinux && echo 'run system.sh before configuring' && exit -1
 
-sudo systemctl enable --now NetworkManager.service
-sudo systemctl disable --now NetworkManager-wait-online.service
-
-nmtui
-
-sudo pacman --needed --noconfirm -Syyuu git
-
-mkdir -p $HOME/repo
-if [ ! -d $HOME/repo/archlinux ]; then
-    git clone https://github.com/HerrMAzik/archlinux.git $HOME/repo/archlinux
-fi
-CONFIGDIR=$HOME/repo/archlinux
-sh -c "cd ${CONFIGDIR}; git pull"
-sudo cp -f $CONFIGDIR/etc/pacman.conf /etc/pacman.conf
-
-sudo pacman --needed --noconfirm -Syu unzip zip p7zip pigz pbzip2 xz
-sudo pacman --needed --noconfirm -S intel-ucode dnscrypt-proxy chezmoi systemd-swap powertop
-sudo pacman --needed --noconfirm -S noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji ttf-jetbrains-mono
-sudo pacman --needed --noconfirm -S xdg-user-dirs plasma-desktop sddm
-sudo pacman --needed --noconfirm -S konsole okular plasma-pa plasma-nm sddm-kcm ark powerdevil gwenview dolphin
-sudo pacman --needed --noconfirm -S mpv firefox flameshot
-sudo pacman --needed --noconfirm -S pass oath-toolkit keepassxc keybase
-sudo pacman --needed --noconfirm -S ranger mc curl wget htop neovim
-sudo pacman --needed --noconfirm -S exa ripgrep fd bat
-sudo pacman --needed --noconfirm -S git gcc gdb cmake git go
-
-sudo sed -i 's/^[\s\t]*COMPRESSION\s*=\s*"/#COMPRESSION="/g' /etc/mkinitcpio.conf
-sudo sed -i 's/^#COMPRESSION="lz4/COMPRESSION="lz4/g' /etc/mkinitcpio.conf
-sudo mkinitcpio -P
-
-sudo mkdir -p /etc/modprobe.d
-sudo cp -f $CONFIGDIR/etc/modprobe.d/blacklist.conf /etc/modprobe.d/blacklist.conf
-
-sudo mkdir -p /etc/dnscrypt-proxy
-sudo cp -f $CONFIGDIR/etc/dnscrypt-proxy/dnscrypt-proxy.toml /etc/dnscrypt-proxy/dnscrypt-proxy.toml
-sudo cp -f $CONFIGDIR/etc/dnscrypt-proxy/forwarding-rules.txt /etc/dnscrypt-proxy/forwarding-rules.txt
-sudo cp -f $CONFIGDIR/etc/NetworkManager/conf.d/dns-servers.conf /etc/NetworkManager/conf.d/dns-servers.conf
-sudo systemctl enable dnscrypt-proxy.service
-
-sudo sed -i 's/relatime/noatime/' /etc/fstab
-sudo systemctl enable fstrim.timer
-
-sudo mkdir -p /etc/sysctl.d
-sudo cp -f $CONFIGDIR/etc/sysctl.d/90-swappiness.conf /etc/sysctl.d/90-swappiness.conf
-
-sudo mkdir -p /etc/systemd/swap.conf.d
-sudo cp -f $CONFIGDIR/etc/systemd/swap.conf.d/swap.conf /etc/systemd/swap.conf.d/swap.conf
-sudo systemctl enable --now systemd-swap.service
-
-sudo cp -f $CONFIGDIR/etc/systemd/system/powertop.service /etc/systemd/system/powertop.service
-sudo systemctl enable powertop.service
-
-sudo mkdir -p /etc/sddm.conf.d
-sudo systemctl enable sddm.service
-
-########################################################################################
+test -z $XDG_CONFIG_HOME && XDG_CONFIG_HOME="$HOME/.config"
+test -z $CONFIGDIR && CONFIGDIR=$HOME/repo/archlinux
 
 rm $HOME/.bashrc 2> /dev/null
 rm $HOME/.bash_{logout,profile} 2> /dev/null
 
-chezmoi init --apply https://github.com/HerrMAzik/dots.git
+if [ ! -d "$(chezmoi source-path)" ]; then
+    chezmoi init --apply https://github.com/HerrMAzik/dots.git
+    sh -c 'cd $(chezmoi source-path); git remote set-url origin git@github.com:HerrMAzik/dots.git'
+fi
 
 systemctl --user enable ssh-agent.service
 
 # yay
-! hash yay 2>/dev/null && sh $CONFIGDIR/yay.sh
+! type yay >/dev/null 2>&1 && sh $CONFIGDIR/yay.sh
 
-! hash vscodium 2>/dev/null && yay --needed --noconfirm -S vscodium-bin
+! type vscodium >/dev/null 2>&1 && yay --needed --noconfirm -S vscodium-bin
 
 nvim -c ':PlugInstall' -c ':q' -c ':q'
 
-sh -c 'cd $(chezmoi source-path); git remote set-url origin git@github.com:HerrMAzik/dots.git'
+mkdir -p $HOME/repo/keepass
+if [ ! -f $HOME/repo/keepass/*.kdbx ]; then
+    echo 'enter keybase account name:'
+    read -ers z
+    curl -L https://${z}.keybase.pub/kdb --output /tmp/kdb
+    echo 'enter password for kdb archive:'
+    read -ers z
+    7za e -o$HOME/repo/keepass/ -p$z /tmp/kdb
+fi
+
+while : ; do
+    hash=$(test -f $HOME/.sanctum.sanctorum && sha512sum $HOME/.sanctum.sanctorum | awk '{ print $1 }' || echo 0)
+    hash=${hash:0:100}
+    test $hash = 'da78e04ead69bdff7f9a9d5eb12e8e9cc7439ac347c697b6093eba4f1b727c7a02e3a53969ff035da204ba19df33445b8acf' && break
+    echo 'enter sanctum sanctorum content:'
+    sh -c "IFS= ;read -N 34 -s -a z; echo \$z > $HOME/.sanctum.sanctorum"
+done
+chmod 0400 $HOME/.sanctum.sanctorum
+
+if [ ! gpg --list-keys prime > /dev/null 2>&1 ]; then
+    test -z $passphrase && echo 'enter password:' && read -ers passphrase
+
+    yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $HOME/repo/database.kdbx GPG/pgp-private  | awk NF | gpg --pinentry-mode loopback --passphrase $(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $HOME/repo/database.kdbx GPG/gpg) --import
+    yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $HOME/repo/database.kdbx GPG/pgp-public | awk NF | gpg --import
+    yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $HOME/repo/database.kdbx GPG/pgp-trust | awk NF | gpg --import-ownertrust
+fi
+
+if [ ! -d $HOME/repo/pass ]; then
+    test -z $passphrase && echo 'enter password:' && read -ers passphrase
+
+    git clone https://HerrMAzik:$(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $HOME/repo/database.kdbx Repositories/GitHub)@github.com/HerrMAzik/pass.git $HOME/repo/pass
+    sh -c 'cd $HOME/repo/pass; git remote set-url origin git@github.com:HerrMAzik/pass.git'
+fi
+
+test ! -L $HOME/.password-store && ln -s $HOME/repo/pass $HOME/.password-store
+! pass > /dev/null 2>&1 && echo 'Wrong password store link'
+
+if [ ! -d $HOME/repo/settings ]; then
+    test -z $passphrase && echo 'enter password:' && read -ers passphrase
+
+    git clone https://HerrMAzik:$(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $HOME/repo/database.kdbx Repositories/GitHub)@github.com/HerrMAzik/settings.git $HOME/repo/settings
+    sh -c 'cd $HOME/repo/settings; git remote set-url origin git@github.com:HerrMAzik/settings.git'
+fi
+
+if [ ! -d $HOME/.mozilla/firefox/*HerrMAN ]; then
+    firefox -CreateProfile HerrMAN
+    firefox -P HerrMAN --headless &
+    sleep 2
+    pkill -15 firefox
+fi
