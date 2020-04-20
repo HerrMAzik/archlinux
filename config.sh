@@ -73,3 +73,17 @@ if [ ! -d $HOME/.mozilla/firefox/*HerrMAN ]; then
     sleep 2
     pkill -15 firefox
 fi
+
+if [ ! type intellij-idea-ultimate-edition >/dev/null 2>&1 ]; then
+    yay -S intellij-idea-ultimate-edition intellij-idea-ultimate-edition-jre
+fi
+
+if [ ! type clion >/dev/null 2>&1 ]; then
+    yay -S clion clion-jre
+fi
+
+if [ ! type goland >/dev/null 2>&1 ]; then
+    yay -S goland goland-jre
+fi
+
+! type omf >/dev/null 2>&1 && curl -L https://get.oh-my.fish | fish
