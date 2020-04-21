@@ -9,6 +9,8 @@ test -z $CONFIGDIR && CONFIGDIR=$HOME/repo/archlinux
 rm $HOME/.bashrc 2> /dev/null
 rm $HOME/.bash_{logout,profile} 2> /dev/null
 
+mkdir -p $HOME/go/src
+
 if [ ! -d "$(chezmoi source-path)" ]; then
     chezmoi init --apply https://github.com/HerrMAzik/dots.git
     sh -c 'cd $(chezmoi source-path); git remote set-url origin git@github.com:HerrMAzik/dots.git'
@@ -74,16 +76,6 @@ if [ ! -d $HOME/.mozilla/firefox/*HerrMAN ]; then
     pkill -15 firefox
 fi
 
-if [ ! type intellij-idea-ultimate-edition >/dev/null 2>&1 ]; then
-    yay -S intellij-idea-ultimate-edition intellij-idea-ultimate-edition-jre
-fi
-
-if [ ! type clion >/dev/null 2>&1 ]; then
-    yay -S clion clion-jre
-fi
-
-if [ ! type goland >/dev/null 2>&1 ]; then
-    yay -S goland goland-jre
-fi
-
-! type omf >/dev/null 2>&1 && curl -L https://get.oh-my.fish | fish
+! type intellij-idea-ultimate-edition >/dev/null 2>&1 && yay -S --needed --noconfirm intellij-idea-ultimate-edition intellij-idea-ultimate-edition-jre
+! type clion >/dev/null 2>&1 && yay -S --needed --noconfirm clion clion-jre
+! type goland >/dev/null 2>&1 && yay -S --needed --noconfirm goland goland-jre

@@ -29,7 +29,7 @@ sudo pacman --needed --noconfirm -S mpv firefox flameshot
 sudo pacman --needed --noconfirm -S pass oath-toolkit keepassxc keybase kbfs gnupg
 sudo pacman --needed --noconfirm -S ranger mc curl wget htop neovim jq expect
 sudo pacman --needed --noconfirm -S exa ripgrep fd bat
-sudo pacman --needed --noconfirm -S git gcc gdb cmake git go
+sudo pacman --needed --noconfirm -S git gcc gdb cmake git go go-tools
 
 sudo sed -i 's/^[\s\t]*COMPRESSION\s*=\s*"/#COMPRESSION="/g' /etc/mkinitcpio.conf
 sudo sed -i 's/^#COMPRESSION="lz4/COMPRESSION="lz4/g' /etc/mkinitcpio.conf
