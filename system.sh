@@ -24,7 +24,7 @@ sudo pacman --needed --noconfirm -Syu unzip zip p7zip pigz pbzip2 xz
 sudo pacman --needed --noconfirm -S intel-ucode dnscrypt-proxy chezmoi systemd-swap powertop man
 sudo pacman --needed --noconfirm -S noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji ttf-jetbrains-mono
 sudo pacman --needed --noconfirm -S xdg-user-dirs plasma-desktop sddm ttf-dejavu
-sudo pacman --needed --noconfirm -S konsole okular plasma-pa plasma-nm sddm-kcm ark powerdevil gwenview dolphin
+sudo pacman --needed --noconfirm -S konsole okular plasma-pa plasma-nm sddm-kcm ark powerdevil gwenview dolphin kcalc
 sudo pacman --needed --noconfirm -S mpv firefox flameshot
 sudo pacman --needed --noconfirm -S pass oath-toolkit keepassxc keybase kbfs gnupg
 sudo pacman --needed --noconfirm -S ranger mc curl wget htop neovim jq expect
