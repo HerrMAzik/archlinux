@@ -26,7 +26,7 @@ sudo pacman --needed --noconfirm -S noto-fonts noto-fonts-extra noto-fonts-cjk n
 sudo pacman --needed --noconfirm -S ttf-jetbrains-mono ttf-dejavu ttf-opensans
 sudo pacman --needed --noconfirm -S xdg-user-dirs plasma-desktop sddm plasma-pa plasma-nm sddm-kcm
 sudo pacman --needed --noconfirm -S konsole okular ark powerdevil gwenview dolphin kcalc kolourpaint
-sudo pacman --needed --noconfirm -S mpv firefox flameshot ncdu 
+sudo pacman --needed --noconfirm -S mpv youtube-dl firefox flameshot ncdu 
 sudo pacman --needed --noconfirm -S pass oath-toolkit keepassxc keybase kbfs gnupg
 sudo pacman --needed --noconfirm -S ranger mc curl wget htop neovim jq expect 
 sudo pacman --needed --noconfirm -S exa ripgrep fd bat
