@@ -11,20 +11,6 @@ rm $HOME/.bash_{logout,profile} 2> /dev/null
 
 mkdir -p $HOME/go/src
 
-if [ ! -d "$(chezmoi source-path)" ]; then
-    chezmoi init --apply https://github.com/HerrMAzik/dots.git
-    sh -c 'cd $(chezmoi source-path); git remote set-url origin git@github.com:HerrMAzik/dots.git'
-fi
-
-systemctl --user enable ssh-agent.service
-
-# yay
-! type yay >/dev/null 2>&1 && sh $CONFIGDIR/yay.sh
-
-! type vscodium >/dev/null 2>&1 && yay --needed --noconfirm -S vscodium-bin
-
-nvim -c ':PlugInstall' -c ':q' -c ':q'
-
 mkdir -p $HOME/repo/keepass
 if [ ! -f $HOME/repo/keepass/*.kdbx ]; then
     echo 'enter keybase account name:'
@@ -43,6 +29,24 @@ while : ; do
     sh -c "IFS= ;read -N 34 -s -a z; echo \$z > $HOME/.sanctum.sanctorum"
 done
 chmod 0400 $HOME/.sanctum.sanctorum
+
+if [ ! -d "$(chezmoi source-path)" ]; then
+    test -z $passphrase && echo 'enter password:' && read -ers passphrase
+
+    git clone https://github.com/HerrMAzik/dots.git "$(chezmoi source-path)"
+    cd "$(chezmoi source-path)"
+    chezmoi apply
+    sh -c 'cd $(chezmoi source-path); git remote set-url origin git@github.com:HerrMAzik/dots.git'
+fi
+
+systemctl --user enable ssh-agent.service
+
+# yay
+! type yay >/dev/null 2>&1 && sh $CONFIGDIR/yay.sh
+
+! type vscodium >/dev/null 2>&1 && yay --needed --noconfirm -S vscodium-bin
+
+nvim -c ':PlugInstall' -c ':q' -c ':q'
 
 if [ ! gpg --list-keys prime > /dev/null 2>&1 ]; then
     test -z $passphrase && echo 'enter password:' && read -ers passphrase
