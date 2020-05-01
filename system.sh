@@ -26,11 +26,11 @@ sudo pacman --needed --noconfirm -S noto-fonts noto-fonts-extra noto-fonts-cjk n
 sudo pacman --needed --noconfirm -S ttf-jetbrains-mono ttf-dejavu ttf-opensans
 sudo pacman --needed --noconfirm -S xdg-user-dirs plasma-desktop sddm plasma-pa plasma-nm sddm-kcm
 sudo pacman --needed --noconfirm -S konsole okular ark powerdevil gwenview dolphin kcalc kolourpaint
-sudo pacman --needed --noconfirm -S mpv youtube-dl firefox flameshot ncdu 
+sudo pacman --needed --noconfirm -S mpv xdotool youtube-dl firefox flameshot ncdu 
 sudo pacman --needed --noconfirm -S pass oath-toolkit keepassxc keybase kbfs gnupg
 sudo pacman --needed --noconfirm -S mc curl wget htop neovim jq expect 
 sudo pacman --needed --noconfirm -S exa ripgrep fd bat
-sudo pacman --needed --noconfirm -S gcc gdb cmake go go-tools
+sudo pacman --needed --noconfirm -S git-crypt gcc gdb cmake go go-tools
 
 sudo sed -i 's/^[\s\t]*COMPRESSION\s*=\s*"/#COMPRESSION="/g' /etc/mkinitcpio.conf
 sudo sed -i 's/^#COMPRESSION="lz4/COMPRESSION="lz4/g' /etc/mkinitcpio.conf
