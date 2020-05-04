@@ -11,8 +11,8 @@ rm $HOME/.bashrc 2> /dev/null
 rm $HOME/.bash_{logout,profile} 2> /dev/null
 
 mkdir -p $HOME/go/src
-
 mkdir -p $HOME/repo
+
 if [ ! -f $MAN_KDB ]; then
     echo 'enter keybase account name:'
     read -ers z
@@ -35,10 +35,10 @@ if [ ! -d "$(chezmoi source-path)" ]; then
     test -z $passphrase && echo 'enter password:' && read -ers passphrase
     
     yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB dots.secret | base64 --decode | gpg --passphrase $passphrase --decrypt --batch --cipher-algo AES256 --quiet --output $HOME/.dots.secret
+    chmod 0400 $HOME/.dots.secret
 
     git clone https://github.com/HerrMAzik/dots.git "$(chezmoi source-path)"
-    cd "$(chezmoi source-path)"
-    git crypt unlock $HOME/.dots.secret
+    sh -c "cd $(chezmoi source-path); git crypt unlock $HOME/.dots.secret"
     
     chezmoi apply
     sh -c 'cd $(chezmoi source-path); git remote set-url origin git@github.com:HerrMAzik/dots.git'
