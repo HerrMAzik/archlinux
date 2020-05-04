@@ -29,7 +29,7 @@ sudo pacman --needed --noconfirm -S konsole okular ark powerdevil gwenview dolph
 sudo pacman --needed --noconfirm -S mpv youtube-dl firefox flameshot ncdu 
 sudo pacman --needed --noconfirm -S pass oath-toolkit keepassxc keybase kbfs gnupg
 sudo pacman --needed --noconfirm -S mc curl wget htop neovim jq expect 
-sudo pacman --needed --noconfirm -S exa ripgrep fd bat
+sudo pacman --needed --noconfirm -S exa ripgrep fd bat skim
 sudo pacman --needed --noconfirm -S git-crypt gcc gdb cmake go go-tools
 
 sudo sed -i 's/^[\s\t]*COMPRESSION\s*=\s*"/#COMPRESSION="/g' /etc/mkinitcpio.conf
