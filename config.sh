@@ -5,20 +5,21 @@ test ! -d $HOME/repo/archlinux && echo 'run system.sh before configuring' && exi
 
 test -z $XDG_CONFIG_HOME && XDG_CONFIG_HOME="$HOME/.config"
 test -z $CONFIGDIR && CONFIGDIR=$HOME/repo/archlinux
+MAN_KDB="$HOME/repo/man.kdbx"
 
 rm $HOME/.bashrc 2> /dev/null
 rm $HOME/.bash_{logout,profile} 2> /dev/null
 
 mkdir -p $HOME/go/src
 
-mkdir -p $HOME/repo/keepass
-if [ ! -f $HOME/repo/keepass/*.kdbx ]; then
+mkdir -p $HOME/repo
+if [ ! -f $MAN_KDB ]; then
     echo 'enter keybase account name:'
     read -ers z
     curl -L https://${z}.keybase.pub/kdb --output /tmp/kdb
     echo 'enter password for kdb archive:'
     read -ers z
-    7za e -o$HOME/repo/keepass/ -p$z /tmp/kdb
+    7za e -o$HOME/repo/ -p$z /tmp/kdb
 fi
 
 while : ; do
@@ -32,9 +33,12 @@ chmod 0400 $HOME/.sanctum.sanctorum
 
 if [ ! -d "$(chezmoi source-path)" ]; then
     test -z $passphrase && echo 'enter password:' && read -ers passphrase
+    
+    yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB dots.secret | base64 --decode | gpg --passphrase $passphrase --decrypt --batch --cipher-algo AES256 --quiet --output $HOME/.dots.secret
 
     git clone https://github.com/HerrMAzik/dots.git "$(chezmoi source-path)"
     cd "$(chezmoi source-path)"
+    git crypt unlock $HOME/.dots.secret
     
     chezmoi apply
     sh -c 'cd $(chezmoi source-path); git remote set-url origin git@github.com:HerrMAzik/dots.git'
@@ -54,15 +58,15 @@ nvim -c ':PlugInstall' -c ':q' -c ':q'
 if [ ! gpg --list-keys prime > /dev/null 2>&1 ]; then
     test -z $passphrase && echo 'enter password:' && read -ers passphrase
 
-    yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $HOME/repo/database.kdbx GPG/pgp-private  | awk NF | gpg --pinentry-mode loopback --passphrase $(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $HOME/repo/database.kdbx GPG/gpg) --import
-    yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $HOME/repo/database.kdbx GPG/pgp-public | awk NF | gpg --import
-    yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $HOME/repo/database.kdbx GPG/pgp-trust | awk NF | gpg --import-ownertrust
+    yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/pgp-private  | awk NF | gpg --pinentry-mode loopback --passphrase $(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/gpg) --import
+    yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/pgp-public | awk NF | gpg --import
+    yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/pgp-trust | awk NF | gpg --import-ownertrust
 fi
 
 if [ ! -d $HOME/repo/pass ]; then
     test -z $passphrase && echo 'enter password:' && read -ers passphrase
 
-    git clone https://HerrMAzik:$(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $HOME/repo/database.kdbx Repositories/GitHub)@github.com/HerrMAzik/pass.git $HOME/repo/pass
+    git clone https://HerrMAzik:$(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $MAN_KDB Repositories/GitHub)@github.com/HerrMAzik/pass.git $HOME/repo/pass
     sh -c 'cd $HOME/repo/pass; git remote set-url origin git@github.com:HerrMAzik/pass.git'
 fi
 
@@ -72,7 +76,7 @@ test ! -L $HOME/.password-store && ln -s $HOME/repo/pass $HOME/.password-store
 if [ ! -d $HOME/repo/settings ]; then
     test -z $passphrase && echo 'enter password:' && read -ers passphrase
 
-    git clone https://HerrMAzik:$(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $HOME/repo/database.kdbx Repositories/GitHub)@github.com/HerrMAzik/settings.git $HOME/repo/settings
+    git clone https://HerrMAzik:$(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $MAN_KDB Repositories/GitHub)@github.com/HerrMAzik/settings.git $HOME/repo/settings
     sh -c 'cd $HOME/repo/settings; git remote set-url origin git@github.com:HerrMAzik/settings.git'
 fi
 
