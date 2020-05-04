@@ -46,15 +46,6 @@ fi
 
 systemctl --user enable ssh-agent.service
 
-# yay
-! type yay >/dev/null 2>&1 && sh $CONFIGDIR/yay.sh
-
-! type vscodium >/dev/null 2>&1 && yay --needed --noconfirm -S vscodium-bin
-
-! type rust-analyzer >/dev/null 2>&1 && yay --needed --noconfirm -S rust-analyzer-bin
-
-nvim -c ':PlugInstall' -c ':q' -c ':q'
-
 if [ ! gpg --list-keys prime > /dev/null 2>&1 ]; then
     test -z $passphrase && echo 'enter password:' && read -ers passphrase
 
@@ -69,7 +60,6 @@ if [ ! -d $HOME/repo/pass ]; then
     git clone https://HerrMAzik:$(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $MAN_KDB Repositories/GitHub)@github.com/HerrMAzik/pass.git $HOME/repo/pass
     sh -c 'cd $HOME/repo/pass; git remote set-url origin git@github.com:HerrMAzik/pass.git'
 fi
-
 test ! -L $HOME/.password-store && ln -s $HOME/repo/pass $HOME/.password-store
 ! pass > /dev/null 2>&1 && echo 'Wrong password store link'
 
@@ -79,6 +69,17 @@ if [ ! -d $HOME/repo/settings ]; then
     git clone https://HerrMAzik:$(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $MAN_KDB Repositories/GitHub)@github.com/HerrMAzik/settings.git $HOME/repo/settings
     sh -c 'cd $HOME/repo/settings; git remote set-url origin git@github.com:HerrMAzik/settings.git'
 fi
+
+rustup default stable
+
+# yay
+! type yay >/dev/null 2>&1 && sh $CONFIGDIR/yay.sh
+
+! type vscodium >/dev/null 2>&1 && yay --needed --noconfirm -S vscodium-bin
+
+! type rust-analyzer >/dev/null 2>&1 && yay --needed --noconfirm -S rust-analyzer-bin
+
+nvim -c ':PlugInstall' -c ':q' -c ':q'
 
 if [ ! -d $HOME/.mozilla/firefox/*HerrMAN ]; then
     firefox -CreateProfile HerrMAN
