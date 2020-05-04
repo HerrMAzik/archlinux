@@ -47,6 +47,8 @@ systemctl --user enable ssh-agent.service
 
 ! type vscodium >/dev/null 2>&1 && yay --needed --noconfirm -S vscodium-bin
 
+! type rust-analyzer >/dev/null 2>&1 && yay --needed --noconfirm -S rust-analyzer-bin
+
 nvim -c ':PlugInstall' -c ':q' -c ':q'
 
 if [ ! gpg --list-keys prime > /dev/null 2>&1 ]; then
