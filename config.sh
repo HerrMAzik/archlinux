@@ -35,6 +35,7 @@ if [ ! -d "$(chezmoi source-path)" ]; then
 
     git clone https://github.com/HerrMAzik/dots.git "$(chezmoi source-path)"
     cd "$(chezmoi source-path)"
+    
     chezmoi apply
     sh -c 'cd $(chezmoi source-path); git remote set-url origin git@github.com:HerrMAzik/dots.git'
 fi
@@ -83,3 +84,5 @@ fi
 ! type intellij-idea-ultimate-edition >/dev/null 2>&1 && yay -S --needed --noconfirm intellij-idea-ultimate-edition intellij-idea-ultimate-edition-jre
 ! type clion >/dev/null 2>&1 && yay -S --needed --noconfirm clion clion-jre
 ! type goland >/dev/null 2>&1 && yay -S --needed --noconfirm goland goland-jre
+
+vscodium --install-extension matklad.rust-analyzer
