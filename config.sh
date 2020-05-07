@@ -77,8 +77,6 @@ rustup default stable
 
 ! type vscodium >/dev/null 2>&1 && yay --needed --noconfirm -S vscodium-bin
 
-! type rust-analyzer >/dev/null 2>&1 && yay --needed --noconfirm -S rust-analyzer-bin
-
 nvim -c ':PlugInstall' -c ':q' -c ':q'
 
 if [ ! -d $HOME/.mozilla/firefox/*HerrMAN ]; then
