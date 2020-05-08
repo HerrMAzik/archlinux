@@ -61,4 +61,7 @@ sudo systemctl enable powertop.service
 sudo mkdir -p /etc/sddm.conf.d
 sudo systemctl enable sddm.service
 
+sudo sed -i 's/.*GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+
 rm $HOME/system.sh
