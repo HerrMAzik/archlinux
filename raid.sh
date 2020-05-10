@@ -28,8 +28,7 @@ umount ./bak
 
 mdadm --detail --scan >> ./src/etc/mdadm.conf
 
-genfstab -U ./src > ./src/etc/fstab
-sed -i 's/relatime/noatime/' ./src/etc/fstab
+genfstab -U ./src | sed 's/relatime/noatime/' > ./src/etc/fstab
 
 arch-chroot ./src /bin/sh <<EOF
 grub-install /dev/sda
