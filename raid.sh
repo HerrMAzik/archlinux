@@ -6,6 +6,7 @@ mkdir -p ./src
 echo ';' | sfdisk /dev/sdb
 yes | mkfs.ext4 -L garbage /dev/sdb1
 mount /dev/sdb1 ./bak
+rm -rf ./bak/*
 
 mount /dev/sda1 ./src
 
@@ -20,6 +21,7 @@ yes | mdadm --create --verbose --level=0 --metadata=1.2 --raid-devices=2 /dev/md
 
 yes | mkfs.ext4 -v -L system -m 0.5 -b 4096 -E stride=16,stripe-width=32 /dev/md0
 mount /dev/md0 ./src
+rm -rf ./src/*
 
 rsync -aAX --info=progress2 --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found"} ./bak/src/ ./src
 umount ./bak
