@@ -9,25 +9,25 @@ mount /dev/sdb1 ./bak
 
 mount /dev/sda1 ./src
 
-rsync -aAX --info=progress2 --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found"} ./src ./bak/src
+rsync -aAX --info=progress2 --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found"} ./src/ ./bak/src
 
 umount ./src
 
 echo ';' | sfdisk /dev/sda
 echo ';' | sfdisk /dev/sdc
 
-mdadm --create --verbose --level=0 --metadata=1.2 --raid-devices=2 /dev/md0 /dev/sda1 /dev/sdc1
+yes | mdadm --create --verbose --level=0 --metadata=1.2 --raid-devices=2 /dev/md0 /dev/sda1 /dev/sdc1
 
 yes | mkfs.ext4 -v -L system -m 0.5 -b 4096 -E stride=16,stripe-width=32 /dev/md0
 mount /dev/md0 ./src
 
-rsync -aAX --info=progress2 --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found"} ./bak/src ./src
+rsync -aAX --info=progress2 --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found"} ./bak/src/ ./src
 umount ./bak
 
 mdadm --detail --scan >> ./src/etc/mdadm.conf
 
-uuid=$(lsblk -lf | grep md0 | awk '{print $5}')
-sed "s/UUID=\([0-9a-f\-]*\)\([\t\s]*\)\/\([\t\s]*\)/UUID=$uuid\2\/\3/" ./src/etc/fstab
+genfstab -U ./src > ./src/etc/fstab
+sudo sed -i 's/relatime/noatime/' ./src/etc/fstab
 
 arch-chroot ./src /bin/sh <<EOF
 grub-install /dev/sda
