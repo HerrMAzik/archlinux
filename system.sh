@@ -22,14 +22,15 @@ sudo cp -f $CONFIGDIR/etc/pacman.conf /etc/pacman.conf
 
 sudo pacman --needed --noconfirm -Syu unzip zip p7zip pigz pbzip2 xz
 sudo pacman --needed --noconfirm -S intel-ucode dnscrypt-proxy chezmoi systemd-swap powertop man
-sudo pacman --needed --noconfirm -S noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji ttf-jetbrains-mono
-sudo pacman --needed --noconfirm -S xdg-user-dirs plasma-desktop sddm
-sudo pacman --needed --noconfirm -S konsole okular plasma-pa plasma-nm sddm-kcm ark powerdevil gwenview dolphin
-sudo pacman --needed --noconfirm -S mpv firefox flameshot
+sudo pacman --needed --noconfirm -S noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji
+sudo pacman --needed --noconfirm -S ttf-jetbrains-mono ttf-dejavu ttf-opensans
+sudo pacman --needed --noconfirm -S xdg-user-dirs plasma-desktop sddm plasma-pa plasma-nm sddm-kcm
+sudo pacman --needed --noconfirm -S konsole okular ark powerdevil gwenview dolphin kcalc kolourpaint
+sudo pacman --needed --noconfirm -S mpv youtube-dl firefox flameshot ncdu 
 sudo pacman --needed --noconfirm -S pass oath-toolkit keepassxc keybase kbfs gnupg
-sudo pacman --needed --noconfirm -S ranger mc curl wget htop neovim jq expect
-sudo pacman --needed --noconfirm -S exa ripgrep fd bat
-sudo pacman --needed --noconfirm -S git gcc gdb cmake git go go-tools
+sudo pacman --needed --noconfirm -S mc curl wget htop neovim jq expect 
+sudo pacman --needed --noconfirm -S exa ripgrep fd bat skim
+sudo pacman --needed --noconfirm -S git-crypt gcc gdb cmake go go-tools rustup rust-analyzer
 
 sudo sed -i 's/^[\s\t]*COMPRESSION\s*=\s*"/#COMPRESSION="/g' /etc/mkinitcpio.conf
 sudo sed -i 's/^#COMPRESSION="lz4/COMPRESSION="lz4/g' /etc/mkinitcpio.conf
@@ -59,5 +60,8 @@ sudo systemctl enable powertop.service
 
 sudo mkdir -p /etc/sddm.conf.d
 sudo systemctl enable sddm.service
+
+sudo sed -i 's/.*GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
+sudo grub-mkconfig -o /boot/grub/grub.cfg
 
 rm $HOME/system.sh
