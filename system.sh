@@ -18,50 +18,46 @@ fi
 test -z $CONFIGDIR && CONFIGDIR=$HOME/repo/archlinux
 sh -c "cd ${CONFIGDIR}; git pull"
 
-sudo cp -f $CONFIGDIR/etc/pacman.conf /etc/pacman.conf
+cat <<EOF | sudo sh
+cp -f $CONFIGDIR/etc/pacman.conf /etc/pacman.conf
 
-sudo pacman --needed --noconfirm -Syu unzip zip p7zip pigz pbzip2 xz
-sudo pacman --needed --noconfirm -S intel-ucode dnscrypt-proxy chezmoi systemd-swap powertop man
-sudo pacman --needed --noconfirm -S noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji
-sudo pacman --needed --noconfirm -S ttf-jetbrains-mono ttf-dejavu ttf-opensans
-sudo pacman --needed --noconfirm -S xdg-user-dirs plasma-desktop sddm plasma-pa plasma-nm sddm-kcm
-sudo pacman --needed --noconfirm -S konsole okular ark powerdevil gwenview dolphin kcalc kolourpaint
-sudo pacman --needed --noconfirm -S mpv youtube-dl firefox flameshot ncdu 
-sudo pacman --needed --noconfirm -S pass oath-toolkit keepassxc keybase kbfs gnupg
-sudo pacman --needed --noconfirm -S mc curl wget htop neovim jq expect 
-sudo pacman --needed --noconfirm -S exa ripgrep fd bat skim
-sudo pacman --needed --noconfirm -S git-crypt gcc gdb cmake go go-tools rustup rust-analyzer
+pacman --needed --noconfirm -Syu unzip zip p7zip pigz pbzip2 xz
+pacman --needed --noconfirm -S intel-ucode dnscrypt-proxy chezmoi systemd-swap powertop man
+pacman --needed --noconfirm -S noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji
+pacman --needed --noconfirm -S ttf-jetbrains-mono ttf-dejavu ttf-opensans
+pacman --needed --noconfirm -S xdg-user-dirs plasma-desktop sddm plasma-pa plasma-nm sddm-kcm
+pacman --needed --noconfirm -S konsole okular ark powerdevil gwenview dolphin kcalc kolourpaint
+pacman --needed --noconfirm -S mpv youtube-dl firefox flameshot ncdu
+pacman --needed --noconfirm -S pass oath-toolkit keepassxc keybase kbfs gnupg
+pacman --needed --noconfirm -S mc curl wget htop neovim jq expect
+pacman --needed --noconfirm -S exa ripgrep fd bat skim
+pacman --needed --noconfirm -S git-crypt gcc gdb cmake go go-tools rustup rust-analyzer
 
-sudo sed -i 's/^[\s\t]*COMPRESSION\s*=\s*"/#COMPRESSION="/g' /etc/mkinitcpio.conf
-sudo sed -i 's/^#COMPRESSION="lz4/COMPRESSION="lz4/g' /etc/mkinitcpio.conf
-sudo mkinitcpio -P
+sed -i 's/^[\s\t]*COMPRESSION\s*=\s*"/#COMPRESSION="/g' /etc/mkinitcpio.conf
+sed -i 's/^#COMPRESSION="lz4/COMPRESSION="lz4/g' /etc/mkinitcpio.conf
 
-sudo mkdir -p /etc/modprobe.d
-sudo cp -f $CONFIGDIR/etc/modprobe.d/blacklist.conf /etc/modprobe.d/blacklist.conf
+mkdir -p /etc/modprobe.d
+cp -f $CONFIGDIR/etc/modprobe.d/blacklist.conf /etc/modprobe.d/blacklist.conf
 
-sudo mkdir -p /etc/dnscrypt-proxy
-sudo cp -f $CONFIGDIR/etc/dnscrypt-proxy/dnscrypt-proxy.toml /etc/dnscrypt-proxy/dnscrypt-proxy.toml
-sudo cp -f $CONFIGDIR/etc/dnscrypt-proxy/forwarding-rules.txt /etc/dnscrypt-proxy/forwarding-rules.txt
-sudo cp -f $CONFIGDIR/etc/NetworkManager/conf.d/dns-servers.conf /etc/NetworkManager/conf.d/dns-servers.conf
-sudo systemctl enable dnscrypt-proxy.service
+mkdir -p /etc/dnscrypt-proxy
+cp -f $CONFIGDIR/etc/dnscrypt-proxy/dnscrypt-proxy.toml /etc/dnscrypt-proxy/dnscrypt-proxy.toml
+cp -f $CONFIGDIR/etc/dnscrypt-proxy/forwarding-rules.txt /etc/dnscrypt-proxy/forwarding-rules.txt
 
-sudo sed -i 's/relatime/noatime/' /etc/fstab
-sudo systemctl enable fstrim.timer
+cp -f $CONFIGDIR/etc/NetworkManager/conf.d/dns-servers.conf /etc/NetworkManager/conf.d/dns-servers.conf
 
-sudo mkdir -p /etc/sysctl.d
-sudo cp -f $CONFIGDIR/etc/sysctl.d/90-swappiness.conf /etc/sysctl.d/90-swappiness.conf
+sed -i 's/relatime/noatime/' /etc/fstab
 
-sudo mkdir -p /etc/systemd/swap.conf.d
-sudo cp -f $CONFIGDIR/etc/systemd/swap.conf.d/swap.conf /etc/systemd/swap.conf.d/swap.conf
-sudo systemctl enable --now systemd-swap.service
+mkdir -p /etc/sysctl.d
+cp -f $CONFIGDIR/etc/sysctl.d/90-swappiness.conf /etc/sysctl.d/90-swappiness.conf
 
-sudo cp -f $CONFIGDIR/etc/systemd/system/powertop.service /etc/systemd/system/powertop.service
-sudo systemctl enable powertop.service
+mkdir -p /etc/systemd/swap.conf.d
+cp -f $CONFIGDIR/etc/systemd/swap.conf.d/swap.conf /etc/systemd/swap.conf.d/swap.conf
 
-sudo mkdir -p /etc/sddm.conf.d
-sudo systemctl enable sddm.service
+sed -i 's/.*GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
 
-sudo sed -i 's/.*GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
-sudo grub-mkconfig -o /boot/grub/grub.cfg
+systemctl enable dnscrypt-proxy.service fstrim.timer systemd-swap.service sddm.service
+mkinitcpio -P
+grub-mkconfig -o /boot/grub/grub.cfg
+EOF
 
 rm $HOME/system.sh
