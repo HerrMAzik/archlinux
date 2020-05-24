@@ -72,6 +72,13 @@ fi
 
 rustup default stable
 
+if [ ! -d $HOME/.mozilla/firefox/*HerrMAN ]; then
+    firefox -CreateProfile HerrMAN
+    firefox -P HerrMAN --headless &
+    sleep 2
+    pkill firefox
+fi
+
 # yay
 ! type yay >/dev/null 2>&1 && sh $CONFIGDIR/yay.sh
 
@@ -79,15 +86,10 @@ rustup default stable
 
 nvim -c ':PlugInstall' -c ':q' -c ':q'
 
-if [ ! -d $HOME/.mozilla/firefox/*HerrMAN ]; then
-    firefox -CreateProfile HerrMAN
-    firefox -P HerrMAN --headless &
-    sleep 2
-    pkill -15 firefox
-fi
-
 ! type intellij-idea-ultimate-edition >/dev/null 2>&1 && yay -S --needed --noconfirm intellij-idea-ultimate-edition intellij-idea-ultimate-edition-jre
 ! type clion >/dev/null 2>&1 && yay -S --needed --noconfirm clion clion-jre
 ! type goland >/dev/null 2>&1 && yay -S --needed --noconfirm goland goland-jre
 
 vscodium --install-extension matklad.rust-analyzer
+vscodium --install-extension bmalehorn.vscode-fish
+vscodium --install-extension mechatroner.rainbow-csv
