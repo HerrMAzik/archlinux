@@ -14,13 +14,35 @@ mkdir -p $HOME/go/src
 mkdir -p $HOME/repo
 
 if [ ! -f $MAN_KDB ]; then
-    echo 'enter keybase account name:'
-    read -ers z
-    curl -L https://${z}.keybase.pub/kdb --output /tmp/kdb
-    echo 'enter password for kdb archive:'
-    read -ers z
-    7za e -o$HOME/repo/ -p$z /tmp/kdb
+#    echo 'enter keybase account name:'
+#    read -ers z
+#    curl -L https://${z}.keybase.pub/kdb --output /tmp/kdb
+    while : ; do
+        test -z $passphrase && echo 'enter password:' && read -ers passphrase
+        link=$(echo 'jA0ECQMCItwerSoXDA3o0lYBs5LFklMXCSTWb9FFsTdqXcPlVoFAHK6q6dZc7OF04lhUcFiKpCgpUgSde+CuPhSqIcGzdD7dyizdgu4aA91oX+QdhN7KLdiJSp7YJ7QyQTbYY2Smaw==' | base64 --decode | gpg --decrypt --batch --quiet --passphrase "$passphrase")
+        [ $? -eq 0 ] && echo $link && break
+        unset passphrase
+    done
+
+    resp=$(curl -sSL "https://cloud-api.yandex.net/v1/disk/public/resources?public_key=$link")
+    error=$(echo $resp | jq -r .error)
+    [ "$error" != "null" ] && echo "Error: $error" && exit -1
+    link=$(echo $resp | jq -r .file)
+    [ "$link" == "null" ] && echo "No link found:" && echo $resp | jq . && exit -1
+    curl -sSL --output /tmp/kdbx $link
+
+    hash=$(echo $resp | jq -r .sha256)
+    sha256=$(sha256sum /tmp/kdbx | awk '{print $1}')
+    [ "$hash" != "$sha256" ] && echo "Wrong hashes:" && echo $hash && echo $sha256 && exit -1
+    echo "kdbx has been downloaded"
+    
+    while : ; do
+        echo 'enter password for kdb archive:' && read -ers z
+        gpg --passphrase $z --batch --quiet --decrypt /tmp/kdbx | xz -d > $MAN_KDB
+        [ $? -eq 0 ] && break
+    done
 fi
+[ ! -f $MAN_KDB ] && echo 'KDBX is not ready' && exit -1
 
 while : ; do
     hash=$(test -f $HOME/.sanctum.sanctorum && sha512sum $HOME/.sanctum.sanctorum | awk '{ print $1 }' || echo 0)
