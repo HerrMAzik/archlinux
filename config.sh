@@ -34,7 +34,7 @@ chmod 0400 $HOME/.sanctum.sanctorum
 if [ ! -d "$(chezmoi source-path)" ]; then
     test -z $passphrase && echo 'enter password:' && read -ers passphrase
     
-    yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB dots.secret | base64 --decode | gpg --passphrase $passphrase --decrypt --batch --cipher-algo AES256 --quiet --output $HOME/.dots.secret
+    yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB dots.secret | base64 --decode | gpg --passphrase $passphrase --decrypt --batch --quiet --output $HOME/.dots.secret
     chmod 0400 $HOME/.dots.secret
 
     git clone https://github.com/HerrMAzik/dots.git "$(chezmoi source-path)"
