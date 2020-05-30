@@ -79,12 +79,12 @@ if [ ! -d $HOME/.mozilla/firefox/*HerrMAN ]; then
     pkill firefox
 fi
 
+nvim -c ':PlugInstall' -c ':q' -c ':q'
+
 # yay
 ! type yay >/dev/null 2>&1 && sh $CONFIGDIR/yay.sh
 
 ! type vscodium >/dev/null 2>&1 && yay --needed --noconfirm -S vscodium-bin
-
-nvim -c ':PlugInstall' -c ':q' -c ':q'
 
 ! type intellij-idea-ultimate-edition >/dev/null 2>&1 && yay -S --needed --noconfirm intellij-idea-ultimate-edition intellij-idea-ultimate-edition-jre
 ! type clion >/dev/null 2>&1 && yay -S --needed --noconfirm clion clion-jre
