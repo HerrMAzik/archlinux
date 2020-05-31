@@ -18,7 +18,7 @@ if [ ! -f $MAN_KDB ]; then
 #    read -ers z
 #    curl -L https://${z}.keybase.pub/kdb --output /tmp/kdb
     while : ; do
-        test -z $passphrase && echo 'enter password:' && read -ers passphrase
+        test -z $passphrase && echo 'enter kdbx password:' && read -ers passphrase
         link=$(echo 'jA0ECQMCItwerSoXDA3o0lYBs5LFklMXCSTWb9FFsTdqXcPlVoFAHK6q6dZc7OF04lhUcFiKpCgpUgSde+CuPhSqIcGzdD7dyizdgu4aA91oX+QdhN7KLdiJSp7YJ7QyQTbYY2Smaw==' | base64 --decode | gpg --decrypt --batch --quiet --passphrase "$passphrase")
         [ $? -eq 0 ] && echo $link && break
         unset passphrase
@@ -54,7 +54,7 @@ done
 chmod 0400 $HOME/.sanctum.sanctorum
 
 if [ ! -d "$(chezmoi source-path)" ]; then
-    test -z $passphrase && echo 'enter password:' && read -ers passphrase
+    test -z $passphrase && echo 'enter kdbx password:' && read -ers passphrase
     
     yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB dots.secret | base64 --decode | gpg --passphrase $passphrase --decrypt --batch --quiet --output $HOME/.dots.secret
     chmod 0400 $HOME/.dots.secret
@@ -69,7 +69,7 @@ fi
 systemctl --user enable ssh-agent.service
 
 if [ ! gpg --list-keys prime > /dev/null 2>&1 ]; then
-    test -z $passphrase && echo 'enter password:' && read -ers passphrase
+    test -z $passphrase && echo 'enter kdbx password:' && read -ers passphrase
 
     yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/pgp-private  | awk NF | gpg --pinentry-mode loopback --passphrase $(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/gpg) --import
     yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/pgp-public | awk NF | gpg --import
@@ -77,7 +77,7 @@ if [ ! gpg --list-keys prime > /dev/null 2>&1 ]; then
 fi
 
 if [ ! -d $HOME/repo/pass ]; then
-    test -z $passphrase && echo 'enter password:' && read -ers passphrase
+    test -z $passphrase && echo 'enter kdbx password:' && read -ers passphrase
 
     git clone https://HerrMAzik:$(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $MAN_KDB Repositories/GitHub)@github.com/HerrMAzik/pass.git $HOME/repo/pass
     sh -c 'cd $HOME/repo/pass; git remote set-url origin git@github.com:HerrMAzik/pass.git'
@@ -86,7 +86,7 @@ test ! -L $HOME/.password-store && ln -s $HOME/repo/pass $HOME/.password-store
 ! pass > /dev/null 2>&1 && echo 'Wrong password store link'
 
 if [ ! -d $HOME/repo/settings ]; then
-    test -z $passphrase && echo 'enter password:' && read -ers passphrase
+    test -z $passphrase && echo 'enter kdbx password:' && read -ers passphrase
 
     git clone https://HerrMAzik:$(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $MAN_KDB Repositories/GitHub)@github.com/HerrMAzik/settings.git $HOME/repo/settings
     sh -c 'cd $HOME/repo/settings; git remote set-url origin git@github.com:HerrMAzik/settings.git'
@@ -107,11 +107,10 @@ nvim -c ':PlugInstall' -c ':q' -c ':q'
 ! type yay >/dev/null 2>&1 && sh $CONFIGDIR/yay.sh
 
 ! type vscodium >/dev/null 2>&1 && yay --needed --noconfirm -S vscodium-bin
+vscodium --install-extension matklad.rust-analyzer
+vscodium --install-extension bmalehorn.vscode-fish
+vscodium --install-extension mechatroner.rainbow-csv
 
 ! type intellij-idea-ultimate-edition >/dev/null 2>&1 && yay -S --needed --noconfirm intellij-idea-ultimate-edition intellij-idea-ultimate-edition-jre
 ! type clion >/dev/null 2>&1 && yay -S --needed --noconfirm clion clion-jre
 ! type goland >/dev/null 2>&1 && yay -S --needed --noconfirm goland goland-jre
-
-vscodium --install-extension matklad.rust-analyzer
-vscodium --install-extension bmalehorn.vscode-fish
-vscodium --install-extension mechatroner.rainbow-csv

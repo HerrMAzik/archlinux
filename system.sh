@@ -18,16 +18,29 @@ fi
 test -z $CONFIGDIR && CONFIGDIR=$HOME/repo/archlinux
 sh -c "cd ${CONFIGDIR}; git pull"
 
+cpu=$(cat /proc/cpuinfo | grep 'vendor' | uniq | awk '{ print $3 }')
+case "$cpu" in
+"GenuineIntel")
+    ucode="intel-ucode"
+    ;;
+"AuthenticAMD")
+    ucode="amd-ucode"
+    ;;
+*)
+    ucode=""
+    ;;
+esac
+
 cat <<EOF | sudo sh
 cp -f $CONFIGDIR/etc/pacman.conf /etc/pacman.conf
 
 pacman --needed --noconfirm -Syu unzip zip p7zip pigz pbzip2 xz
-pacman --needed --noconfirm -S intel-ucode dnscrypt-proxy chezmoi systemd-swap powertop man
+pacman --needed --noconfirm -S $ucode dnscrypt-proxy chezmoi systemd-swap man
 pacman --needed --noconfirm -S noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji
 pacman --needed --noconfirm -S ttf-jetbrains-mono ttf-dejavu ttf-opensans
 pacman --needed --noconfirm -S xdg-user-dirs plasma-desktop sddm plasma-pa plasma-nm sddm-kcm
 pacman --needed --noconfirm -S konsole okular ark powerdevil gwenview dolphin kcalc kolourpaint
-pacman --needed --noconfirm -S mpv youtube-dl firefox flameshot ncdu
+pacman --needed --noconfirm -S mpv youtube-dl firefox spectacle flameshot ncdu qbittorrent
 pacman --needed --noconfirm -S pass oath-toolkit keepassxc keybase kbfs gnupg
 pacman --needed --noconfirm -S mc curl wget htop neovim jq expect
 pacman --needed --noconfirm -S exa ripgrep fd bat skim
