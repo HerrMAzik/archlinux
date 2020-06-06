@@ -38,8 +38,9 @@ if [ ! -f $MAN_KDB ]; then
     
     while : ; do
         echo 'enter password for kdb archive:' && read -ers z
-        gpg --passphrase $z --batch --quiet --decrypt /tmp/kdbx | xz -d > $MAN_KDB
+        gpg --passphrase "$z" --batch --quiet --decrypt /tmp/kdbx | xz -d > $MAN_KDB
         [ $? -eq 0 ] && break
+	rm -rf $MAN_KDB
     done
 fi
 [ ! -f $MAN_KDB ] && echo 'KDBX is not ready' && exit -1
