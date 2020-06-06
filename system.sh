@@ -10,13 +10,10 @@ nmtui
 sudo pacman --needed --noconfirm -Syyuu git
 
 mkdir -p $HOME/repo
-if [ ! -d $HOME/repo/archlinux ];then
-    git clone https://github.com/HerrMAzik/archlinux.git $HOME/repo/archlinux
-    sh -c 'cd $HOME/repo/archlinux; git remote set-url origin git@github.com:HerrMAzik/archlinux.git'
-fi
+[ ! -d $HOME/repo/archlinux ] && git clone https://github.com/HerrMAzik/archlinux.git $HOME/repo/archlinux
 
 test -z $CONFIGDIR && CONFIGDIR=$HOME/repo/archlinux
-sh -c "cd ${CONFIGDIR}; git pull"
+sh -c "cd ${CONFIGDIR}; git pull --ff-only"
 
 cpu=$(cat /proc/cpuinfo | grep 'vendor' | uniq | awk '{ print $3 }')
 case "$cpu" in
