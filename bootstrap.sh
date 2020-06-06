@@ -110,4 +110,4 @@ pacman --noconfirm -S grub
 grub-mkconfig -o /boot/grub/grub.cfg
 EOF
 
-umount -a
+umount -R /mnt
