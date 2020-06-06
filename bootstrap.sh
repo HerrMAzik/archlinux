@@ -50,9 +50,9 @@ reset
 
 export LANG=en_US.UTF-8
 
-echo ';' | sfdisk /dev/sda
-yes | mkfs.ext4 -L system /dev/sda1
-mount /dev/sda1 /mnt
+echo ';' | sfdisk $DEVICE
+yes | mkfs.ext4 -L system "${DEVICE}1"
+mount "${DEVICE}1" /mnt
 
 sed -n "/yandex/p" -i /etc/pacman.d/mirrorlist
 yes '' | pacstrap /mnt base base-devel linux linux-firmware
@@ -88,7 +88,7 @@ EOF
 
 arch-chroot /mnt /bin/sh <<EOF
 pacman --noconfirm -S grub
-grub-install /dev/sda
+grub-install $DEVICE
 grub-mkconfig -o /boot/grub/grub.cfg
 EOF
 
