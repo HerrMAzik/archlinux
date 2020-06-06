@@ -38,9 +38,9 @@ pacman --needed --noconfirm -Syu unzip zip p7zip pigz pbzip2 xz
 pacman --needed --noconfirm -S $ucode dnscrypt-proxy chezmoi systemd-swap man
 pacman --needed --noconfirm -S noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji
 pacman --needed --noconfirm -S ttf-jetbrains-mono ttf-dejavu ttf-opensans
-pacman --needed --noconfirm -S xdg-user-dirs plasma-desktop sddm plasma-pa plasma-nm sddm-kcm
-pacman --needed --noconfirm -S konsole okular ark powerdevil gwenview dolphin kcalc kolourpaint
-pacman --needed --noconfirm -S mpv youtube-dl firefox spectacle flameshot ncdu qbittorrent
+pacman --needed --noconfirm -S xdg-user-dirs gnome-shell gdm gnome-terminal
+pacman --needed --noconfirm -S gnome-control-center gnome-tweaks evince
+pacman --needed --noconfirm -S mpv youtube-dl firefox ncdu transmission-gtk
 pacman --needed --noconfirm -S pass oath-toolkit keepassxc keybase kbfs gnupg
 pacman --needed --noconfirm -S mc curl wget htop neovim jq expect
 pacman --needed --noconfirm -S exa ripgrep fd bat skim
@@ -68,7 +68,7 @@ cp -f $CONFIGDIR/etc/systemd/swap.conf.d/swap.conf /etc/systemd/swap.conf.d/swap
 
 sed -i 's/.*GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
 
-systemctl enable dnscrypt-proxy.service fstrim.timer systemd-swap.service sddm.service
+systemctl enable dnscrypt-proxy.service fstrim.timer systemd-swap.service gdm.service
 mkinitcpio -P
 grub-mkconfig -o /boot/grub/grub.cfg
 EOF
