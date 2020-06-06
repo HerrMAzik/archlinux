@@ -1,6 +1,6 @@
 #!/bin/sh
 
-WARN_END=" (cannot be omitted ot empty)"
+WARN_END=" (cannot be omitted or empty)"
 
 bootstrapper_dialog() {
     DIALOG_RESULT=$(dialog --clear --stdout --backtitle "Arch bootstrapper" --no-shadow --no-cancel "$@" 2>/dev/null)
