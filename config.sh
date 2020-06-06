@@ -76,6 +76,8 @@ if [ ! gpg --list-keys prime > /dev/null 2>&1 ]; then
     yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/pgp-trust | awk NF | gpg --import-ownertrust
 fi
 
+sh -c 'cd $HOME/repo/archlinux; git remote set-url origin git@github.com:HerrMAzik/archlinux.git'
+
 if [ ! -d $HOME/repo/pass ]; then
     test -z $passphrase && echo 'enter kdbx password:' && read -ers passphrase
 
