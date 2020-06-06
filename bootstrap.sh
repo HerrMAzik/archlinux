@@ -104,19 +104,19 @@ EOF
 
 if [ $MODE -eq 1 ]; then
     arch-chroot /mnt /bin/sh <<EOF
-    pacman --noconfirm -S grub
-    grub-install $DEVICE
-    grub-mkconfig -o /boot/grub/grub.cfg
-    EOF
+pacman --noconfirm -S grub
+grub-install
+grub-mkconfig -o /boot/grub/grub.cfg
+EOF
 else
     arch-chroot /mnt /bin/sh <<EOF
-    pacman --noconfirm -S grub efibootmgr
-    mkdir -p /efi
-    mount "${DEVICE}1" /efi
-    grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
-    grub-mkconfig -o /boot/grub/grub.cfg
-    umount /efi
-    EOF
+pacman --noconfirm -S grub efibootmgr
+mkdir -p /efi
+mount "${DEVICE}1" /efi
+grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
+grub-mkconfig -o /boot/grub/grub.cfg
+umount /efi
+EOF
 fi
 
 umount /mnt
