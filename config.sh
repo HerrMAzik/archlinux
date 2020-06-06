@@ -67,7 +67,7 @@ if [ ! -d "$(chezmoi source-path)" ]; then
     sh -c 'cd $(chezmoi source-path); git remote set-url origin git@github.com:HerrMAzik/dots.git'
 fi
 
-systemctl --user enable ssh-agent.service
+systemctl --user enable --now ssh-agent.service
 
 if [ ! gpg --list-keys prime > /dev/null 2>&1 ]; then
     test -z $passphrase && echo 'enter kdbx password:' && read -ers passphrase
