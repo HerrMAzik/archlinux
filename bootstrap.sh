@@ -84,7 +84,7 @@ export LANG=en_US.UTF-8
 echo 'LANG=en_US.UTF-8' > /etc/locale.conf
 echo 'KEYMAP=us' > /etc/vconsole.conf
 ln -s /usr/share/zoneinfo/Europe/Samara /etc/localtime
-hwclock --systohc
+hwclock --systohc --utc
 cat << EOF2 > /etc/hosts
 127.0.0.1   localhost
 ::1         localhost ip6-localhost ip6-loopback
