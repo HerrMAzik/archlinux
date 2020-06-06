@@ -51,7 +51,6 @@ USER_PASSWORD="$DIALOG_RESULT"
 reset
 
 timedatectl set-ntp true
-export LANG=en_US.UTF-8
 
 if [ $MODE -eq 1 ]; then
     echo ';' | sfdisk $DEVICE
@@ -102,21 +101,13 @@ chown $USERNAME:users /home/$USERNAME/system.sh
 chmod 0700 /home/$USERNAME/system.sh
 EOF
 
-if [ $MODE -eq 1 ]; then
-    arch-chroot /mnt /bin/sh <<EOF
+arch-chroot /mnt /bin/sh <<EOF
 pacman --noconfirm -S grub
-grub-install
+[ $MODE -eq 2 ] && pacman --noconfirm -S efibootmgr
+[ $MODE -eq 2 ] && mkdir -p /efi && mount "${DEVICE}1" /efi
+[ $MODE -eq 1 ] && grub-install
+[ $MODE -eq 2 ] && grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
 EOF
-else
-    arch-chroot /mnt /bin/sh <<EOF
-pacman --noconfirm -S grub efibootmgr
-mkdir -p /efi
-mount "${DEVICE}1" /efi
-grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
-grub-mkconfig -o /boot/grub/grub.cfg
-umount /efi
-EOF
-fi
 
-umount /mnt
+umount -a
