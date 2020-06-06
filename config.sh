@@ -72,8 +72,8 @@ systemctl --user enable --now ssh-agent.service
 if [ ! gpg --list-keys prime > /dev/null 2>&1 ]; then
     test -z $passphrase && echo 'enter kdbx password:' && read -ers passphrase
 
-    yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/pgp-private  | awk NF | gpg --pinentry-mode loopback --passphrase $(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/gpg) --import
-    yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/pgp-public | awk NF | gpg --import
+    yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/pgp-private | gpg --pinentry-mode loopback --passphrase $(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/gpg) --import
+    yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/pgp-public | gpg --import
     yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/pgp-trust | awk NF | gpg --import-ownertrust
 fi
 
