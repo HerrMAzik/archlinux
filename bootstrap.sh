@@ -106,7 +106,7 @@ pacman --noconfirm -S grub
 [ $MODE -eq 2 ] && pacman --noconfirm -S efibootmgr
 [ $MODE -eq 2 ] && mkdir -p /efi && mount "${DEVICE}1" /efi
 [ $MODE -eq 1 ] && grub-install
-[ $MODE -eq 2 ] && grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
+[ $MODE -eq 2 ] && grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB --removable
 grub-mkconfig -o /boot/grub/grub.cfg
 EOF
 
