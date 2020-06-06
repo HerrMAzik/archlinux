@@ -117,3 +117,9 @@ vscodium --install-extension mechatroner.rainbow-csv
 ! type intellij-idea-ultimate-edition >/dev/null 2>&1 && yay -S --needed --noconfirm intellij-idea-ultimate-edition intellij-idea-ultimate-edition-jre
 ! type clion >/dev/null 2>&1 && yay -S --needed --noconfirm clion clion-jre
 ! type goland >/dev/null 2>&1 && yay -S --needed --noconfirm goland goland-jre
+
+[ ! (gnome-extensions list | rg 'appindicatorsupport@rgcjonas.gmail.com') ] && yay --needed --noconfirm -S gnome-shell-extension-appindicator
+[ ! (gnome-extensions list | rg 'dash-to-dock@micxgx.gmail.com') ] && yay --needed --noconfirm -S gnome-shell-extension-dash-to-dock
+
+gnome-extensions enable appindicatorsupport@rgcjonas.gmail.com
+gnome-extensions enable dash-to-dock@micxgx.gmail.com
