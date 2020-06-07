@@ -115,7 +115,7 @@ vscodium --install-extension bmalehorn.vscode-fish
 vscodium --install-extension mechatroner.rainbow-csv
 
 ! type intellij-idea-ultimate-edition >/dev/null 2>&1 && yay -S --needed --noconfirm intellij-idea-ultimate-edition intellij-idea-ultimate-edition-jre
-! type clion >/dev/null 2>&1 && yay -S --needed --noconfirm clion clion-jre
+! type clion >/dev/null 2>&1 && yay -S --needed --noconfirm clion clion-jre clion-lldb clion-gdb clion-cmake
 ! type goland >/dev/null 2>&1 && yay -S --needed --noconfirm goland goland-jre
 
 [ ! (gnome-extensions list | rg 'appindicatorsupport@rgcjonas.gmail.com') ] && yay --needed --noconfirm -S gnome-shell-extension-appindicator
