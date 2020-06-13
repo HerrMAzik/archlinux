@@ -123,3 +123,5 @@ vscodium --install-extension mechatroner.rainbow-csv
 
 gnome-extensions enable appindicatorsupport@rgcjonas.gmail.com
 gnome-extensions enable dash-to-dock@micxgx.gmail.com
+
+! type gnome-pomodoro >/dev/null 2>&1 && yay -S --needed --noconfirm gnome-shell-pomodoro
