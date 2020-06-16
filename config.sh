@@ -72,6 +72,7 @@ if [ ! -f $XDG_CONFIG_HOME/keybase/*.mpack ]; then
     
     mpack_filename=$(yes $passphrase | keepassxc-cli show -q -a UserName -s -k $HOME/.sanctum.sanctorum $MAN_KDB Programs/Keybase/mpack)
     yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB Programs/Keybase/mpack | base64 --decode > $XDG_CONFIG_HOME/keybase/$mpack_filename
+    chmod 0600 $XDG_CONFIG_HOME/keybase/$mpack_filename
 fi
 
 systemctl --user enable --now ssh-agent.service
