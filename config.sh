@@ -67,6 +67,13 @@ if [ ! -d "$(chezmoi source-path)" ]; then
     sh -c 'cd $(chezmoi source-path); git remote set-url origin git@github.com:HerrMAzik/dots.git'
 fi
 
+if [ ! -f $XDG_CONFIG_HOME/keybase/*.mpack ]; then
+    test -z $passphrase && echo 'enter kdbx password:' && read -ers passphrase
+    
+    mpack_filename=$(yes $passphrase | keepassxc-cli show -q -a UserName -s -k $HOME/.sanctum.sanctorum $MAN_KDB Programs/Keybase/mpack)
+    yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB Programs/Keybase/mpack | base64 --decode > $XDG_CONFIG_HOME/keybase/$mpack_filename
+fi
+
 systemctl --user enable --now ssh-agent.service
 
 if [ ! gpg --list-keys prime > /dev/null 2>&1 ]; then
