@@ -119,19 +119,19 @@ nvim -c ':PlugInstall' -c ':q' -c ':q'
 # yay
 ! type yay >/dev/null 2>&1 && sh $CONFIGDIR/yay.sh
 
-! type vscodium >/dev/null 2>&1 && yay -S --needed --noconfirm vscodium-bin
+! type vscodium >/dev/null 2>&1 && yay -S --needed --noconfirm --removemake vscodium-bin
 vscodium --install-extension matklad.rust-analyzer
 vscodium --install-extension bmalehorn.vscode-fish
 vscodium --install-extension mechatroner.rainbow-csv
 
-! type intellij-idea-ultimate-edition >/dev/null 2>&1 && yay -S --needed --noconfirm intellij-idea-ultimate-edition intellij-idea-ultimate-edition-jre
-! type clion >/dev/null 2>&1 && yay -S --needed --noconfirm clion clion-jre clion-lldb clion-gdb clion-cmake
-! type goland >/dev/null 2>&1 && yay -S --needed --noconfirm goland goland-jre
+! type intellij-idea-ultimate-edition >/dev/null 2>&1 && yay -S --needed --noconfirm --removemake intellij-idea-ultimate-edition intellij-idea-ultimate-edition-jre
+! type clion >/dev/null 2>&1 && yay -S --needed --noconfirm --removemake clion clion-jre clion-lldb clion-gdb clion-cmake
+! type goland >/dev/null 2>&1 && yay -S --needed --noconfirm --removemake goland goland-jre
 
-! yay -Qs gnome-shell-extension-appindicator >/dev/null 2>&1 && yay -S --needed --noconfirm gnome-shell-extension-appindicator
-! yay -Qs gnome-shell-extension-dash-to-dock >/dev/null 2>&1 && yay -S --needed --noconfirm gnome-shell-extension-dash-to-dock
+! yay -Qs gnome-shell-extension-appindicator >/dev/null 2>&1 && yay -S --needed --noconfirm --removemake gnome-shell-extension-appindicator
+! yay -Qs gnome-shell-extension-dash-to-dock >/dev/null 2>&1 && yay -S --needed --noconfirm --removemake gnome-shell-extension-dash-to-dock
 
 gnome-extensions enable appindicatorsupport@rgcjonas.gmail.com
 gnome-extensions enable dash-to-dock@micxgx.gmail.com
 
-! type gnome-pomodoro >/dev/null 2>&1 && yay -S --needed --noconfirm gnome-shell-pomodoro
+! type gnome-pomodoro >/dev/null 2>&1 && yay -S --needed --noconfirm --removemake gnome-shell-pomodoro
