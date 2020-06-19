@@ -1,5 +1,7 @@
 #!/bin/sh
 
+sudo echo 'Preparing:'
+
 ! type git >/dev/null && echo 'install git at first running system.sh' && exit -1
 test ! -d $HOME/repo/archlinux && echo 'run system.sh before configuring' && exit -1
 
