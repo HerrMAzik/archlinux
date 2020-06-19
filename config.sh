@@ -7,8 +7,8 @@ test -z $XDG_CONFIG_HOME && XDG_CONFIG_HOME="$HOME/.config"
 test -z $CONFIGDIR && CONFIGDIR=$HOME/repo/archlinux
 MAN_KDB="$HOME/repo/man.kdbx"
 
-rm $HOME/.bashrc 2> /dev/null
-rm $HOME/.bash_{logout,profile} 2> /dev/null
+rm $HOME/.bashrc 2>/dev/null
+rm $HOME/.bash_{logout,profile} 2>/dev/null
 
 mkdir -p $HOME/go/src
 mkdir -p $HOME/repo
@@ -90,7 +90,7 @@ sh -c 'cd $HOME/repo/archlinux; git remote set-url origin git@github.com:HerrMAz
 if [ ! -d $HOME/repo/pass ]; then
     test -z $passphrase && echo 'enter kdbx password:' && read -ers passphrase
 
-    git clone https://HerrMAzik:$(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $MAN_KDB Repositories/GitHub)@github.com/HerrMAzik/pass.git $HOME/repo/pass
+    git clone https://HerrMAzik:$(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $MAN_KDB Repositories/GitHub/token)@github.com/HerrMAzik/pass.git $HOME/repo/pass
     sh -c 'cd $HOME/repo/pass; git remote set-url origin git@github.com:HerrMAzik/pass.git'
 fi
 test ! -L $HOME/.password-store && ln -s $HOME/repo/pass $HOME/.password-store
@@ -99,7 +99,7 @@ test ! -L $HOME/.password-store && ln -s $HOME/repo/pass $HOME/.password-store
 if [ ! -d $HOME/repo/settings ]; then
     test -z $passphrase && echo 'enter kdbx password:' && read -ers passphrase
 
-    git clone https://HerrMAzik:$(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $MAN_KDB Repositories/GitHub)@github.com/HerrMAzik/settings.git $HOME/repo/settings
+    git clone https://HerrMAzik:$(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $MAN_KDB Repositories/GitHub/token)@github.com/HerrMAzik/settings.git $HOME/repo/settings
     sh -c 'cd $HOME/repo/settings; git remote set-url origin git@github.com:HerrMAzik/settings.git'
 fi
 
@@ -117,7 +117,7 @@ nvim -c ':PlugInstall' -c ':q' -c ':q'
 # yay
 ! type yay >/dev/null 2>&1 && sh $CONFIGDIR/yay.sh
 
-! type vscodium >/dev/null 2>&1 && yay --needed --noconfirm -S vscodium-bin
+! type vscodium >/dev/null 2>&1 && yay -S --needed --noconfirm vscodium-bin
 vscodium --install-extension matklad.rust-analyzer
 vscodium --install-extension bmalehorn.vscode-fish
 vscodium --install-extension mechatroner.rainbow-csv
@@ -126,8 +126,8 @@ vscodium --install-extension mechatroner.rainbow-csv
 ! type clion >/dev/null 2>&1 && yay -S --needed --noconfirm clion clion-jre clion-lldb clion-gdb clion-cmake
 ! type goland >/dev/null 2>&1 && yay -S --needed --noconfirm goland goland-jre
 
-[ ! (gnome-extensions list | rg 'appindicatorsupport@rgcjonas.gmail.com') ] && yay --needed --noconfirm -S gnome-shell-extension-appindicator
-[ ! (gnome-extensions list | rg 'dash-to-dock@micxgx.gmail.com') ] && yay --needed --noconfirm -S gnome-shell-extension-dash-to-dock
+! yay -Qs gnome-shell-extension-appindicator >/dev/null 2>&1 && yay -S --needed --noconfirm gnome-shell-extension-appindicator
+! yay -Qs gnome-shell-extension-dash-to-dock >/dev/null 2>&1 && yay -S --needed --noconfirm gnome-shell-extension-dash-to-dock
 
 gnome-extensions enable appindicatorsupport@rgcjonas.gmail.com
 gnome-extensions enable dash-to-dock@micxgx.gmail.com
