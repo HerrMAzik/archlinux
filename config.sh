@@ -50,18 +50,25 @@ fi
 while : ; do
     hash=$(test -f $HOME/.sanctum.sanctorum && sha512sum $HOME/.sanctum.sanctorum | awk '{ print $1 }' || echo 0)
     hash=${hash:0:64}
-    test $hash = 'da78e04ead69bdff7f9a9d5eb12e8e9cc7439ac347c697b6093eba4f1b727c7a' && break
+    test $hash = 'da78e04ead69bdff7f9a9d5eb12e8e9cc7439ac347c697b6093eba4f1b727c7a' && chmod 0400 $HOME/.sanctum.sanctorum && break
     echo 'enter sanctum sanctorum content:'
     sh -c "IFS= ;read -N 34 -s -a z; echo \$z > $HOME/.sanctum.sanctorum"
 done
-chmod 0400 $HOME/.sanctum.sanctorum
+
+if [ ! -f $HOME/.dots.secret ]; then
+    while : ; then
+        test -z $passphrase && echo 'enter kdbx password:' && read -ers passphrase
+
+        yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB dots.secret | base64 --decode | gpg --passphrase $passphrase --decrypt --batch --quiet --output $HOME/.dots.secret
+        [ $? -eq 0 ] && break
+    done
+    hash=$(test -f $HOME/.dots.secret && sha512sum $HOME/.dots.secret | awk '{ print $1 }' || echo 0)
+    hash=${hash:0:64}
+    test $hash != 'd5f37e719c1af84da39fbef77908b8fb1b8e14737f7c02aa2206cc3adeb4e8b' && rm -rf $HOME/.dots.secret && echo 'wrong dots.secret file content' && exit -1
+    chmod 0400 $HOME/.dots.secret
+fi
 
 if [ ! -d "$(chezmoi source-path)" ]; then
-    test -z $passphrase && echo 'enter kdbx password:' && read -ers passphrase
-    
-    yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB dots.secret | base64 --decode | gpg --passphrase $passphrase --decrypt --batch --quiet --output $HOME/.dots.secret
-    chmod 0400 $HOME/.dots.secret
-
     git clone https://github.com/HerrMAzik/dots.git "$(chezmoi source-path)"
     sh -c "cd $(chezmoi source-path); git crypt unlock $HOME/.dots.secret"
     
@@ -95,7 +102,7 @@ if [ ! -d $HOME/repo/pass ]; then
     git clone https://HerrMAzik:$(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $MAN_KDB Repositories/GitHub/token)@github.com/HerrMAzik/pass.git $HOME/repo/pass
     sh -c 'cd $HOME/repo/pass; git remote set-url origin git@github.com:HerrMAzik/pass.git'
 fi
-test ! -L $HOME/.password-store && ln -s $HOME/repo/pass $HOME/.password-store
+[ ! -L $HOME/.password-store ] && ln -s $HOME/repo/pass $HOME/.password-store
 ! pass > /dev/null 2>&1 && echo 'Wrong password store link'
 
 if [ ! -d $HOME/repo/settings ]; then
