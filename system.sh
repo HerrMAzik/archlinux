@@ -35,10 +35,11 @@ pacman --needed --noconfirm -Syu unzip zip p7zip pigz pbzip2 xz
 pacman --needed --noconfirm -S $ucode dnscrypt-proxy chezmoi systemd-swap man
 pacman --needed --noconfirm -S noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji
 pacman --needed --noconfirm -S ttf-jetbrains-mono ttf-dejavu ttf-opensans
-pacman --needed --noconfirm -S xdg-user-dirs gnome-shell gdm gnome-terminal nautilus
+pacman --needed --noconfirm -S xdg-user-dirs
+pacman --needed --noconfirm -S gnome-shell gdm gnome-terminal nautilus
 pacman --needed --noconfirm -S gnome-control-center gnome-tweaks evince eog file-roller
-pacman --needed --noconfirm -S gnome-calculator
-pacman --needed --noconfirm -S mpv youtube-dl firefox ncdu transmission-gtk
+pacman --needed --noconfirm -S gnome-calculator transmission-gtk
+pacman --needed --noconfirm -S mpv youtube-dl firefox ncdu code
 pacman --needed --noconfirm -S pass oath-toolkit keepassxc keybase kbfs gnupg
 pacman --needed --noconfirm -S mc curl wget htop neovim jq expect
 pacman --needed --noconfirm -S exa ripgrep fd bat skim
