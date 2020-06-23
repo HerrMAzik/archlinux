@@ -40,7 +40,7 @@ pacman --needed --noconfirm -S plasma-desktop sddm plasma-pa plasma-nm sddm-kcm
 pacman --needed --noconfirm -S konsole okular ark powerdevil gwenview dolphin
 pacman --needed --noconfirm -S qbittorrent kolourpaint kcalc
 pacman --needed --noconfirm -S mpv youtube-dl firefox ncdu code flameshot
-pacman --needed --noconfirm -S pass oath-toolkit keepassxc keybase kbfs gnupg
+pacman --needed --noconfirm -S pass oath-toolkit keepassxc keybase kbfs gnupg pass-pinentry
 pacman --needed --noconfirm -S mc curl wget htop neovim jq expect
 pacman --needed --noconfirm -S exa ripgrep fd bat skim
 pacman --needed --noconfirm -S git-crypt gcc gdb cmake go go-tools rustup

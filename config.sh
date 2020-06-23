@@ -56,7 +56,7 @@ while : ; do
 done
 
 if [ ! -f $HOME/.dots.secret ]; then
-    while : ; then
+    while : ; do
         test -z $passphrase && echo 'enter kdbx password:' && read -ers passphrase
 
         yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB dots.secret | base64 --decode | gpg --passphrase $passphrase --decrypt --batch --quiet --output $HOME/.dots.secret
@@ -64,7 +64,7 @@ if [ ! -f $HOME/.dots.secret ]; then
     done
     hash=$(test -f $HOME/.dots.secret && sha512sum $HOME/.dots.secret | awk '{ print $1 }' || echo 0)
     hash=${hash:0:64}
-    test $hash != 'd5f37e719c1af84da39fbef77908b8fb1b8e14737f7c02aa2206cc3adeb4e8b' && rm -rf $HOME/.dots.secret && echo 'wrong dots.secret file content' && exit -1
+    [ $hash != 'd5f37e719c1af84da39fbef77908b8fb1b8e14737f7c02aa2206cc3adeb4e8be' ] && rm -rf $HOME/.dots.secret && echo 'wrong dots.secret file content' && exit -1
     chmod 0400 $HOME/.dots.secret
 fi
 
@@ -117,6 +117,7 @@ rustup default stable
 code --install-extension matklad.rust-analyzer
 code --install-extension bmalehorn.vscode-fish
 code --install-extension mechatroner.rainbow-csv
+code --install-extension jdinhlife.gruvbox
 
 if [ ! -d $HOME/.mozilla/firefox/*HerrMAN ]; then
     firefox -CreateProfile HerrMAN
@@ -132,4 +133,3 @@ nvim -c ':PlugInstall' -c ':q' -c ':q'
 
 ! type intellij-idea-ultimate-edition >/dev/null 2>&1 && yay -S --needed --noconfirm --removemake intellij-idea-ultimate-edition intellij-idea-ultimate-edition-jre
 ! type clion >/dev/null 2>&1 && yay -S --needed --noconfirm --removemake clion clion-jre clion-lldb clion-gdb clion-cmake
-! type goland >/dev/null 2>&1 && yay -S --needed --noconfirm --removemake goland goland-jre
