@@ -39,6 +39,7 @@ pacman --needed --noconfirm -S xdg-user-dirs xcursor-simpleandsoft
 pacman --needed --noconfirm -S plasma-desktop sddm plasma-pa plasma-nm sddm-kcm
 pacman --needed --noconfirm -S konsole okular ark powerdevil gwenview dolphin
 pacman --needed --noconfirm -S qbittorrent kolourpaint kcalc kscreen
+pacman --needed --noconfirm -S kvantum-theme-arc arc-gtk-theme qt5-tools papirus-icon-theme
 pacman --needed --noconfirm -S mpv youtube-dl firefox ncdu code flameshot
 pacman --needed --noconfirm -S pass oath-toolkit keepassxc keybase kbfs gnupg pass-pinentry
 pacman --needed --noconfirm -S mc curl wget htop neovim jq expect
