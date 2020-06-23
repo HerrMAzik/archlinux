@@ -35,7 +35,7 @@ pacman --needed --noconfirm -Syu unzip zip p7zip pigz pbzip2 xz
 pacman --needed --noconfirm -S $ucode dnscrypt-proxy chezmoi systemd-swap man
 pacman --needed --noconfirm -S noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji
 pacman --needed --noconfirm -S ttf-jetbrains-mono ttf-dejavu ttf-opensans
-pacman --needed --noconfirm -S xdg-user-dirs
+pacman --needed --noconfirm -S xdg-user-dirs xcursor-simpleandsoft
 pacman --needed --noconfirm -S plasma-desktop sddm plasma-pa plasma-nm sddm-kcm
 pacman --needed --noconfirm -S konsole okular ark powerdevil gwenview dolphin
 pacman --needed --noconfirm -S qbittorrent kolourpaint kcalc
