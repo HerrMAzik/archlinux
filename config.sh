@@ -9,8 +9,8 @@ test -z $XDG_CONFIG_HOME && XDG_CONFIG_HOME="$HOME/.config"
 test -z $CONFIGDIR && CONFIGDIR=$HOME/repo/archlinux
 MAN_KDB="$HOME/repo/man.kdbx"
 
-rm $HOME/.bashrc 2>/dev/null
-rm $HOME/.bash_{logout,profile} 2>/dev/null
+rm -rf $HOME/.bashrc
+rm -rf $HOME/.bash_{logout,profile}
 
 mkdir -p $HOME/go/src
 mkdir -p $HOME/repo
