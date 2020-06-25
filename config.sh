@@ -16,9 +16,6 @@ mkdir -p $HOME/go/src
 mkdir -p $HOME/repo
 
 if [ ! -f $MAN_KDB ]; then
-#    echo 'enter keybase account name:'
-#    read -ers z
-#    curl -L https://${z}.keybase.pub/kdb --output /tmp/kdb
     while : ; do
         test -z $passphrase && echo 'enter kdbx password:' && read -ers passphrase
         link=$(echo 'jA0ECQMCItwerSoXDA3o0lYBs5LFklMXCSTWb9FFsTdqXcPlVoFAHK6q6dZc7OF04lhUcFiKpCgpUgSde+CuPhSqIcGzdD7dyizdgu4aA91oX+QdhN7KLdiJSp7YJ7QyQTbYY2Smaw==' | base64 --decode | gpg --decrypt --batch --quiet --passphrase "$passphrase")
@@ -28,16 +25,13 @@ if [ ! -f $MAN_KDB ]; then
 
     resp=$(curl -sSL "https://cloud-api.yandex.net/v1/disk/public/resources?public_key=$link")
     error=$(echo $resp | jq -r .error)
-    [ "$error" != "null" ] && echo "Error: $error" && exit -1
+    [ "$error" != "null" ] && echo "Error: $error"
     link=$(echo $resp | jq -r .file)
-    [ "$link" == "null" ] && echo "No link found:" && echo $resp | jq . && exit -1
-    curl -sSL --output /tmp/kdbx $link
+    [ "$link" == "null" ] || [ $? -ne 0 ] && link=$(echo 'jA0ECQMCXOfwQMLRH93p0lkBXcQzC1SyWhccifyEn1QGeU7VS7Q7+aJLuI5iP7EiOBkKGaMteZ68aF6bbuVGjjZLw4L/BB3br6CK+4yF0/0nRREXoQyEee1AVoE1OaDG/kqq7oa/QFy3Kg==' | base64 --decode | gpg --decrypt --batch --quiet --passphrase "$passphrase")
 
-    hash=$(echo $resp | jq -r .sha256)
-    sha256=$(sha256sum /tmp/kdbx | awk '{print $1}')
-    [ "$hash" != "$sha256" ] && echo "Wrong hashes:" && echo $hash && echo $sha256 && exit -1
+    curl -sSL --output /tmp/kdbx $link
     echo "kdbx has been downloaded"
-    
+
     while : ; do
         echo 'enter password for kdb archive:' && read -ers z
         gpg --passphrase "$z" --batch --quiet --decrypt /tmp/kdbx | xz -d > $MAN_KDB
@@ -72,14 +66,14 @@ if [ ! -d "$(chezmoi source-path)" ]; then
     git clone https://github.com/HerrMAzik/dots.git "$(chezmoi source-path)"
     chmod 0700 $(chezmoi source-path)
     sh -c "cd $(chezmoi source-path); git crypt unlock $HOME/.dots.secret"
-    
+
     chezmoi apply
     sh -c 'cd $(chezmoi source-path); git remote set-url origin git@github.com:HerrMAzik/dots.git'
 fi
 
 if [ ! -f $XDG_CONFIG_HOME/keybase/*.mpack ]; then
     test -z $passphrase && echo 'enter kdbx password:' && read -ers passphrase
-    
+
     mpack_filename=$(yes $passphrase | keepassxc-cli show -q -a UserName -s -k $HOME/.sanctum.sanctorum $MAN_KDB Programs/Keybase/mpack)
     yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB Programs/Keybase/mpack | base64 --decode > $XDG_CONFIG_HOME/keybase/$mpack_filename
     chmod 0600 $XDG_CONFIG_HOME/keybase/$mpack_filename
@@ -120,17 +114,21 @@ code --install-extension bmalehorn.vscode-fish
 code --install-extension mechatroner.rainbow-csv
 code --install-extension jdinhlife.gruvbox
 
-if [ ! -d $HOME/.mozilla/firefox/*HerrMAN ]; then
-    firefox -CreateProfile HerrMAN
-    firefox -P HerrMAN --headless &
-    sleep 2
-    pkill firefox
-fi
-
 nvim -c ':PlugInstall' -c ':q' -c ':q'
 
 # yay
 ! type yay >/dev/null 2>&1 && sh $CONFIGDIR/yay.sh
 
-! type intellij-idea-ultimate-edition >/dev/null 2>&1 && yay -S --needed --noconfirm --removemake intellij-idea-ultimate-edition intellij-idea-ultimate-edition-jre
-! type clion >/dev/null 2>&1 && yay -S --needed --noconfirm --removemake clion clion-jre clion-lldb clion-gdb clion-cmake
+! type lz4json >/dev/null 2>&1 && yay -S --needed --noconfirm --removemake lz4json
+
+if [ ! -d $HOME/.mozilla/firefox/*HerrMAN ]; then
+    firefox -CreateProfile HerrMAN
+    firefox -P HerrMAN --headless &
+    sleep 2
+    pkill firefox
+    sleep 1
+    cp $HOME/repo/settings/user.js $HOME/.mozilla/firefox/*HerrMAN/
+    firefox https://addons.mozilla.org/firefox/addon/ublock-origin/
+    firefox https://addons.mozilla.org/firefox/addon/umatrix/
+    firefox https://addons.mozilla.org/firefox/addon/keepassxc-browser/
+fi

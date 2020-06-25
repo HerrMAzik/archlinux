@@ -1,5 +1,12 @@
 #!/bin/sh
 
+# screen lock
+kwriteconfig5 --file $HOME/.config/kscreenlockerrc --group Daemon --key Autolock "false"
+
+# mouse
+kwriteconfig5 --file $HOME/.config/kcminputrc --group Mouse --key cursorSize "24"
+kwriteconfig5 --file $HOME/.config/kcminputrc --group Mouse --key cursorTheme "Breeze_Snow"
+
 # keyboard
 kwriteconfig5 --file $HOME/.config/kcminputrc --group Keyboard --key KeyboardRepeating "0"
 kwriteconfig5 --file $HOME/.config/kcminputrc --group Keyboard --key NumLock "0"
@@ -11,7 +18,7 @@ kwriteconfig5 --file $HOME/.config/kxkbrc --group Layout --key LayoutList "us,ru
 kwriteconfig5 --file $HOME/.config/kxkbrc --group Layout --key LayoutLoopCount "1111111"
 sed -i 's/LayoutLoopCount=1111111/LayoutLoopCount=-1/' $HOME/.config/kxkbrc
 kwriteconfig5 --file $HOME/.config/kxkbrc --group Layout --key Model "pc105"
-kwriteconfig5 --file $HOME/.config/kxkbrc --group Layout --key Options "grp:rctrl_toggle"
+kwriteconfig5 --file $HOME/.config/kxkbrc --group Layout --key Options "grp:toggle"
 kwriteconfig5 --file $HOME/.config/kxkbrc --group Layout --key ResetOldOptions "true"
 kwriteconfig5 --file $HOME/.config/kxkbrc --group Layout --key ShowFlag "true"
 kwriteconfig5 --file $HOME/.config/kxkbrc --group Layout --key ShowLabel "false"

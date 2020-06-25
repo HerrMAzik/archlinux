@@ -30,21 +30,28 @@ esac
 
 cat <<EOF | sudo sh
 cp -f $CONFIGDIR/etc/pacman.conf /etc/pacman.conf
+pacman --needed --noconfirm -Syu
 
-pacman --needed --noconfirm -Syu unzip zip p7zip pigz pbzip2 xz
-pacman --needed --noconfirm -S $ucode dnscrypt-proxy chezmoi systemd-swap man
-pacman --needed --noconfirm -S noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji
-pacman --needed --noconfirm -S ttf-jetbrains-mono ttf-dejavu ttf-opensans
-pacman --needed --noconfirm -S xdg-user-dirs xcursor-simpleandsoft
-pacman --needed --noconfirm -S plasma-desktop sddm plasma-pa plasma-nm sddm-kcm
-pacman --needed --noconfirm -S konsole okular ark powerdevil gwenview dolphin
-pacman --needed --noconfirm -S qbittorrent kolourpaint kcalc kscreen
-pacman --needed --noconfirm -S kvantum-theme-arc arc-gtk-theme qt5-tools papirus-icon-theme
-pacman --needed --noconfirm -S mpv youtube-dl firefox ncdu code flameshot
-pacman --needed --noconfirm -S pass oath-toolkit keepassxc keybase kbfs gnupg pass-pinentry
-pacman --needed --noconfirm -S mc curl wget htop neovim jq expect
-pacman --needed --noconfirm -S exa ripgrep fd bat skim
-pacman --needed --noconfirm -S git-crypt gcc gdb cmake go go-tools rustup
+while : ; do
+    cat <<EOF2 | sed 's/\s/\n/g' | pacman --needed --noconfirm -S -
+        unzip zip p7zip pigz pbzip2 xz
+        $ucode dnscrypt-proxy chezmoi systemd-swap man
+        noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji
+        ttf-jetbrains-mono ttf-dejavu ttf-opensans
+        xdg-user-dirs plasma-desktop
+        sddm plasma-pa plasma-nm sddm-kcm
+        konsole okular ark powerdevil gwenview dolphin
+        qbittorrent kolourpaint kcalc kscreen
+        qt5-tools kde-gtk-config
+        mpv youtube-dl firefox ncdu code flameshot
+        pass oath-toolkit keepassxc keybase kbfs gnupg pass-pinentry
+        mc curl wget htop neovim jq expect
+        exa ripgrep fd bat skim
+        git-crypt gcc gdb cmake go go-tools rustup
+        kvantum-theme-materia materia-gtk-theme materia-kde papirus-icon-theme
+    EOF2
+    [ $? -eq 0 ] && break
+done
 
 sed -i 's/^[\s\t]*COMPRESSION\s*=\s*"/#COMPRESSION="/g' /etc/mkinitcpio.conf
 sed -i 's/^#COMPRESSION="lz4/COMPRESSION="lz4/g' /etc/mkinitcpio.conf
