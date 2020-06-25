@@ -49,7 +49,7 @@ while : ; do
         exa ripgrep fd bat skim
         git-crypt gcc gdb cmake go go-tools rustup
         kvantum-theme-materia materia-gtk-theme materia-kde papirus-icon-theme
-    EOF2
+EOF2
     [ $? -eq 0 ] && break
 done
 
