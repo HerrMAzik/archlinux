@@ -119,7 +119,7 @@ nvim -c ':PlugInstall' -c ':q' -c ':q'
 # yay
 ! type yay >/dev/null 2>&1 && sh $CONFIGDIR/yay.sh
 
-! type lz4json >/dev/null 2>&1 && yay -S --needed --noconfirm --removemake lz4json
+! type lz4jsoncat >/dev/null 2>&1 && yay -S --needed --noconfirm --removemake lz4json
 ! yay -Qs konsole-gruvbox >/dev/null 2>&1 && yay -S --needed --noconfirm --removemake konsole-gruvbox
 
 if [ ! -d $HOME/.mozilla/firefox/*HerrMAN ]; then
