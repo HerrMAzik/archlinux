@@ -48,6 +48,10 @@ while : ; do
 done
 USER_PASSWORD="$DIALOG_RESULT"
 
+DESKTOP_ENVS="gnome GNOME kde KDE"
+bootstrapper_dialog --title "DE" --menu "Please select a desktop environment" 13 70 3 $DESKTOP_ENVS
+[ $? -ne 0 ] || [ -z $DIALOG_RESULT ] && DESKTOP_ENV=gnome || MODE=$DIALOG_RESULT
+
 reset
 
 timedatectl set-ntp true
@@ -97,6 +101,7 @@ echo "root:$ROOT_PASSWORD" | chpasswd
 useradd -m -g users -G audio,video,power,storage,wheel -s /bin/fish $USERNAME
 echo "$USERNAME:$USER_PASSWORD" | chpasswd
 curl -L https://raw.githubusercontent.com/HerrMAzik/archlinux/master/system.sh > /home/$USERNAME/system.sh
+sed -i "s/##${DESKTOP_ENV}##//g" /home/$USERNAME/system.sh
 chown $USERNAME:users /home/$USERNAME/system.sh
 chmod 0700 /home/$USERNAME/system.sh
 EOF

@@ -28,6 +28,17 @@ case "$cpu" in
     ;;
 esac
 
+##gnome##dm_manager=gdm
+##kde##dm_manager=sddm
+
+de_packages=""
+##gnome##de_packages=" $de_packages gnome-shell $dm_manager gnome-terminal nautilus gnome-control-center gnome-tweaks evince eog file-roller "
+##gnome##de_packages=" $de_packages gnome-calculator celluloid "
+
+##kde##de_packages=" $de_packages plasma-desktop $dm_manager plasma-pa plasma-nm sddm-kcm konsole okular ark powerdevil gwenview dolphin "
+##kde##de_packages=" $de_packages flameshot kolourpaint kcalc kscreen qt5-tools kde-gtk-config mpv "
+##kde##de_packages=" $de_packages kvantum-theme-materia materia-gtk-theme materia-kde papirus-icon-theme "
+
 cat <<EOF | sudo sh
 cp -f $CONFIGDIR/etc/pacman.conf /etc/pacman.conf
 pacman --needed --noconfirm -Syu
@@ -38,17 +49,13 @@ while : ; do
         $ucode dnscrypt-proxy chezmoi systemd-swap man
         noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji
         ttf-jetbrains-mono ttf-dejavu ttf-opensans
-        xdg-user-dirs plasma-desktop
-        sddm plasma-pa plasma-nm sddm-kcm
-        konsole okular ark powerdevil gwenview dolphin
-        qbittorrent kolourpaint kcalc kscreen
-        qt5-tools kde-gtk-config
-        mpv youtube-dl firefox ncdu code flameshot
+        xdg-user-dirs
+        $de_packages
+        youtube-dl firefox ncdu code qbittorrent
         pass oath-toolkit keepassxc keybase kbfs gnupg pass-pinentry
         mc curl wget htop neovim jq expect
         exa ripgrep fd bat skim
         git-crypt gcc gdb cmake go go-tools rustup
-        kvantum-theme-materia materia-gtk-theme materia-kde papirus-icon-theme
 EOF2
     [ $? -eq 0 ] && break
 done
@@ -75,7 +82,7 @@ cp -f $CONFIGDIR/etc/systemd/swap.conf.d/swap.conf /etc/systemd/swap.conf.d/swap
 
 sed -i 's/.*GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
 
-systemctl enable dnscrypt-proxy.service fstrim.timer systemd-swap.service sddm.service
+systemctl enable dnscrypt-proxy.service fstrim.timer systemd-swap.service ${dm_manager}.service
 mkinitcpio -P
 grub-mkconfig -o /boot/grub/grub.cfg
 EOF
