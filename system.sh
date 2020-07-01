@@ -49,7 +49,7 @@ while : ; do
         $ucode dnscrypt-proxy chezmoi systemd-swap man
         noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji
         ttf-jetbrains-mono ttf-dejavu ttf-opensans
-        xdg-user-dirs
+        xdg-user-dirs ntfs-3g exfat-utils
         $de_packages
         youtube-dl firefox ncdu code qbittorrent
         pass oath-toolkit keepassxc keybase kbfs gnupg pass-pinentry
