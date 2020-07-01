@@ -81,7 +81,7 @@ fi
 
 systemctl --user enable --now ssh-agent.service
 
-if [ ! gpg --list-keys prime > /dev/null 2>&1 ]; then
+if [ ! $(gpg --list-keys prime > /dev/null 2>&1) ]; then
     test -z $passphrase && echo 'enter kdbx password:' && read -ers passphrase
 
     yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/pgp-private | gpg --pinentry-mode loopback --passphrase $(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/gpg) --import
@@ -120,7 +120,6 @@ nvim -c ':PlugInstall' -c ':q' -c ':q'
 ! type yay >/dev/null 2>&1 && sh $CONFIGDIR/yay.sh
 
 ! type lz4jsoncat >/dev/null 2>&1 && yay -S --needed --noconfirm --removemake lz4json
-! yay -Qs konsole-gruvbox >/dev/null 2>&1 && yay -S --needed --noconfirm --removemake konsole-gruvbox
 
 if [ ! -d $HOME/.mozilla/firefox/*HerrMAN ]; then
     firefox -CreateProfile HerrMAN
