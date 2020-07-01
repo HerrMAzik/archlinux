@@ -1,5 +1,7 @@
 #!/bin/sh
 
+systemctl stop reflector.service
+
 WARN_END=" (cannot be omitted or empty)"
 
 bootstrapper_dialog() {
@@ -72,7 +74,7 @@ else
     mount "${DEVICE}2" /mnt
 fi
 
-sed -n "/yandex/p" -i /etc/pacman.d/mirrorlist
+reflector --sort rate --country Russia --save /etc/pacman.d/mirrorlist
 yes '' | pacstrap /mnt base base-devel linux linux-firmware
 genfstab -U /mnt >> /mnt/etc/fstab
 
