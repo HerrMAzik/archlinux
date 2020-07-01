@@ -50,7 +50,7 @@ USER_PASSWORD="$DIALOG_RESULT"
 
 DESKTOP_ENVS="gnome GNOME kde KDE"
 bootstrapper_dialog --title "DE" --menu "Please select a desktop environment" 13 70 3 $DESKTOP_ENVS
-[ $? -ne 0 ] || [ -z $DIALOG_RESULT ] && DESKTOP_ENV=gnome || MODE=$DIALOG_RESULT
+[ $? -ne 0 ] || [ -z $DIALOG_RESULT ] && DESKTOP_ENV=gnome || DESKTOP_ENV=$DIALOG_RESULT
 
 reset
 
