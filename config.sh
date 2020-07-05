@@ -114,7 +114,7 @@ code --install-extension bmalehorn.vscode-fish
 code --install-extension mechatroner.rainbow-csv
 code --install-extension jdinhlife.gruvbox
 
-nvim -c ':PlugInstall' -c ':q' -c ':q'
+nvim +PlugInstall +UpdateRemotePlugins +qa
 
 # yay
 ! type yay >/dev/null 2>&1 && sh $CONFIGDIR/yay.sh
