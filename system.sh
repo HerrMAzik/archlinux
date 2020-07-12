@@ -9,6 +9,7 @@ nmtui
 
 sudo pacman --needed --noconfirm -Syyuu git
 
+mkdir -p $HOME/fast
 mkdir -p $HOME/repo
 [ ! -d $HOME/repo/archlinux ] && git clone https://github.com/HerrMAzik/archlinux.git $HOME/repo/archlinux
 
@@ -36,8 +37,7 @@ de_packages=""
 ##gnome##de_packages=" $de_packages gnome-calculator celluloid "
 
 ##kde##de_packages=" $de_packages plasma-desktop $dm_manager plasma-pa plasma-nm sddm-kcm konsole okular ark powerdevil gwenview dolphin "
-##kde##de_packages=" $de_packages flameshot kolourpaint kcalc kscreen qt5-tools kde-gtk-config mpv "
-##kde##de_packages=" $de_packages kvantum-theme-materia materia-gtk-theme materia-kde papirus-icon-theme "
+##kde##de_packages=" $de_packages flameshot kolourpaint kcalc kscreen mpv breeze-gtk "
 
 cat <<EOF | sudo sh
 cp -f $CONFIGDIR/etc/pacman.conf /etc/pacman.conf

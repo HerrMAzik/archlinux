@@ -4,8 +4,8 @@
 kwriteconfig5 --file $HOME/.config/kscreenlockerrc --group Daemon --key Autolock "false"
 
 # mouse
-kwriteconfig5 --file $HOME/.config/kcminputrc --group Mouse --key cursorSize "24"
-kwriteconfig5 --file $HOME/.config/kcminputrc --group Mouse --key cursorTheme "Breeze_Snow"
+# kwriteconfig5 --file $HOME/.config/kcminputrc --group Mouse --key cursorSize "24"
+# kwriteconfig5 --file $HOME/.config/kcminputrc --group Mouse --key cursorTheme "Breeze_Snow"
 
 # keyboard
 kwriteconfig5 --file $HOME/.config/kcminputrc --group Keyboard --key KeyboardRepeating "0"
