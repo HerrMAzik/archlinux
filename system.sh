@@ -52,10 +52,10 @@ while : ; do
         xdg-user-dirs ntfs-3g exfat-utils
         $de_packages
         youtube-dl firefox ncdu code qbittorrent
-        pass oath-toolkit keepassxc keybase kbfs gnupg pass-pinentry
+        pass oath-toolkit keepassxc keybase kbfs gnupg
         mc curl wget htop neovim jq expect
         exa ripgrep fd bat skim
-        git-crypt gcc gdb cmake go go-tools rustup
+        git-crypt gcc gdb cmake rustup asp
 EOF2
     [ $? -eq 0 ] && break
 done

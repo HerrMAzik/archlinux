@@ -6,13 +6,13 @@ sudo echo 'Preparing:'
 test ! -d $HOME/repo/archlinux && echo 'run system.sh before configuring' && exit -1
 
 test -z $XDG_CONFIG_HOME && XDG_CONFIG_HOME="$HOME/.config"
-test -z $CONFIGDIR && CONFIGDIR=$HOME/repo/archlinux
+test -z $ARCHLINUX && ARCHLINUX=$HOME/repo/archlinux
 MAN_KDB="$HOME/repo/man.kdbx"
 
 rm -rf $HOME/.bashrc
 rm -rf $HOME/.bash_{logout,profile}
 
-mkdir -p $HOME/go/src
+mkdir -p $HOME/build
 mkdir -p $HOME/repo
 
 if [ ! -f $MAN_KDB ]; then
@@ -89,7 +89,7 @@ if [ ! $(gpg --list-keys prime > /dev/null 2>&1) ]; then
     yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/pgp-trust | awk NF | gpg --import-ownertrust
 fi
 
-sh -c 'cd $HOME/repo/archlinux; git remote set-url origin git@github.com:HerrMAzik/archlinux.git'
+sh -c "cd $ARCHLINUX; git remote set-url origin git@github.com:HerrMAzik/archlinux.git"
 
 if [ ! -d $HOME/repo/pass ]; then
     test -z $passphrase && echo 'enter kdbx password:' && read -ers passphrase
@@ -117,7 +117,7 @@ code --install-extension jdinhlife.gruvbox
 nvim +PlugInstall +UpdateRemotePlugins +qa
 
 # yay
-! type yay >/dev/null 2>&1 && sh $CONFIGDIR/yay.sh
+! type yay >/dev/null 2>&1 && sh $ARCHLINUX/yay.sh
 
 ! type lz4jsoncat >/dev/null 2>&1 && yay -S --needed --noconfirm --removemake lz4json
 
@@ -132,3 +132,13 @@ if [ ! -d $HOME/.mozilla/firefox/*HerrMAN ]; then
     firefox https://addons.mozilla.org/firefox/addon/umatrix/
     firefox https://addons.mozilla.org/firefox/addon/keepassxc-browser/
 fi
+
+# Werner Koch (gnupg)
+gpg --list-keys 249B39D24F25E3B6 || gpg --receive-keys 249B39D24F25E3B6
+cd $HOME/build
+asp update gnupg
+asp export gnupg
+cd gnupg
+cp $ARCHLINUX/build/gnupg/* ./
+makepkg -s
+

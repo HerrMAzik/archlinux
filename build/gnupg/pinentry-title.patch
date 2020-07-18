@@ -1,0 +1,77 @@
+diff --git a/agent/agent.h b/agent/agent.h
+index 8b5ae6083..995f054ab 100644
+--- a/agent/agent.h
++++ b/agent/agent.h
+@@ -93,6 +93,7 @@ struct
+   /* A string where the first character is used by the pinentry as a
+      custom invisible character.  */
+   char *pinentry_invisible_char;
++  char *pinentry_title;
+ 
+   /* The timeout value for the Pinentry in seconds.  This is passed to
+      the pinentry if it is not 0.  It is up to the pinentry to act
+diff --git a/agent/call-pinentry.c b/agent/call-pinentry.c
+index 2af94c9cd..0647ffb89 100644
+--- a/agent/call-pinentry.c
++++ b/agent/call-pinentry.c
+@@ -573,6 +573,20 @@ start_pinentry (ctrl_t ctrl)
+         }
+     }
+ 
++  if (opt.pinentry_title)
++    {
++      char *optstr;
++      if ((optstr = xtryasprintf ("SETTITLE %s",
++                                  opt.pinentry_title)))
++        {
++          assuan_transact (entry_ctx, optstr, NULL, NULL, NULL, NULL, NULL,
++                           NULL);
++          /* We ignore errors because this is just a fancy thing and
++             older pinentries do not support this feature.  */
++          xfree (optstr);
++        }
++    }
++
+   if (opt.pinentry_timeout)
+     {
+       char *optstr;
+diff --git a/agent/gpg-agent.c b/agent/gpg-agent.c
+index 3dcbbf802..4fa1bba9c 100644
+--- a/agent/gpg-agent.c
++++ b/agent/gpg-agent.c
+@@ -95,6 +95,7 @@ enum cmd_and_opt_values
+   oPinentryProgram,
+   oPinentryTouchFile,
+   oPinentryInvisibleChar,
++  oPinentryTitle,
+   oPinentryTimeout,
+   oDisplay,
+   oTTYname,
+@@ -185,6 +186,7 @@ static ARGPARSE_OPTS opts[] = {
+                 /* */             N_("|PGM|use PGM as the PIN-Entry program")),
+   ARGPARSE_s_s (oPinentryTouchFile, "pinentry-touch-file", "@"),
+   ARGPARSE_s_s (oPinentryInvisibleChar, "pinentry-invisible-char", "@"),
++  ARGPARSE_s_s (oPinentryTitle, "pinentry-title", "@"),
+   ARGPARSE_s_u (oPinentryTimeout, "pinentry-timeout", "@"),
+   ARGPARSE_s_s (oScdaemonProgram, "scdaemon-program",
+                 /* */             N_("|PGM|use PGM as the SCdaemon program") ),
+@@ -814,6 +816,8 @@ parse_rereadable_options (ARGPARSE_ARGS *pargs, int reread)
+       opt.pinentry_touch_file = NULL;
+       xfree (opt.pinentry_invisible_char);
+       opt.pinentry_invisible_char = NULL;
++      xfree (opt.pinentry_title);
++      opt.pinentry_title = NULL;
+       opt.pinentry_timeout = 0;
+       opt.scdaemon_program = NULL;
+       opt.def_cache_ttl = DEFAULT_CACHE_TTL;
+@@ -874,6 +878,10 @@ parse_rereadable_options (ARGPARSE_ARGS *pargs, int reread)
+       xfree (opt.pinentry_invisible_char);
+       opt.pinentry_invisible_char = xtrystrdup (pargs->r.ret_str); break;
+       break;
++    case oPinentryTitle:
++      xfree (opt.pinentry_title);
++      opt.pinentry_title = xtrystrdup (pargs->r.ret_str); break;
++    break;
+     case oPinentryTimeout: opt.pinentry_timeout = pargs->r.ret_ulong; break;
+     case oScdaemonProgram: opt.scdaemon_program = pargs->r.ret_str; break;
+     case oDisableScdaemon: opt.disable_scdaemon = 1; break;
