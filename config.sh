@@ -132,13 +132,3 @@ if [ ! -d $HOME/.mozilla/firefox/*HerrMAN ]; then
     firefox https://addons.mozilla.org/firefox/addon/umatrix/
     firefox https://addons.mozilla.org/firefox/addon/keepassxc-browser/
 fi
-
-# Werner Koch (gnupg)
-gpg --list-keys 249B39D24F25E3B6 || gpg --receive-keys 249B39D24F25E3B6
-cd $HOME/build
-asp update gnupg
-asp export gnupg
-cd gnupg
-cp $ARCHLINUX/build/gnupg/* ./
-makepkg -s
-
