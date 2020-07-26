@@ -112,7 +112,7 @@ arch-chroot /mnt /bin/sh <<EOF
 pacman --noconfirm -S grub
 [ $MODE -eq 2 ] && pacman --noconfirm -S efibootmgr
 [ $MODE -eq 2 ] && mkdir -p /ife && mount "${DEVICE}1" /ife
-[ $MODE -eq 1 ] && grub-install
+[ $MODE -eq 1 ] && grub-install $DEVICE
 [ $MODE -eq 2 ] && grub-install --target=x86_64-efi --efi-directory=/ife --bootloader-id=GRUB --removable
 grub-mkconfig -o /boot/grub/grub.cfg
 EOF
