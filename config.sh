@@ -81,12 +81,13 @@ fi
 
 systemctl --user enable --now ssh-agent.service
 
+# GPG
 if [ ! $(gpg --list-keys prime > /dev/null 2>&1) ]; then
     test -z $passphrase && echo 'enter kdbx password:' && read -ers passphrase
 
-    yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/pgp-private | gpg --pinentry-mode loopback --passphrase $(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/gpg) --import
-    yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/pgp-public | gpg --import
-    yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/pgp-trust | awk NF | gpg --import-ownertrust
+    yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/keys/private | gpg --pinentry-mode loopback --passphrase $(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/gpg) --import
+    yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/keys/public | gpg --import
+    yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $MAN_KDB GPG/keys/trust | awk NF | gpg --import-ownertrust
 fi
 
 sh -c "cd $ARCHLINUX; git remote set-url origin git@github.com:HerrMAzik/archlinux.git"
@@ -124,7 +125,7 @@ nvim +PlugInstall +UpdateRemotePlugins +qa
 if [ ! -d $HOME/.mozilla/firefox/*HerrMAN ]; then
     firefox -CreateProfile HerrMAN
     firefox -P HerrMAN --headless &
-    sleep 2
+    sleep 1
     pkill firefox
     sleep 1
     cp $HOME/repo/settings/user.js $HOME/.mozilla/firefox/*HerrMAN/
