@@ -74,8 +74,8 @@ else
     mount "${DEVICE}2" /mnt
 fi
 
-reflector --sort rate --country Russia --save /etc/pacman.d/mirrorlist
-yes '' | pacstrap /mnt base base-devel linux linux-firmware
+type reflector >/dev/null 2>&1 && reflector --sort rate --country Russia --save /etc/pacman.d/mirrorlist
+yes '' | pacstrap /mnt base base-devel linux-lts linux-lts-headers linux-firmware
 genfstab -U /mnt >> /mnt/etc/fstab
 
 arch-chroot /mnt /bin/bash <<EOF
