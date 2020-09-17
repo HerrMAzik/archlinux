@@ -78,7 +78,7 @@ fi
 yes | mkfs.ext4 -L system $ROOT_PART
 mount $ROOT_PART /mnt
 
-type reflector >/dev/null 2>&1 && reflector --sort score --country Russia --save /etc/pacman.d/mirrorlist
+type reflector >/dev/null 2>&1 && reflector --sort score --country Russia -p https,http --save /etc/pacman.d/mirrorlist
 yes '' | pacstrap /mnt base base-devel linux-lts linux-lts-headers linux-firmware
 genfstab -U /mnt >> /mnt/etc/fstab
 
