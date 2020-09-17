@@ -2,7 +2,7 @@
 
 systemctl stop reflector.service
 
-pacman -Sy --noconfirm dialog jq
+pacman -Sy --noconfirm --needed dialog jq
 
 WARN_END=" (cannot be omitted or empty)"
 
@@ -78,7 +78,7 @@ fi
 yes | mkfs.ext4 -L system $ROOT_PART
 mount $ROOT_PART /mnt
 
-type reflector >/dev/null 2>&1 && reflector --sort rate --country Russia --save /etc/pacman.d/mirrorlist
+type reflector >/dev/null 2>&1 && reflector --sort score --country Russia --save /etc/pacman.d/mirrorlist
 yes '' | pacstrap /mnt base base-devel linux-lts linux-lts-headers linux-firmware
 genfstab -U /mnt >> /mnt/etc/fstab
 
