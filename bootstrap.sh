@@ -2,6 +2,8 @@
 
 systemctl stop reflector.service
 
+pacman -Sy --noconfirm dialog jq
+
 WARN_END=" (cannot be omitted or empty)"
 
 bootstrapper_dialog() {
@@ -13,7 +15,7 @@ MODES="1 BIOS"
 bootstrapper_dialog --title "MODE" --menu "Please select a boot mode from the following list" 13 70 3 $MODES
 [ $? -ne 0 ] || [ -z $DIALOG_RESULT ] && MODE=1 || MODE=$DIALOG_RESULT
 
-DISKS=$(lsblk --nodeps -n -o path,size -I8,259 | awk '{print $1" "$2}' ORS=' ')
+DISKS=$(lsblk -J -o path,size --nodeps -I8,259 | jq -r '.blockdevices | .[] | .path,.size')
 bootstrapper_dialog --title "Device" --menu "Please select a device from the following list to use for Linux installation." 13 70 3 $DISKS
 [ $? -ne 0 ] || [ -z $DIALOG_RESULT ] && echo 'No device selected' && exit 0
 DEVICE=$DIALOG_RESULT
