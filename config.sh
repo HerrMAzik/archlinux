@@ -115,6 +115,8 @@ code --install-extension bmalehorn.vscode-fish
 code --install-extension mechatroner.rainbow-csv
 code --install-extension jdinhlife.gruvbox
 
+VIM_PLUG=$HOME/.local/share/nvim/site/autoload/plug.vim
+[ ! -f $VIM_PLUG ] && curl -fLo $VIM_PLUG --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 nvim +PlugInstall +UpdateRemotePlugins +qa
 
 # yay
