@@ -62,19 +62,21 @@ timedatectl set-ntp true
 
 if [ $MODE -eq 1 ]; then
     echo ';' | sfdisk $DEVICE
-    yes | mkfs.ext4 -L system "${DEVICE}1"
-    mount "${DEVICE}1" /mnt
+    ROOT_PART=$(lsblk -J -o path,name -I8,259  | jq -r ".blockdevices[] | select(.path == \"$DEVICE\") | .children | sort_by(.name) | .[0].path")
 else
     sgdisk --zap-all $DEVICE
     sgdisk -o $DEVICE
     sgdisk -n 1:0:+128M -t 1:ef00 $DEVICE
     sgdisk -N 2 -t 2:8300 $DEVICE
+    
+    ESP_PART=$(lsblk -J -o path,name -I8,259  | jq -r ".blockdevices[] | select(.path == \"$DEVICE\") | .children | sort_by(.name) | .[0].path")
+    ROOT_PART=$(lsblk -J -o path,name -I8,259  | jq -r ".blockdevices[] | select(.path == \"$DEVICE\") | .children | sort_by(.name) | .[1].path")
 
-    mkfs.fat -F32 "${DEVICE}1"
-    mkfs.ext4 -L system "${DEVICE}2"
-
-    mount "${DEVICE}2" /mnt
+    yes | mkfs.fat -F32 $ESP_PART
 fi
+
+yes | mkfs.ext4 -L system $ROOT_PART
+mount $ROOT_PART /mnt
 
 type reflector >/dev/null 2>&1 && reflector --sort rate --country Russia --save /etc/pacman.d/mirrorlist
 yes '' | pacstrap /mnt base base-devel linux-lts linux-lts-headers linux-firmware
@@ -113,10 +115,11 @@ EOF
 arch-chroot /mnt /bin/sh <<EOF
 pacman --noconfirm -S grub
 [ $MODE -eq 2 ] && pacman --noconfirm -S efibootmgr
-[ $MODE -eq 2 ] && mkdir -p /ife && mount "${DEVICE}1" /ife
+[ $MODE -eq 2 ] && mkdir -p /ife && mount $ESP_PART /ife
 [ $MODE -eq 1 ] && grub-install $DEVICE
 [ $MODE -eq 2 ] && grub-install --target=x86_64-efi --efi-directory=/ife --bootloader-id=GRUB --removable
 grub-mkconfig -o /boot/grub/grub.cfg
+[ $MODE -eq 2 ] && umount /ife
 EOF
 
 umount -R /mnt
