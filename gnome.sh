@@ -22,7 +22,7 @@ gsettings set org.gnome.desktop.privacy disable-microphone true
 
 gsettings set org.gnome.desktop.media-handling autorun-never true
 
-gsettings set org.gnome.desktop.background picture-uri 'file:///home/azat/repo/archlinux/wallpaper.png'
+gsettings set org.gnome.desktop.background picture-uri 'file:///home/azat/repo/archlinux/wallpaper.jpg'
 gsettings set org.gnome.desktop.background color-shading-type 'solid'
 gsettings set org.gnome.desktop.background picture-options 'stretched'
 
