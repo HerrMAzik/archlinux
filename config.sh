@@ -71,6 +71,8 @@ if [ ! -d "$(chezmoi source-path)" ]; then
     sh -c 'cd $(chezmoi source-path); git remote set-url origin git@github.com:HerrMAzik/dots.git'
 fi
 
+sed -i 's/^pinentry-title/#pinentry-title/g' $HOME/.gnupg/gpg-agent.conf
+
 if [ ! -f $XDG_CONFIG_HOME/keybase/*.mpack ]; then
     test -z $passphrase && echo 'enter kdbx password:' && read -ers passphrase
 
