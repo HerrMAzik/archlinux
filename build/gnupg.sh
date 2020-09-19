@@ -11,3 +11,5 @@ cd gnupg
 
 cp $build/gnupg/* ./
 makepkg -s --noconfirm --needed
+
+sed -i 's/#pinentry-title/pinentry-title/g' $HOME/.gnupg/gpg-agent.conf
