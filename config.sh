@@ -130,7 +130,7 @@ if [ ! -d $HOME/.mozilla/firefox/*HerrMAN ]; then
     firefox -CreateProfile HerrMAN
     firefox -P HerrMAN --headless &
     sleep 1
-    pkill firefox
+    pkill 'firefox|MainThread'
     sleep 1
     cp $HOME/repo/settings/user.js $HOME/.mozilla/firefox/*HerrMAN/
     firefox https://addons.mozilla.org/firefox/addon/ublock-origin/
