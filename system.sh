@@ -37,7 +37,7 @@ de_packages=""
 ##gnome##de_packages=" $de_packages gnome-calculator celluloid "
 
 ##kde##de_packages=" $de_packages plasma-desktop $dm_manager plasma-pa plasma-nm sddm-kcm konsole okular ark powerdevil gwenview dolphin "
-##kde##de_packages=" $de_packages flameshot kolourpaint kcalc kscreen mpv breeze-gtk kdialog"
+##kde##de_packages=" $de_packages flameshot kolourpaint kcalc kscreen mpv breeze-gtk kdialog kde-gtk-config"
 
 cat <<EOF | sudo sh
 cp -f $CONFIGDIR/etc/pacman.conf /etc/pacman.conf
