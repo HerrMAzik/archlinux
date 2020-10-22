@@ -45,7 +45,7 @@ pacman --needed --noconfirm -Syu
 
 while : ; do
     cat <<EOF2 | sed 's/\s/\n/g' | pacman --needed --noconfirm -S -
-        unzip zip p7zip pigz pbzip2 xz
+        unzip unrar zip p7zip pigz pbzip2 xz
         $ucode dnscrypt-proxy chezmoi systemd-swap man
         noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji
         ttf-jetbrains-mono ttf-dejavu ttf-opensans
