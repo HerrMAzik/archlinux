@@ -110,9 +110,6 @@ if [ ! -d $HOME/repo/settings ]; then
     sh -c 'cd $HOME/repo/settings; git remote set-url origin git@github.com:HerrMAzik/settings.git'
 fi
 
-rustup default stable
-
-code --install-extension matklad.rust-analyzer
 code --install-extension bmalehorn.vscode-fish
 code --install-extension mechatroner.rainbow-csv
 code --install-extension jdinhlife.gruvbox
@@ -135,5 +132,6 @@ if [ ! -d $HOME/.mozilla/firefox/*HerrMAN ]; then
     cp $HOME/repo/settings/user.js $HOME/.mozilla/firefox/*HerrMAN/
     firefox https://addons.mozilla.org/firefox/addon/ublock-origin/
     firefox https://addons.mozilla.org/firefox/addon/umatrix/
+    firefox https://addons.mozilla.org/en-US/firefox/addon/ublacklist/
     firefox https://addons.mozilla.org/firefox/addon/keepassxc-browser/
 fi
