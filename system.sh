@@ -29,17 +29,6 @@ case "$cpu" in
     ;;
 esac
 
-##gnome##dm_manager=gdm
-##kde##dm_manager=sddm
-
-de_packages=""
-##gnome##de_packages=" $de_packages gnome-shell $dm_manager gnome-terminal nautilus gnome-control-center gnome-tweaks evince eog file-roller "
-##gnome##de_packages=" $de_packages gnome-calculator celluloid "
-
-##kde##de_packages=" $de_packages plasma-desktop $dm_manager plasma-pa plasma-nm sddm-kcm konsole okular ark powerdevil gwenview dolphin "
-##kde##de_packages=" $de_packages pulseaudio-bluetooth plasma-browser-integration flameshot kolourpaint kcalc kscreen mpv breeze-gtk "
-##kde##de_packages=" $de_packages kdialog kde-gtk-config jdk-openjdk openjdk-doc openjdk-src"
-
 cat <<EOF | sudo sh
 cp -f $CONFIGDIR/etc/pacman.conf /etc/pacman.conf
 pacman --needed --noconfirm -Syu
@@ -51,12 +40,15 @@ while : ; do
         noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji
         ttf-jetbrains-mono ttf-dejavu ttf-opensans
         xdg-user-dirs ntfs-3g exfat-utils
-        $de_packages
-        youtube-dl firefox ncdu code qbittorrent
+        plasma-desktop plasma-pa plasma-nm sddm sddm-kcm konsole okular ark powerdevil gwenview dolphin
+        pulseaudio-bluetooth plasma-browser-integration flameshot kolourpaint kcalc kscreen kdialog
+        breeze-gtk kde-gtk-config
+        jdk-openjdk openjdk-doc openjdk-src
+        mpv youtube-dl firefox ncdu code qbittorrent
         pass oath-toolkit keepassxc keybase kbfs gnupg
         mc curl wget htop neovim jq expect
         exa ripgrep fd bat skim
-        git-crypt gcc gdb cmake rustup asp
+        git-crypt gcc gdb cmake asp
 EOF2
     [ $? -eq 0 ] && break
 done
@@ -83,7 +75,7 @@ cp -f $CONFIGDIR/etc/systemd/swap.conf.d/swap.conf /etc/systemd/swap.conf.d/swap
 
 sed -i 's/.*GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
 
-systemctl enable dnscrypt-proxy.service fstrim.timer systemd-swap.service ${dm_manager}.service
+systemctl enable dnscrypt-proxy.service fstrim.timer systemd-swap.service sddm.service
 mkinitcpio -P
 grub-mkconfig -o /boot/grub/grub.cfg
 EOF
