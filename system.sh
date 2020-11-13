@@ -48,7 +48,7 @@ while : ; do
         pass oath-toolkit keepassxc keybase kbfs gnupg
         mc curl wget htop neovim jq expect
         exa ripgrep fd bat skim
-        git-crypt gcc gdb cmake asp
+        git-crypt gcc gdb cmake asp rustup
 EOF2
     [ $? -eq 0 ] && break
 done
