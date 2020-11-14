@@ -116,6 +116,13 @@ code --install-extension matklad.rust-analyzer
 code --install-extension bmalehorn.vscode-fish
 code --install-extension mechatroner.rainbow-csv
 code --install-extension jdinhlife.gruvbox
+code --install-extension redhat.java
+code --install-extension vscjava.vscode-java-test
+code --install-extension vscjava.vscode-maven
+code --install-extension vscjava.vscode-java-dependency
+code --install-extension vscjava.vscode-java-debug
+code --install-extension ms-vscode.cmake-tools
+curl -L -o /tmp/cpptools-linux.vsix (curl -X GET https://api.github.com/repos/microsoft/vscode-cpptools/releases/latest | jq -r '.assets[] | select(.name=="cpptools-linux.vsix") | .browser_download_url') && code --install-extension /tmp/cpptools-linux.vsix
 
 VIM_PLUG=$HOME/.local/share/nvim/site/autoload/plug.vim
 [ ! -f $VIM_PLUG ] && curl -fLo $VIM_PLUG --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
