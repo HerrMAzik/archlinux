@@ -100,7 +100,7 @@ pacman --noconfirm -S networkmanager fish
 mkinitcpio -P
 echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel
 echo "root:$ROOT_PASSWORD" | chpasswd
-useradd -m -g users -G audio,video,power,storage,wheel -s /bin/fish $USERNAME
+useradd -m -g users -G audio,video,power,storage,wheel,scanner -s /bin/fish $USERNAME
 echo "$USERNAME:$USER_PASSWORD" | chpasswd
 curl -L https://raw.githubusercontent.com/HerrMAzik/archlinux/master/system.sh > /home/$USERNAME/system.sh
 chown $USERNAME:users /home/$USERNAME/system.sh
