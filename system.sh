@@ -41,7 +41,7 @@ while : ; do
         ttf-jetbrains-mono ttf-dejavu ttf-opensans
         xdg-user-dirs ntfs-3g exfat-utils
         plasma-desktop plasma-pa plasma-nm sddm sddm-kcm konsole okular ark powerdevil gwenview dolphin
-        pulseaudio-bluetooth plasma-browser-integration flameshot kolourpaint kcalc kscreen kdialog
+        bluedevil pulseaudio-bluetooth plasma-browser-integration flameshot kolourpaint kcalc kscreen kdialog
         breeze-gtk kde-gtk-config
         jdk-openjdk openjdk-doc openjdk-src
         mpv youtube-dl firefox ncdu code qbittorrent
@@ -75,7 +75,7 @@ cp -f $CONFIGDIR/etc/systemd/swap.conf.d/swap.conf /etc/systemd/swap.conf.d/swap
 
 sed -i 's/.*GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
 
-systemctl enable dnscrypt-proxy.service fstrim.timer systemd-swap.service sddm.service
+systemctl enable dnscrypt-proxy.service fstrim.timer systemd-swap.service bluetooth.service sddm.service
 mkinitcpio -P
 grub-mkconfig -o /boot/grub/grub.cfg
 EOF
