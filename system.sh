@@ -47,7 +47,7 @@ while : ; do
         mpv youtube-dl firefox ncdu code qbittorrent
         pass oath-toolkit keepassxc keybase kbfs gnupg
         mc curl wget htop neovim jq expect
-        exa ripgrep fd bat skim
+        exa ripgrep fd bat skim sd
         git-crypt gcc gdb cmake asp rustup
 EOF2
     [ $? -eq 0 ] && break
