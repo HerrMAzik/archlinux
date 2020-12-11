@@ -85,3 +85,6 @@ kwriteconfig5 --file $HOME/.config/plasma-localerc --group Formats --key LANG "e
 
 # power management
 kwriteconfig5 --file $HOME/.config/powerdevilrc --group BatteryManagement --key BatteryCriticalAction "1"
+
+# dolphin
+kwriteconfig5 --file $HOME/.config/kiorc --group Confirmations --key ConfirmDelete "false"
