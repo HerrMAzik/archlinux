@@ -88,3 +88,24 @@ kwriteconfig5 --file $HOME/.config/powerdevilrc --group BatteryManagement --key 
 
 # dolphin
 kwriteconfig5 --file $HOME/.config/kiorc --group Confirmations --key ConfirmDelete "false"
+
+# bluetooth
+declare BT_MAC
+BT_MAC=`bluetoothctl list | awk '{print $2}'`
+for i in "${BT_MAC[@]}"
+do
+    kwriteconfig5 --file $HOME/.config/bluedevilglobalrc --group Adapters --key "${i}_powered" "false"
+done
+
+# touchpad
+declare TOUCHPAD_ADAPTERS
+TOUCHPAD_ADAPTERS=`xinput list --name-only | grep -Ei '(touchpad|glidepoint)'`
+for i in "${TOUCHPAD_ADAPTERS[@]}"
+do
+    kwriteconfig5 --file $HOME/.config/touchpadxlibinputrc --group "$i" --key "tapDragLock" "true"
+    kwriteconfig5 --file $HOME/.config/touchpadxlibinputrc --group "$i" --key "tapToClick" "true"
+done
+
+# wallpaper
+[ ! -L /$HOME/Pictures/wallpaper.jpg ] && ln -s $PWD/wallpaper.jpg /$HOME/Pictures/wallpaper.jpg
+qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript 'var allDesktops = desktops();print (allDesktops);for (i=0;i<allDesktops.length;i++) {d = allDesktops[i];d.wallpaperPlugin = "org.kde.image";d.currentConfigGroup = Array("Wallpaper", "org.kde.image", "General");d.writeConfig("Image", "file:///home/azat/Pictures/wallpaper.jpg")}'

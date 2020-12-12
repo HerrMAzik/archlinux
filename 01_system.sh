@@ -39,7 +39,7 @@ while : ; do
         $ucode dnscrypt-proxy chezmoi systemd-swap man
         noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji
         ttf-jetbrains-mono ttf-dejavu ttf-opensans
-        xdg-user-dirs ntfs-3g exfat-utils
+        xdg-user-dirs ntfs-3g exfat-utils bluez-utils xorg-xinput
         plasma-desktop plasma-pa plasma-nm sddm sddm-kcm konsole okular ark powerdevil gwenview dolphin
         bluedevil pulseaudio-bluetooth plasma-browser-integration flameshot kolourpaint kcalc kscreen kdialog
         breeze-gtk kde-gtk-config
@@ -77,6 +77,8 @@ sed -i 's/.*GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
 
 systemctl enable dnscrypt-proxy.service fstrim.timer systemd-swap.service bluetooth.service sddm.service
 mkinitcpio -P
+
+grep '^GRUB_CMDLINE_LINUX_DEFAULT=".*mitigations' /etc/default/grub || sed -i 's/\(^GRUB_CMDLINE_LINUX_DEFAULT=".*\)"$/\1 mitigations=off"/' /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg
 EOF
 
