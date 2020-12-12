@@ -115,7 +115,7 @@ rustup default stable
 code --install-extension matklad.rust-analyzer
 code --install-extension bmalehorn.vscode-fish
 code --install-extension mechatroner.rainbow-csv
-code --install-extension jdinhlife.gruvbox
+code --install-extension gulajavaministudio.mayukaithemevsc
 
 VIM_PLUG=$HOME/.local/share/nvim/site/autoload/plug.vim
 [ ! -f $VIM_PLUG ] && curl -fLo $VIM_PLUG --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
