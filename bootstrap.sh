@@ -28,7 +28,7 @@ HOSTNAME="$DIALOG_RESULT"
 TITLE="Root password"
 while : ; do
     [ -z $title ] && title=$TITLE
-    bootstrapper_dialog --title "$title" --passwordbox "Please enter a strong password for the root user.\n" 8 60
+    bootstrapper_dialog --title "$title" --passwordbox "Please enter a strong password for the ROOT user.\n" 8 60
     [ $? -eq 0 ] && [ ! -z $DIALOG_RESULT ] && unset title && break
     title="$TITLE$WARN_END"
 done
@@ -102,7 +102,7 @@ echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel
 echo "root:$ROOT_PASSWORD" | chpasswd
 useradd -m -g users -G audio,video,power,storage,wheel,scanner -s /bin/fish $USERNAME
 echo "$USERNAME:$USER_PASSWORD" | chpasswd
-curl -L https://raw.githubusercontent.com/HerrMAzik/archlinux/master/system.sh > /home/$USERNAME/system.sh
+curl -L https://raw.githubusercontent.com/HerrMAzik/archlinux/master/system.sh > /home/$USERNAME/01_system.sh
 chown $USERNAME:users /home/$USERNAME/system.sh
 chmod 0700 /home/$USERNAME/system.sh
 EOF
