@@ -80,6 +80,8 @@ mkinitcpio -P
 
 grep '^GRUB_CMDLINE_LINUX_DEFAULT=".*mitigations' /etc/default/grub || sed -i 's/\(^GRUB_CMDLINE_LINUX_DEFAULT=".*\)"$/\1 mitigations=off"/' /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg
+
+timedatectl set-ntp true
 EOF
 
 rm $HOME/system.sh
