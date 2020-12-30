@@ -1,4 +1,8 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+
+! type gpg >/dev/null && echo 'install gnupg' && exit -1
+! type curl >/dev/null && echo 'install curl' && exit -1
+! type jq >/dev/null && echo 'install jq' && exit -1
 
 if [ ! -f $SANCTUM_SANCTORUM ]; then
     while : ; do
