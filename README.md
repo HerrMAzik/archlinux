@@ -1,7 +1,7 @@
-# arch-setup
+# archlinux
 
 #### bootstrap
 
 ```bash
-curl -L https://git.io/Jvjt4 | sh
+curl -L git.io/JL7wc | sh
 ```
