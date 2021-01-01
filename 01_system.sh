@@ -11,7 +11,7 @@ sudo pacman --needed --noconfirm -Syyuu git
 
 mkdir -p $HOME/fast
 mkdir -p $HOME/repo
-[ ! -d $HOME/repo/archlinux ] && git clone https://github.com/HerrMAzik/archlinux.git $HOME/repo/archlinux
+[ ! -d $HOME/repo/archlinux ] && git clone https://github.com/devrtc0/archlinux.git $HOME/repo/archlinux
 
 test -z $CONFIGDIR && CONFIGDIR=$HOME/repo/archlinux
 sh -c "cd ${CONFIGDIR}; git pull --ff-only"
