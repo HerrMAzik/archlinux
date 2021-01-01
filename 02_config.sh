@@ -40,12 +40,12 @@ if [ ! -f $HOME/.dots.secret ]; then
 fi
 
 if [ ! -d "$(chezmoi source-path)" ]; then
-    git clone https://github.com/HerrMAzik/dots.git "$(chezmoi source-path)"
+    git clone https://github.com/devrtc0/dots.git "$(chezmoi source-path)"
     chmod 0700 $(chezmoi source-path)
     sh -c "cd $(chezmoi source-path); git crypt unlock $HOME/.dots.secret"
 
     chezmoi apply
-    sh -c 'cd $(chezmoi source-path); git remote set-url origin git@github.com:HerrMAzik/dots.git'
+    sh -c 'cd $(chezmoi source-path); git remote set-url origin git@github.com:devrtc0/dots.git'
 fi
 
 sed -i 's/^pinentry-title/#pinentry-title/g' $HOME/.gnupg/gpg-agent.conf
@@ -69,13 +69,13 @@ if [ ! $(gpg --list-keys prime > /dev/null 2>&1) ]; then
     yes $passphrase | keepassxc-cli show -q -a Notes -s -k $HOME/.sanctum.sanctorum $SANCTUM_SANCTORUM GPG/keys/trust | awk NF | gpg --import-ownertrust
 fi
 
-sh -c "cd $ARCHLINUX; git remote set-url origin git@github.com:HerrMAzik/archlinux.git"
+sh -c "cd $ARCHLINUX; git remote set-url origin git@github.com:devrtc0/archlinux.git"
 
 if [ ! -d $HOME/repo/pass ]; then
     test -z $passphrase && echo 'enter kdbx password:' && read -ers passphrase
 
-    git clone https://HerrMAzik:$(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $SANCTUM_SANCTORUM Repositories/GitHub/token)@github.com/HerrMAzik/pass.git $HOME/repo/pass
-    sh -c 'cd $HOME/repo/pass; git remote set-url origin git@github.com:HerrMAzik/pass.git'
+    git clone https://devrtc0:$(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $SANCTUM_SANCTORUM Repositories/GitHub/token)@github.com/devrtc0/pass.git $HOME/repo/pass
+    sh -c 'cd $HOME/repo/pass; git remote set-url origin git@github.com:devrtc0/pass.git'
 fi
 [ ! -L $HOME/.password-store ] && ln -s $HOME/repo/pass $HOME/.password-store
 ! pass > /dev/null 2>&1 && echo 'Wrong password store link'
@@ -83,8 +83,8 @@ fi
 if [ ! -d $HOME/repo/settings ]; then
     test -z $passphrase && echo 'enter kdbx password:' && read -ers passphrase
 
-    git clone https://HerrMAzik:$(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $SANCTUM_SANCTORUM Repositories/GitHub/token)@github.com/HerrMAzik/settings.git $HOME/repo/settings
-    sh -c 'cd $HOME/repo/settings; git remote set-url origin git@github.com:HerrMAzik/settings.git'
+    git clone https://devrtc0:$(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $SANCTUM_SANCTORUM Repositories/GitHub/token)@github.com/devrtc0/settings.git $HOME/repo/settings
+    sh -c 'cd $HOME/repo/settings; git remote set-url origin git@github.com:devrtc0/settings.git'
 fi
 
 rustup default stable
