@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-PKGVER=2.2.25
+PKGVER=2.2.27
 PKGREL=1
 build=$PWD
 
