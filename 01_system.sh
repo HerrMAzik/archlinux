@@ -41,10 +41,12 @@ while : ; do
         ttf-jetbrains-mono ttf-dejavu ttf-opensans
         xdg-user-dirs ntfs-3g exfat-utils bluez-utils xorg-xinput
         plasma-desktop plasma-pa plasma-nm sddm sddm-kcm konsole okular ark powerdevil gwenview dolphin
-        bluedevil pulseaudio-bluetooth plasma-browser-integration flameshot kolourpaint kcalc kscreen kdialog
+        bluedevil pulseaudio-bluetooth plasma-browser-integration kolourpaint kcalc kscreen kdialog
+        flameshot spectacle
         breeze-gtk kde-gtk-config
         jdk-openjdk openjdk-doc openjdk-src
-        mpv youtube-dl firefox ncdu code qbittorrent
+        mpv youtube-dl firefox chromium ncdu qbittorrent
+        code qtcreator
         pass oath-toolkit keepassxc keybase kbfs gnupg
         mc curl wget htop neovim jq expect
         exa ripgrep fd bat skim sd
