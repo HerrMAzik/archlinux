@@ -40,8 +40,9 @@ while : ; do
         noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji
         ttf-jetbrains-mono ttf-dejavu ttf-opensans
         xdg-user-dirs ntfs-3g exfat-utils bluez-utils xorg-xinput
-        plasma-desktop plasma-pa plasma-nm sddm sddm-kcm konsole okular ark powerdevil gwenview dolphin
-        bluedevil pulseaudio-bluetooth plasma-browser-integration kolourpaint kcalc kscreen kdialog
+        plasma-desktop plasma-nm sddm sddm-kcm konsole okular ark powerdevil gwenview dolphin
+        bluedevil plasma-browser-integration kolourpaint kcalc kscreen kdialog
+        pulseaudio-bluetooth plasma-pa
         flameshot spectacle
         breeze-gtk kde-gtk-config
         jdk-openjdk openjdk-doc openjdk-src
@@ -49,7 +50,7 @@ while : ; do
         code qtcreator
         pass oath-toolkit keepassxc keybase kbfs gnupg
         mc curl wget htop neovim jq expect
-        exa ripgrep fd bat skim sd
+        exa ripgrep fd bat skim
         git-crypt gcc gdb cmake asp
 EOF2
     [ $? -eq 0 ] && break
