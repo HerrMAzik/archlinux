@@ -102,7 +102,7 @@ echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel
 echo "root:$ROOT_PASSWORD" | chpasswd
 useradd -m -g users -G audio,video,power,storage,wheel,scanner -s /bin/fish $USERNAME
 echo "$USERNAME:$USER_PASSWORD" | chpasswd
-curl -L https://raw.githubusercontent.com/devrtc0/archlinux/master/system.sh > /home/$USERNAME/01_system.sh
+curl -L https://raw.githubusercontent.com/devrtc0/archlinux/master/01_system.sh > /home/$USERNAME/01_system.sh
 chown $USERNAME:users /home/$USERNAME/system.sh
 chmod 0700 /home/$USERNAME/system.sh
 EOF
