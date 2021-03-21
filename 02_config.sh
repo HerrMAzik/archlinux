@@ -109,5 +109,4 @@ if [ ! -d $HOME/.mozilla/firefox/*HerrMAN ]; then
     firefox https://addons.mozilla.org/firefox/addon/umatrix/
     firefox https://addons.mozilla.org/en-US/firefox/addon/ublacklist/
     firefox https://addons.mozilla.org/firefox/addon/keepassxc-browser/
-    firefox https://addons.mozilla.org/ru/firefox/addon/tampermonkey/
 fi
