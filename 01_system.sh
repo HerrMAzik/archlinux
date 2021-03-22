@@ -9,7 +9,6 @@ nmtui
 
 sudo pacman --needed --noconfirm -Syyuu git
 
-mkdir -p $HOME/fast
 mkdir -p $HOME/repo
 [ ! -d $HOME/repo/archlinux ] && git clone https://github.com/devrtc0/archlinux.git $HOME/repo/archlinux
 
@@ -47,11 +46,12 @@ while : ; do
         breeze-gtk kde-gtk-config
         jdk-openjdk openjdk-doc openjdk-src
         mpv youtube-dl firefox chromium ncdu qbittorrent
-        code qtcreator
+        neovim code qtcreator
         pass oath-toolkit keepassxc keybase kbfs gnupg
-        mc curl wget htop neovim jq expect
+        mc curl wget htop jq expect
         exa ripgrep fd bat skim
-        git-crypt gcc gdb cmake asp
+        gcc gdb cmake clang lldb llvm rustup
+        git-crypt asp
 EOF2
     [ $? -eq 0 ] && break
 done
@@ -87,4 +87,4 @@ grub-mkconfig -o /boot/grub/grub.cfg
 timedatectl set-ntp true
 EOF
 
-rm $HOME/system.sh
+rm $HOME/01_system.sh
