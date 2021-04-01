@@ -87,4 +87,4 @@ grub-mkconfig -o /boot/grub/grub.cfg
 timedatectl set-ntp true
 EOF
 
-rm $HOME/01_system.sh
+rm -rf $HOME/01_system.sh
