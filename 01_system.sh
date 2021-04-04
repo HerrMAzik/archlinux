@@ -5,7 +5,8 @@ test -z $XDG_CONFIG_HOME && XDG_CONFIG_HOME="$HOME/.config"
 ! systemctl is-enabled NetworkManager.service > /dev/null && sudo systemctl enable --now NetworkManager.service
 systemctl is-enabled NetworkManager-wait-online.service > /dev/null && sudo systemctl disable --now NetworkManager-wait-online.service
 
-nmtui
+#NETWORKMANAGER
+#nmtui OR nmcli device wifi connect SSID-Name password wireless-password
 
 sudo pacman --needed --noconfirm -Syyuu git
 
@@ -35,14 +36,14 @@ pacman --needed --noconfirm -Syu
 while : ; do
     cat <<EOF2 | sed 's/\s/\n/g' | pacman --needed --noconfirm -S -
         unzip unrar zip p7zip pigz pbzip2 xz
-        $ucode dnscrypt-proxy chezmoi systemd-swap man
+        $ucode chezmoi systemd-swap man
         noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji
         ttf-jetbrains-mono ttf-dejavu ttf-opensans
         xdg-user-dirs ntfs-3g exfat-utils bluez-utils xorg-xinput
         plasma-desktop plasma-nm sddm sddm-kcm konsole okular ark powerdevil dolphin
         bluedevil plasma-browser-integration kcalc kscreen kdialog
         pulseaudio-bluetooth plasma-pa
-        gwenview kolourpaint flameshot spectacle zbar
+        gwenview kolourpaint spectacle zbar
         breeze-gtk kde-gtk-config
         jdk-openjdk openjdk-doc openjdk-src
         mpv youtube-dl firefox chromium ncdu qbittorrent
@@ -56,17 +57,8 @@ EOF2
     [ $? -eq 0 ] && break
 done
 
-sed -i 's/^[\s\t]*COMPRESSION\s*=\s*"/#COMPRESSION="/g' /etc/mkinitcpio.conf
-sed -i 's/^#COMPRESSION="lz4/COMPRESSION="lz4/g' /etc/mkinitcpio.conf
-
 mkdir -p /etc/modprobe.d
 cp -f $CONFIGDIR/etc/modprobe.d/blacklist.conf /etc/modprobe.d/blacklist.conf
-
-mkdir -p /etc/dnscrypt-proxy
-cp -f $CONFIGDIR/etc/dnscrypt-proxy/dnscrypt-proxy.toml /etc/dnscrypt-proxy/dnscrypt-proxy.toml
-cp -f $CONFIGDIR/etc/dnscrypt-proxy/forwarding-rules.txt /etc/dnscrypt-proxy/forwarding-rules.txt
-
-cp -f $CONFIGDIR/etc/NetworkManager/conf.d/dns-servers.conf /etc/NetworkManager/conf.d/dns-servers.conf
 
 sed -i 's/relatime/noatime/' /etc/fstab
 
@@ -78,7 +70,7 @@ cp -f $CONFIGDIR/etc/systemd/swap.conf.d/swap.conf /etc/systemd/swap.conf.d/swap
 
 sed -i 's/.*GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
 
-systemctl enable dnscrypt-proxy.service fstrim.timer systemd-swap.service bluetooth.service sddm.service
+systemctl enable fstrim.timer systemd-swap.service bluetooth.service sddm.service
 mkinitcpio -P
 
 grep '^GRUB_CMDLINE_LINUX_DEFAULT=".*mitigations' /etc/default/grub || sed -i 's/\(^GRUB_CMDLINE_LINUX_DEFAULT=".*\)"$/\1 mitigations=off"/' /etc/default/grub

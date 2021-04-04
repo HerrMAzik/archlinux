@@ -52,6 +52,16 @@ while : ; do
 done
 USER_PASSWORD="$DIALOG_RESULT"
 
+bootstrapper_dialog --title "Network" --cancel --inputbox "Please enter SSID.\n" 8 60
+NETWORK_SETUP="nmtui"
+if [ $? -eq 0 ] && [ ! -z $DIALOG_RESULT ]; then
+    NETWORK_SSID="$DIALOG_RESULT"
+    SETUP_NETWORK=true
+    bootstrapper_dialog --title "Network" --inputbox "Please enter '$NETWORK_SSID' password.\n" 8 60
+    NETWORK_PASS="$DIALOG_RESULT"
+    NETWORK_SETUP="nmcli device wifi connect $NETWORK_SSID password $NETWORK_PASS"
+fi
+
 reset
 
 timedatectl set-ntp true
@@ -64,7 +74,7 @@ else
     sgdisk -o $DEVICE
     sgdisk -n 1:0:+128M -t 1:ef00 $DEVICE
     sgdisk -N 2 -t 2:8300 $DEVICE
-    
+
     ESP_PART=$(lsblk -J -o path,name -I8,259  | jq -r ".blockdevices[] | select(.path == \"$DEVICE\") | .children | sort_by(.name) | .[0].path")
     ROOT_PART=$(lsblk -J -o path,name -I8,259  | jq -r ".blockdevices[] | select(.path == \"$DEVICE\") | .children | sort_by(.name) | .[1].path")
 
@@ -103,6 +113,7 @@ echo "root:$ROOT_PASSWORD" | chpasswd
 useradd -m -g users -G audio,video,power,storage,wheel,scanner -s /bin/fish $USERNAME
 echo "$USERNAME:$USER_PASSWORD" | chpasswd
 curl -L https://raw.githubusercontent.com/devrtc0/archlinux/master/01_system.sh > /home/$USERNAME/01_system.sh
+sed -i 's/^#NETWORKMANAGER$/$NETWORK_SETUP/' /home/$USERNAME/01_system.sh
 chown $USERNAME:users /home/$USERNAME/system.sh
 chmod 0700 /home/$USERNAME/system.sh
 EOF
@@ -110,11 +121,11 @@ EOF
 arch-chroot /mnt /bin/sh <<EOF
 pacman --noconfirm -S grub
 [ $MODE -eq 2 ] && pacman --noconfirm -S efibootmgr
-[ $MODE -eq 2 ] && mkdir -p /ife && mount $ESP_PART /ife
+[ $MODE -eq 2 ] && mkdir -p /boot/efi && mount $ESP_PART /boot/efi
 [ $MODE -eq 1 ] && grub-install $DEVICE
-[ $MODE -eq 2 ] && grub-install --target=x86_64-efi --efi-directory=/ife --bootloader-id=GRUB --removable
+[ $MODE -eq 2 ] && grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --removable
 grub-mkconfig -o /boot/grub/grub.cfg
-[ $MODE -eq 2 ] && umount /ife
+[ $MODE -eq 2 ] && umount /boot/efi
 EOF
 
 umount -R /mnt

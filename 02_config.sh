@@ -9,8 +9,7 @@ test -z $XDG_CONFIG_HOME && XDG_CONFIG_HOME="$HOME/.config"
 test -z $ARCHLINUX && ARCHLINUX=$HOME/repo/archlinux
 SANCTUM_SANCTORUM="$HOME/repo/man.kdbx"
 
-rm -rf $HOME/.bashrc
-rm -rf $HOME/.bash_{logout,profile}
+rm -rf ~/.bash{rc,_{logout,profile}}
 
 mkdir -p $HOME/build
 mkdir -p $HOME/repo
@@ -50,6 +49,7 @@ fi
 
 sed -i 's/^pinentry-title/#pinentry-title/g' $HOME/.gnupg/gpg-agent.conf
 
+# keybase
 if [ ! -f $XDG_CONFIG_HOME/keybase/*.mpack ]; then
     test -z $passphrase && echo 'enter kdbx password:' && read -ers passphrase
 
