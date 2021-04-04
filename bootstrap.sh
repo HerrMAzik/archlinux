@@ -65,19 +65,19 @@ reset
 
 timedatectl set-ntp true
 
+sgdisk --zap-all $DEVICE
+sgdisk -o $DEVICE
+
 if [ $MODE -eq 1 ]; then
     echo ';' | sfdisk $DEVICE
     ROOT_PART=$(lsblk -J -o path,name -I8,259  | jq -r ".blockdevices[] | select(.path == \"$DEVICE\") | .children | sort_by(.name) | .[0].path")
 else
-    sgdisk --zap-all $DEVICE
-    sgdisk -o $DEVICE
-    sgdisk -n 1:0:+128M -t 1:ef00 $DEVICE
-    sgdisk -N 2 -t 2:8300 $DEVICE
+    sgdisk -n 1:0:+128M -t 1:ef00 -N 2 -t 2:8300 $DEVICE
 
-    ESP_PART=$(lsblk -J -o path,name -I8,259  | jq -r ".blockdevices[] | select(.path == \"$DEVICE\") | .children | sort_by(.name) | .[0].path")
+    EFI_PART=$(lsblk -J -o path,name -I8,259  | jq -r ".blockdevices[] | select(.path == \"$DEVICE\") | .children | sort_by(.name) | .[0].path")
     ROOT_PART=$(lsblk -J -o path,name -I8,259  | jq -r ".blockdevices[] | select(.path == \"$DEVICE\") | .children | sort_by(.name) | .[1].path")
 
-    yes | mkfs.fat -F32 $ESP_PART
+    yes | mkfs.fat -F32 $EFI_PART
 fi
 
 yes | mkfs.ext4 -L system $ROOT_PART
@@ -120,7 +120,7 @@ EOF
 arch-chroot /mnt /bin/sh <<EOF
 pacman --noconfirm -S grub
 [ $MODE -eq 2 ] && pacman --noconfirm -S efibootmgr
-[ $MODE -eq 2 ] && mkdir -p /boot/efi && mount $ESP_PART /boot/efi
+[ $MODE -eq 2 ] && mkdir -p /boot/efi && mount $EFI_PART /boot/efi
 [ $MODE -eq 1 ] && grub-install $DEVICE
 [ $MODE -eq 2 ] && grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --removable
 grub-mkconfig -o /boot/grub/grub.cfg
