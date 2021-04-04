@@ -52,11 +52,10 @@ while : ; do
 done
 USER_PASSWORD="$DIALOG_RESULT"
 
-bootstrapper_dialog --title "Network" --cancel --inputbox "Please enter SSID.\n" 8 60
 NETWORK_SETUP="nmtui"
+bootstrapper_dialog --title "WiFi Network setup" --cancel --inputbox "Please enter SSID name.\n" 8 60
 if [ $? -eq 0 ] && [ ! -z $DIALOG_RESULT ]; then
     NETWORK_SSID="$DIALOG_RESULT"
-    SETUP_NETWORK=true
     bootstrapper_dialog --title "Network" --inputbox "Please enter '$NETWORK_SSID' password.\n" 8 60
     NETWORK_PASS="$DIALOG_RESULT"
     NETWORK_SETUP="nmcli device wifi connect $NETWORK_SSID password $NETWORK_PASS"
