@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+test -z $SANCTUM_SANCTORUM && echo 'envvar SANCTUM_SANCTORUM is not set' && exit -1
+
 ! type gpg >/dev/null && echo 'install gnupg' && exit -1
 ! type curl >/dev/null && echo 'install curl' && exit -1
 ! type jq >/dev/null && echo 'install jq' && exit -1
