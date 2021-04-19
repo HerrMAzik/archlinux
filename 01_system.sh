@@ -16,19 +16,6 @@ mkdir -p $HOME/repo
 test -z $CONFIGDIR && CONFIGDIR=$HOME/repo/archlinux
 sh -c "cd ${CONFIGDIR}; git pull --ff-only"
 
-cpu=$(cat /proc/cpuinfo | grep 'vendor' | uniq | awk '{ print $3 }')
-case "$cpu" in
-"GenuineIntel")
-    ucode="intel-ucode"
-    ;;
-"AuthenticAMD")
-    ucode="amd-ucode"
-    ;;
-*)
-    ucode=""
-    ;;
-esac
-
 cat <<EOF | sudo sh
 cp -f $CONFIGDIR/etc/pacman.conf /etc/pacman.conf
 pacman --needed --noconfirm -Syu
@@ -36,7 +23,7 @@ pacman --needed --noconfirm -Syu
 while : ; do
     cat <<EOF2 | sed 's/\s/\n/g' | pacman --needed --noconfirm -S -
         unzip unrar zip p7zip pigz pbzip2 xz
-        $ucode chezmoi systemd-swap man
+        chezmoi systemd-swap man
         noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji
         ttf-jetbrains-mono ttf-dejavu ttf-opensans
         xdg-user-dirs ntfs-3g exfat-utils bluez-utils xorg-xinput
