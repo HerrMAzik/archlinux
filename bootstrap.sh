@@ -154,11 +154,11 @@ arch-chroot /mnt /bin/sh <<EOF
     echo 'default arch.conf' > /boot/loader/loader.conf
     echo 'editor 0' >> /boot/loader/loader.conf
 
-    echo 'title Arch' > /boot/loader/entities/arch.conf
-    echo 'linux /vmlinuz-linux-lts' >> /boot/loader/entities/arch.conf
-    echo 'initrd /$ucode.img' >> /boot/loader/entities/arch.conf
-    echo 'initrd /initramfs-linux-lts.img' >> /boot/loader/entities/arch.conf
-    echo 'options root=PARTUUID=$part_uuid rw' >> /boot/loader/entities/arch.conf
+    echo 'title Arch' > /boot/loader/entries/arch.conf
+    echo 'linux /vmlinuz-linux-lts' >> /boot/loader/entries/arch.conf
+    echo 'initrd /${ucode}.img' >> /boot/loader/entries/arch.conf
+    echo 'initrd /initramfs-linux-lts.img' >> /boot/loader/entries/arch.conf
+    echo 'options root=PARTUUID=$part_uuid rw' >> /boot/loader/entries/arch.conf
 EOF
 fi
 
