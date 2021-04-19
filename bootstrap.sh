@@ -89,7 +89,7 @@ yes | mkfs.ext4 -L system $ROOT_PART
 mount $ROOT_PART /mnt
 if [ $MODE -eq 2 ]; then
     mkdir -p /mnt/boot
-    mount $ROOT_PART /mnt
+    mount $EFI_PART /mnt/boot
 fi
 
 type reflector >/dev/null 2>&1 && reflector --sort rate --country Russia -p https --save /etc/pacman.d/mirrorlist
@@ -136,8 +136,8 @@ useradd -m -g users -G audio,video,power,storage,wheel,scanner -s /bin/fish $USE
 echo "$USERNAME:$USER_PASSWORD" | chpasswd
 curl -L https://raw.githubusercontent.com/devrtc0/archlinux/master/01_system.sh > /home/$USERNAME/01_system.sh
 sed -i 's/^#NETWORKMANAGER$/$NETWORK_SETUP/' /home/$USERNAME/01_system.sh
-chown $USERNAME:users /home/$USERNAME/system.sh
-chmod 0700 /home/$USERNAME/system.sh
+chown $USERNAME:users /home/$USERNAME/01_system.sh
+chmod 0700 /home/$USERNAME/01_system.sh
 EOF
 
 part_uuid=$(blkid -s PARTUUID -o value $ROOT_PART)
