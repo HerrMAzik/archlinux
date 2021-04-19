@@ -87,6 +87,10 @@ fi
 
 yes | mkfs.ext4 -L system $ROOT_PART
 mount $ROOT_PART /mnt
+if [ $MODE -eq 2 ]; then
+    mkdir -p /mnt/boot
+    mount $ROOT_PART /mnt
+fi
 
 type reflector >/dev/null 2>&1 && reflector --sort rate --country Russia -p https --save /etc/pacman.d/mirrorlist
 
@@ -138,16 +142,24 @@ EOF
 
 part_uuid=$(blkid -s PARTUUID -o value $ROOT_PART)
 
+if [ $MODE -eq 1 ]; then
 arch-chroot /mnt /bin/sh <<EOF
-bootctl install
-echo 'default arch.conf' > /boot/loader/loader.conf
-echo 'editor 0' >> /boot/loader/loader.conf
-
-echo 'title Arch' > /boot/loader/entities/arch.conf
-echo 'linux /vmlinuz-linux-lts' >> /boot/loader/entities/arch.conf
-echo 'initrd /$ucode.img' >> /boot/loader/entities/arch.conf
-echo 'initrd /initramfs-linux-lts.img' >> /boot/loader/entities/arch.conf
-echo 'options root=PARTUUID=$part_uuid rw' >> /boot/loader/entities/arch.conf
+    pacman -S --noconfirm grub
+    grub-install $DEVICE
+    grub-mkconfig -o /boot/grub/grub.cfg
 EOF
+else
+arch-chroot /mnt /bin/sh <<EOF
+    bootctl install
+    echo 'default arch.conf' > /boot/loader/loader.conf
+    echo 'editor 0' >> /boot/loader/loader.conf
+
+    echo 'title Arch' > /boot/loader/entities/arch.conf
+    echo 'linux /vmlinuz-linux-lts' >> /boot/loader/entities/arch.conf
+    echo 'initrd /$ucode.img' >> /boot/loader/entities/arch.conf
+    echo 'initrd /initramfs-linux-lts.img' >> /boot/loader/entities/arch.conf
+    echo 'options root=PARTUUID=$part_uuid rw' >> /boot/loader/entities/arch.conf
+EOF
+fi
 
 umount -R /mnt
