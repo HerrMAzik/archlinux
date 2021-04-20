@@ -27,7 +27,7 @@ if [ $MODE -eq 2 ]; then
         if [ $? -ne 0 ] || [ -z $DIALOG_RESULT ]; then
             break
         fi
-        TMP_PASSWORD = "$DIALOG_RESULT"
+        TMP_PASSWORD="$DIALOG_RESULT"
         bootstrapper_dialog --title "$title" --cancel --passwordbox "Repeat the password.\n" 8 60
         if [ $? -ne 0 ] || [ -z $DIALOG_RESULT ]; then
             break
