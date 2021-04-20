@@ -21,8 +21,22 @@ bootstrapper_dialog --title "Device" --menu "Please select a device from the fol
 DEVICE=$DIALOG_RESULT
 
 if [ $MODE -eq 2 ]; then
-    bootstrapper_dialog --title "$title" --cancel --passwordbox "Please enter a strong password for ROOT partition.\n" 8 60
-    [ $? -eq 0 ] && [ ! -z $DIALOG_RESULT ] && ROOT_PART_PASSWORD="$DIALOG_RESULT"
+    while : ; do
+        unset TMP_PASSWORD
+        bootstrapper_dialog --title "$title" --cancel --passwordbox "Please enter a strong password for ROOT partition.\n" 8 60
+        if [ $? -ne 0 ] || [ -z $DIALOG_RESULT ]; then
+            break
+        fi
+        TMP_PASSWORD = "$DIALOG_RESULT"
+        bootstrapper_dialog --title "$title" --cancel --passwordbox "Repeat the password.\n" 8 60
+        if [ $? -ne 0 ] || [ -z $DIALOG_RESULT ]; then
+            break
+        fi
+        if [ "$TMP_PASSWORD" != "$DIALOG_RESULT" ]; then
+            continue
+        fi
+        ROOT_PART_PASSWORD="$TMP_PASSWORD"
+    done
 fi
 
 bootstrapper_dialog --title "WARNING" --msgbox "This script will NUKE $DEVICE from orbit.\nPress <Enter> to continue or <Esc> to cancel.\n" 6 60
@@ -85,8 +99,19 @@ else
     yes | mkfs.fat -F32 $EFI_PART
 fi
 
-yes | mkfs.ext4 -L system $ROOT_PART
-mount $ROOT_PART /mnt
+if [ ! -z $ROOT_PART_PASSWORD ]; then
+    yes "$ROOT_PART_PASSWORD" | cryptsetup -q luksFormat $ROOT_PART
+    yes "$ROOT_PART_PASSWORD" | cryptsetup -q --allow-discards open $ROOT_PART luks_root
+
+    yes | mkfs.ext4 -L system /dev/mapper/luks_root
+    mount /dev/mapper/luks_root /mnt
+
+    luks_uuid=$(blkid -s UUID -o value /dev/mapper/luks_root)
+else
+    yes | mkfs.ext4 -L system $ROOT_PART
+    mount $ROOT_PART /mnt
+fi
+
 if [ $MODE -eq 2 ]; then
     mkdir -p /mnt/boot
     mount $EFI_PART /mnt/boot
@@ -140,7 +165,7 @@ chown $USERNAME:users /home/$USERNAME/01_system.sh
 chmod 0700 /home/$USERNAME/01_system.sh
 EOF
 
-part_uuid=$(blkid -s PARTUUID -o value $ROOT_PART)
+root_uuid=$(blkid -s PARTUUID -o value $ROOT_PART)
 
 if [ $MODE -eq 1 ]; then
 arch-chroot /mnt /bin/sh <<EOF
@@ -149,6 +174,11 @@ arch-chroot /mnt /bin/sh <<EOF
     grub-mkconfig -o /boot/grub/grub.cfg
 EOF
 else
+OPTIONS=""
+if [ ! -z $ROOT_PART_PASSWORD ]; then
+    sed -i -e "s/^HOOKS=(.*$/HOOKS=(base udev autodetect keyboard keymap modconf block encrypt filesystems fsck)/" /mnt/etc/mkinitcpio.conf
+    OPTIONS="cryptdevice=UUID=${luks_uuid}:luks_root:allow-discards"
+fi
 arch-chroot /mnt /bin/sh <<EOF
     bootctl install
     echo 'default arch.conf' > /boot/loader/loader.conf
@@ -156,9 +186,9 @@ arch-chroot /mnt /bin/sh <<EOF
 
     echo 'title Arch' > /boot/loader/entries/arch.conf
     echo 'linux /vmlinuz-linux-lts' >> /boot/loader/entries/arch.conf
-    echo 'initrd /${ucode}.img' >> /boot/loader/entries/arch.conf
+    [ ! -z $ucode ] && echo 'initrd /${ucode}.img' >> /boot/loader/entries/arch.conf
     echo 'initrd /initramfs-linux-lts.img' >> /boot/loader/entries/arch.conf
-    echo 'options root=PARTUUID=$part_uuid rw' >> /boot/loader/entries/arch.conf
+    echo 'options $OPTIONS root=PARTUUID=$root_uuid rw' >> /boot/loader/entries/arch.conf
 EOF
 fi
 
