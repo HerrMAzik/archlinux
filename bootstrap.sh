@@ -166,7 +166,7 @@ chown $USERNAME:users /home/$USERNAME/01_system.sh
 chmod 0700 /home/$USERNAME/01_system.sh
 EOF
 
-root_uuid=$(blkid -s PARTUUID -o value $ROOT_PART)
+root_uuid=$(blkid -s UUID -o value $ROOT_PART)
 
 if [ $MODE -eq 1 ]; then
 arch-chroot /mnt /bin/sh <<EOF
@@ -175,11 +175,13 @@ arch-chroot /mnt /bin/sh <<EOF
     grub-mkconfig -o /boot/grub/grub.cfg
 EOF
 else
+
 OPTIONS=""
 if [ ! -z $ROOT_PART_PASSWORD ]; then
-    sed -i -e "s/^HOOKS=(.*$/HOOKS=(base udev autodetect keyboard keymap modconf block encrypt filesystems fsck)/" /mnt/etc/mkinitcpio.conf
-    OPTIONS="cryptdevice=UUID=${luks_uuid}:luks_root:allow-discards"
+    sed -i -e "s/^HOOKS=(.*$/HOOKS=(base systemd autodetect keyboard sd-vconsole modconf block sd-encrypt filesystems fsck)/" /mnt/etc/mkinitcpio.conf
+    OPTIONS="luks.uuid=${root_uuid} luks.name=luks_root luks.options=allow-discards"
 fi
+
 arch-chroot /mnt /bin/sh <<EOF
     bootctl install
     echo 'default arch.conf' > /boot/loader/loader.conf
@@ -189,7 +191,9 @@ arch-chroot /mnt /bin/sh <<EOF
     echo 'linux /vmlinuz-linux-lts' >> /boot/loader/entries/arch.conf
     [ ! -z $ucode ] && echo 'initrd /${ucode}.img' >> /boot/loader/entries/arch.conf
     echo 'initrd /initramfs-linux-lts.img' >> /boot/loader/entries/arch.conf
-    echo 'options $OPTIONS root=PARTUUID=$root_uuid rw' >> /boot/loader/entries/arch.conf
+    echo 'options $OPTIONS root=UUID=$luks_uuid rw' >> /boot/loader/entries/arch.conf
+
+    mkinitcpio -P
 EOF
 fi
 
