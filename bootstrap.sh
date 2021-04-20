@@ -36,6 +36,7 @@ if [ $MODE -eq 2 ]; then
             continue
         fi
         ROOT_PART_PASSWORD="$TMP_PASSWORD"
+        break
     done
 fi
 
