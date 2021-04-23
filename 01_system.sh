@@ -38,7 +38,7 @@ while : ; do
         pass oath-toolkit keepassxc keybase kbfs gnupg
         mc curl wget htop jq expect
         exa ripgrep fd bat skim
-        gcc gdb cmake clang lldb llvm rustup
+        gcc gdb cmake rustup
         git-crypt asp
 EOF2
     [ $? -eq 0 ] && break
@@ -55,13 +55,15 @@ cp -f $CONFIGDIR/etc/sysctl.d/90-swappiness.conf /etc/sysctl.d/90-swappiness.con
 mkdir -p /etc/systemd/swap.conf.d
 cp -f $CONFIGDIR/etc/systemd/swap.conf.d/swap.conf /etc/systemd/swap.conf.d/swap.conf
 
-sed -i 's/.*GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
+[ -f /etc/default/grub ] && sed -i 's/.*GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
 
 systemctl enable fstrim.timer systemd-swap.service bluetooth.service sddm.service
 mkinitcpio -P
 
-grep '^GRUB_CMDLINE_LINUX_DEFAULT=".*mitigations' /etc/default/grub || sed -i 's/\(^GRUB_CMDLINE_LINUX_DEFAULT=".*\)"$/\1 mitigations=off"/' /etc/default/grub
-grub-mkconfig -o /boot/grub/grub.cfg
+if [ -f /etc/default/grub ]; then
+    grep '^GRUB_CMDLINE_LINUX_DEFAULT=".*mitigations' /etc/default/grub || sed -i 's/\(^GRUB_CMDLINE_LINUX_DEFAULT=".*\)"$/\1 mitigations=off"/' /etc/default/grub
+fi
+[ -f /boot/grub/grub.cfg ] && grub-mkconfig -o /boot/grub/grub.cfg
 
 timedatectl set-ntp true
 EOF
