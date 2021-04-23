@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+mkdir -p $HOME/build
+
 PKGVER=2.2.27
 PKGREL=1
 build=$PWD

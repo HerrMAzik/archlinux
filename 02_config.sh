@@ -11,7 +11,6 @@ SANCTUM_SANCTORUM="$HOME/repo/man.kdbx"
 
 rm -rf ~/.bash{rc,_{logout,profile}}
 
-mkdir -p $HOME/build
 mkdir -p $HOME/repo
 
 . ./sanctum.sanctorum.sh
@@ -80,6 +79,14 @@ fi
 [ ! -L $HOME/.password-store ] && ln -s $HOME/repo/pass $HOME/.password-store
 ! pass > /dev/null 2>&1 && echo 'Wrong password store link'
 
+if [ ! -d $HOME/repo/kdbx ]; then
+    test -z $passphrase && echo 'enter kdbx password:' && read -ers passphrase
+
+    git clone https://devrtc0:$(yes $passphrase | keepassxc-cli show -q -a Password -s -k $HOME/.sanctum.sanctorum $SANCTUM_SANCTORUM Repositories/GitHub/token)@github.com/devrtc0/kdbx.git $HOME/repo/kdbx
+    sh -c 'cd $HOME/repo/kdbx; git remote set-url origin git@github.com:devrtc0/kdbx.git'
+    sh -c 'cd $HOME/repo/kdbx; git remote add gitlab git@gitlab.com:devrtc0/kdbx.git'
+fi
+
 if [ ! -d $HOME/repo/settings ]; then
     test -z $passphrase && echo 'enter kdbx password:' && read -ers passphrase
 
@@ -98,15 +105,15 @@ nvim +PlugInstall +UpdateRemotePlugins +qa
 # yay
 ! type yay >/dev/null 2>&1 && sh $ARCHLINUX/yay.sh
 
-if [ ! -d $HOME/.mozilla/firefox/*HerrMAN ]; then
-    firefox -CreateProfile HerrMAN
-    firefox -P HerrMAN --headless &
+if [ ! -d $HOME/.mozilla/firefox/*devrtc0 ]; then
+    firefox -CreateProfile devrtc0
+    firefox -P devrtc0 --headless &
     sleep 1
     pkill 'firefox|MainThread'
     sleep 1
-    cp $HOME/repo/settings/user.js $HOME/.mozilla/firefox/*HerrMAN/
+    cp $HOME/repo/settings/user.js $HOME/.mozilla/firefox/*devrtc0/
     firefox https://addons.mozilla.org/firefox/addon/ublock-origin/
     firefox https://addons.mozilla.org/firefox/addon/umatrix/
-    firefox https://addons.mozilla.org/en-US/firefox/addon/ublacklist/
+    firefox https://addons.mozilla.org/firefox/addon/ublacklist/
     firefox https://addons.mozilla.org/firefox/addon/keepassxc-browser/
 fi
