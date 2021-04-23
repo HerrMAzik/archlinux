@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 # screen lock
 kwriteconfig5 --file $HOME/.config/kscreenlockerrc --group Daemon --key Autolock "false"
@@ -90,21 +90,21 @@ kwriteconfig5 --file $HOME/.config/powerdevilrc --group BatteryManagement --key 
 kwriteconfig5 --file $HOME/.config/kiorc --group Confirmations --key ConfirmDelete "false"
 
 # bluetooth
-declare BT_MAC
-BT_MAC=`bluetoothctl list | awk '{print $2}'`
-for i in "${BT_MAC[@]}"
-do
-    kwriteconfig5 --file $HOME/.config/bluedevilglobalrc --group Adapters --key "${i}_powered" "false"
-done
+#declare BT_MAC
+#BT_MAC=`bluetoothctl list | awk '{print $2}'`
+#for i in "${BT_MAC[@]}"
+#do
+#    kwriteconfig5 --file $HOME/.config/bluedevilglobalrc --group Adapters --key "${i}_powered" "false"
+#done
 
 # touchpad
-declare TOUCHPAD_ADAPTERS
-TOUCHPAD_ADAPTERS=`xinput list --name-only | grep -Ei '(touchpad|glidepoint)'`
-for i in "${TOUCHPAD_ADAPTERS[@]}"
-do
-    kwriteconfig5 --file $HOME/.config/touchpadxlibinputrc --group "$i" --key "tapDragLock" "true"
-    kwriteconfig5 --file $HOME/.config/touchpadxlibinputrc --group "$i" --key "tapToClick" "true"
-done
+#declare TOUCHPAD_ADAPTERS
+#TOUCHPAD_ADAPTERS=`xinput list --name-only | grep -Ei '(touchpad|glidepoint)'`
+#for i in "${TOUCHPAD_ADAPTERS[@]}"
+#do
+#    kwriteconfig5 --file $HOME/.config/touchpadxlibinputrc --group "$i" --key "tapDragLock" "true"
+#    kwriteconfig5 --file $HOME/.config/touchpadxlibinputrc --group "$i" --key "tapToClick" "true"
+#done
 
 # wallpaper
 # [ ! -L /$HOME/Pictures/wallpaper.jpg ] && ln -s $PWD/wallpaper.jpg /$HOME/Pictures/wallpaper.jpg

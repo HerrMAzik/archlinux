@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 git clone https://aur.archlinux.org/yay-bin.git
 cd yay-bin
