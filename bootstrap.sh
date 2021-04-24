@@ -49,7 +49,7 @@ TITLE="Root password"
 while : ; do
     [ -z $title ] && title=$TITLE
     bootstrapper_dialog --title "$title" --passwordbox "Please enter a strong password for the ROOT user.\n" 8 60
-    [ $? -eq 0 ] && [ ! -z $DIALOG_RESULT ] && unset title && break
+    [ $? -eq 0 ] && [ -n $DIALOG_RESULT ] && unset title && break
     title="$TITLE$WARN_END"
 done
 ROOT_PASSWORD="$DIALOG_RESULT"
@@ -58,7 +58,7 @@ TITLE="User name"
 while : ; do
     [ -z $title ] && title=$TITLE
     bootstrapper_dialog --title "$title" --inputbox "Please enter a user name.\n" 8 60
-    [ $? -eq 0 ] && [ ! -z $DIALOG_RESULT ] && unset title && break
+    [ $? -eq 0 ] && [ -n $DIALOG_RESULT ] && unset title && break
     title="$TITLE$WARN_END"
 done
 USERNAME="$DIALOG_RESULT"
@@ -67,14 +67,14 @@ TITLE="$USERNAME password"
 while : ; do
     [ -z $title ] && title=$TITLE
     bootstrapper_dialog --title "$title" --passwordbox "Please enter a strong password for $USERNAME.\n" 8 60
-    [ $? -eq 0 ] && [ ! -z $DIALOG_RESULT ] && unset title && break
+    [ $? -eq 0 ] && [ -n $DIALOG_RESULT ] && unset title && break
     title="$TITLE$WARN_END"
 done
 USER_PASSWORD="$DIALOG_RESULT"
 
 NETWORK_SETUP="nmtui"
 bootstrapper_dialog --title "WiFi Network setup" --cancel --inputbox "Please enter SSID name.\n" 8 60
-if [ $? -eq 0 ] && [ ! -z $DIALOG_RESULT ]; then
+if [ $? -eq 0 ] && [ -n $DIALOG_RESULT ]; then
     NETWORK_SSID="$DIALOG_RESULT"
     bootstrapper_dialog --title "Network" --inputbox "Please enter '$NETWORK_SSID' password.\n" 8 60
     NETWORK_PASS="$DIALOG_RESULT"
@@ -100,7 +100,7 @@ else
     yes | mkfs.fat -F32 $EFI_PART
 fi
 
-if [ ! -z $ROOT_PART_PASSWORD ]; then
+if [ -n $ROOT_PART_PASSWORD ]; then
     yes "$ROOT_PART_PASSWORD" | cryptsetup -q luksFormat $ROOT_PART
     yes "$ROOT_PART_PASSWORD" | cryptsetup -q --allow-discards open $ROOT_PART luks_root
 
@@ -177,7 +177,7 @@ EOF
 else
 
 OPTIONS=""
-if [ ! -z $ROOT_PART_PASSWORD ]; then
+if [ -n $ROOT_PART_PASSWORD ]; then
     sed -i -e "s/^HOOKS=(.*$/HOOKS=(base systemd autodetect keyboard sd-vconsole modconf block sd-encrypt filesystems fsck)/" /mnt/etc/mkinitcpio.conf
     OPTIONS="luks.uuid=${root_uuid} luks.name=luks_root luks.options=allow-discards"
 fi
@@ -189,7 +189,7 @@ arch-chroot /mnt /bin/sh <<EOF
 
     echo 'title Arch' > /boot/loader/entries/arch.conf
     echo 'linux /vmlinuz-linux-lts' >> /boot/loader/entries/arch.conf
-    [ ! -z $ucode ] && echo 'initrd /${ucode}.img' >> /boot/loader/entries/arch.conf
+    [ -n $ucode ] && echo 'initrd /${ucode}.img' >> /boot/loader/entries/arch.conf
     echo 'initrd /initramfs-linux-lts.img' >> /boot/loader/entries/arch.conf
     echo 'options $OPTIONS root=UUID=$luks_uuid rw' >> /boot/loader/entries/arch.conf
 

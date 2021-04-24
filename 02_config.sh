@@ -102,6 +102,8 @@ VIM_PLUG=$HOME/.local/share/nvim/site/autoload/plug.vim
 [ ! -f $VIM_PLUG ] && curl -fLo $VIM_PLUG --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 nvim +PlugInstall +UpdateRemotePlugins +qa
 
+rustup default stable
+
 # yay
 ! type yay >/dev/null 2>&1 && sh $ARCHLINUX/yay.sh
 
