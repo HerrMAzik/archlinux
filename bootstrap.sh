@@ -78,7 +78,7 @@ if [ $? -eq 0 ] && [ ! -z $DIALOG_RESULT ]; then
     NETWORK_SSID="$DIALOG_RESULT"
     bootstrapper_dialog --title "Network" --inputbox "Please enter '$NETWORK_SSID' password.\n" 8 60
     NETWORK_PASS="$DIALOG_RESULT"
-    NETWORK_SETUP="nmcli device wifi connect $NETWORK_SSID password $NETWORK_PASS"
+    NETWORK_SETUP="while :;do nmcli device wifi connect $NETWORK_SSID password ${NETWORK_PASS};[ $? -eq 0 ] && break;sleep 1;done"
 fi
 
 reset
