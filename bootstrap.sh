@@ -1,5 +1,7 @@
 #!/bin/sh
 
+KERNEL="linux-lts"
+
 systemctl stop reflector.service
 
 pacman -Sy --noconfirm --needed dialog jq
@@ -13,23 +15,23 @@ bootstrapper_dialog() {
 MODES="1 BIOS"
 [ -d /sys/firmware/efi ] && MODES="$MODES 2 UEFI"
 bootstrapper_dialog --title "MODE" --menu "Please select a boot mode from the following list" 13 70 3 $MODES
-[ $? -ne 0 ] || [ -z $DIALOG_RESULT ] && MODE=1 || MODE=$DIALOG_RESULT
+[ $? -ne 0 ] || [ -z "$DIALOG_RESULT" ] && MODE=1 || MODE="$DIALOG_RESULT"
 
 DISKS=$(lsblk -J -o path,size --nodeps -I8,259 | jq -r '.blockdevices | .[] | .path,.size')
 bootstrapper_dialog --title "Device" --menu "Please select a device from the following list to use for Linux installation." 13 70 3 $DISKS
-[ $? -ne 0 ] || [ -z $DIALOG_RESULT ] && echo 'No device selected' && exit 0
-DEVICE=$DIALOG_RESULT
+[ $? -ne 0 ] || [ -z "$DIALOG_RESULT" ] && echo 'No device selected' && exit 0
+DEVICE="$DIALOG_RESULT"
 
 if [ $MODE -eq 2 ]; then
     while : ; do
         unset TMP_PASSWORD
         bootstrapper_dialog --title "$title" --cancel --passwordbox "Please enter a strong password for ROOT partition.\n" 8 60
-        if [ $? -ne 0 ] || [ -z $DIALOG_RESULT ]; then
+        if [ $? -ne 0 ] || [ -z "$DIALOG_RESULT" ]; then
             break
         fi
         TMP_PASSWORD="$DIALOG_RESULT"
         bootstrapper_dialog --title "$title" --cancel --passwordbox "Repeat the password.\n" 8 60
-        if [ $? -ne 0 ] || [ -z $DIALOG_RESULT ]; then
+        if [ $? -ne 0 ] || [ -z "$DIALOG_RESULT" ]; then
             break
         fi
         if [ "$TMP_PASSWORD" != "$DIALOG_RESULT" ]; then
@@ -47,38 +49,38 @@ HOSTNAME="$DIALOG_RESULT"
 
 TITLE="Root password"
 while : ; do
-    [ -z $title ] && title=$TITLE
+    [ -z "$title" ] && title=$TITLE
     bootstrapper_dialog --title "$title" --passwordbox "Please enter a strong password for the ROOT user.\n" 8 60
-    [ $? -eq 0 ] && [ -n $DIALOG_RESULT ] && unset title && break
+    [ $? -eq 0 ] && [ ! -z "$DIALOG_RESULT" ] && unset title && break
     title="$TITLE$WARN_END"
 done
 ROOT_PASSWORD="$DIALOG_RESULT"
 
 TITLE="User name"
 while : ; do
-    [ -z $title ] && title=$TITLE
+    [ -z "$title" ] && title=$TITLE
     bootstrapper_dialog --title "$title" --inputbox "Please enter a user name.\n" 8 60
-    [ $? -eq 0 ] && [ -n $DIALOG_RESULT ] && unset title && break
+    [ $? -eq 0 ] && [ ! -z "$DIALOG_RESULT" ] && unset title && break
     title="$TITLE$WARN_END"
 done
 USERNAME="$DIALOG_RESULT"
 
 TITLE="$USERNAME password"
 while : ; do
-    [ -z $title ] && title=$TITLE
+    [ -z "$title" ] && title=$TITLE
     bootstrapper_dialog --title "$title" --passwordbox "Please enter a strong password for $USERNAME.\n" 8 60
-    [ $? -eq 0 ] && [ -n $DIALOG_RESULT ] && unset title && break
+    [ $? -eq 0 ] && [ ! -z "$DIALOG_RESULT" ] && unset title && break
     title="$TITLE$WARN_END"
 done
 USER_PASSWORD="$DIALOG_RESULT"
 
 NETWORK_SETUP="nmtui"
 bootstrapper_dialog --title "WiFi Network setup" --cancel --inputbox "Please enter SSID name.\n" 8 60
-if [ $? -eq 0 ] && [ -n $DIALOG_RESULT ]; then
+if [ $? -eq 0 ] && [ ! -z "$DIALOG_RESULT" ]; then
     NETWORK_SSID="$DIALOG_RESULT"
     bootstrapper_dialog --title "Network" --inputbox "Please enter '$NETWORK_SSID' password.\n" 8 60
     NETWORK_PASS="$DIALOG_RESULT"
-    NETWORK_SETUP="while :;do nmcli device wifi connect $NETWORK_SSID password ${NETWORK_PASS};[ $? -eq 0 ] && break;sleep 1;done"
+    NETWORK_SETUP="while :;do nmcli device wifi connect $NETWORK_SSID password ${NETWORK_PASS};[ \$? -eq 0 ] \&\& break;sleep 1;done"
 fi
 
 reset
@@ -100,7 +102,7 @@ else
     yes | mkfs.fat -F32 $EFI_PART
 fi
 
-if [ -n $ROOT_PART_PASSWORD ]; then
+if [ ! -z "$ROOT_PART_PASSWORD" ]; then
     yes "$ROOT_PART_PASSWORD" | cryptsetup -q luksFormat $ROOT_PART
     yes "$ROOT_PART_PASSWORD" | cryptsetup -q --allow-discards open $ROOT_PART luks_root
 
@@ -120,20 +122,7 @@ fi
 
 type reflector >/dev/null 2>&1 && reflector --sort rate --country Russia -p https --save /etc/pacman.d/mirrorlist
 
-cpu=$(cat /proc/cpuinfo | grep 'vendor' | uniq | awk '{ print $3 }')
-case "$cpu" in
-"GenuineIntel")
-    ucode="intel-ucode"
-    ;;
-"AuthenticAMD")
-    ucode="amd-ucode"
-    ;;
-*)
-    ucode=""
-    ;;
-esac
-
-yes '' | pacstrap /mnt base base-devel linux-lts linux-lts-headers linux-firmware $ucode
+yes '' | pacstrap /mnt base base-devel "$KERNEL" "${KERNEL}-headers" linux-firmware
 genfstab -U /mnt >> /mnt/etc/fstab
 
 arch-chroot /mnt /bin/bash <<EOF
@@ -177,9 +166,12 @@ EOF
 else
 
 OPTIONS=""
-if [ -n $ROOT_PART_PASSWORD ]; then
+if [ ! -z "$ROOT_PART_PASSWORD" ]; then
     sed -i -e "s/^HOOKS=(.*$/HOOKS=(base systemd autodetect keyboard sd-vconsole modconf block sd-encrypt filesystems fsck)/" /mnt/etc/mkinitcpio.conf
-    OPTIONS="luks.uuid=${root_uuid} luks.name=luks_root luks.options=allow-discards"
+    OPTIONS="luks.uuid=$root_uuid luks.name=luks_root luks.options=allow-discards root=UUID=$luks_uuid rw"
+else
+    sed -i -e "s/^HOOKS=(.*$/HOOKS=(base systemd autodetect keyboard sd-vconsole modconf block filesystems fsck)/" /mnt/etc/mkinitcpio.conf
+    OPTIONS="root=UUID=$root_uuid rw"
 fi
 
 arch-chroot /mnt /bin/sh <<EOF
@@ -188,10 +180,9 @@ arch-chroot /mnt /bin/sh <<EOF
     echo 'editor 0' >> /boot/loader/loader.conf
 
     echo 'title Arch' > /boot/loader/entries/arch.conf
-    echo 'linux /vmlinuz-linux-lts' >> /boot/loader/entries/arch.conf
-    [ -n $ucode ] && echo 'initrd /${ucode}.img' >> /boot/loader/entries/arch.conf
-    echo 'initrd /initramfs-linux-lts.img' >> /boot/loader/entries/arch.conf
-    echo 'options $OPTIONS root=UUID=$luks_uuid rw' >> /boot/loader/entries/arch.conf
+    echo 'linux /vmlinuz-$KERNEL' >> /boot/loader/entries/arch.conf
+    echo 'initrd /initramfs-${KERNEL}.img' >> /boot/loader/entries/arch.conf
+    echo 'options $OPTIONS' >> /boot/loader/entries/arch.conf
 
     mkinitcpio -P
 EOF

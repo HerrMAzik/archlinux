@@ -90,12 +90,12 @@ kwriteconfig5 --file $HOME/.config/powerdevilrc --group BatteryManagement --key 
 kwriteconfig5 --file $HOME/.config/kiorc --group Confirmations --key ConfirmDelete "false"
 
 # bluetooth
-#declare BT_MAC
-#BT_MAC=`bluetoothctl list | awk '{print $2}'`
-#for i in "${BT_MAC[@]}"
-#do
-#    kwriteconfig5 --file $HOME/.config/bluedevilglobalrc --group Adapters --key "${i}_powered" "false"
-#done
+declare BT_MAC
+BT_MAC=`bluetoothctl list | awk '{print $2}'`
+for i in "${BT_MAC[@]}"
+do
+    kwriteconfig5 --file $HOME/.config/bluedevilglobalrc --group Adapters --key "${i}_powered" "false"
+done
 
 # touchpad
 #declare TOUCHPAD_ADAPTERS
