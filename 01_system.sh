@@ -55,6 +55,9 @@ cp -f $CONFIGDIR/etc/sysctl.d/90-swappiness.conf /etc/sysctl.d/90-swappiness.con
 mkdir -p /etc/systemd/swap.conf.d
 cp -f $CONFIGDIR/etc/systemd/swap.conf.d/swap.conf /etc/systemd/swap.conf.d/swap.conf
 
+mkdir -p /etc/systemd/system.conf.d
+cp -f $CONFIGDIR/etc/systemd/system.conf.d/timeout.conf /etc/systemd/system.conf.d/timeout.conf
+
 [ -f /etc/default/grub ] && sed -i 's/.*GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
 
 systemctl enable fstrim.timer systemd-swap.service bluetooth.service sddm.service
