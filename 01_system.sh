@@ -81,7 +81,7 @@ if [ -f /etc/default/grub ]; then
 fi
 [ -f /boot/grub/grub.cfg ] && grub-mkconfig -o /boot/grub/grub.cfg
 
-find /boot/loader/entries/ -type f -iname '*.conf' -exec sh -c 'grep -E "^initrd.*-ucode.img" {} || sed -i -e "@^linux.*vmlinuz-linux@a initrd /${ucode}.img" {}' \;
+find /boot/loader/entries/ -type f -iname '*.conf' -exec sh -c 'grep -E "^initrd.*-ucode.img" {} || sed -i -e "/^linux.*vmlinuz-linux/a initrd \/${ucode}.img" {}' \;
 
 timedatectl set-ntp true
 EOF
