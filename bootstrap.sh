@@ -30,12 +30,14 @@ echo "$USERNAME"
 echo "$HOSTNAME"
 echo "$ROOT_PASSWORD"
 echo "$USER_PASSWORD"
+echo "$NETWORK"
+echo "$NETWORK_PASSWORD"
 
 NETWORK_SETUP=''
 if [ ! -z "$NETWORK" ]; then
     NETWORK_SETUP='nmtui'
     if [ ! -z "$NETWORK_PASSWORD" ]; then
-        NETWORK_SETUP="nmcli device wifi connect $NETWORK password $NETWORK_PASSWORD"
+        NETWORK_SETUP="while :;do nmcli device wifi connect $NETWORK password ${NETWORK_PASSWORD};[ \$? -eq 0 ] \&\& break;sleep 1;done"
     fi
 fi
 
