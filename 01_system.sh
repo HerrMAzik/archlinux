@@ -5,8 +5,7 @@
 ! systemctl is-enabled NetworkManager.service > /dev/null && sudo systemctl enable --now NetworkManager.service
 systemctl is-enabled NetworkManager-wait-online.service > /dev/null && sudo systemctl disable --now NetworkManager-wait-online.service
 
-#NETWORKMANAGER
-#nmtui OR nmcli device wifi connect SSID-Name password wireless-password
+###NETWORKMANAGER###while :;do nmcli device wifi connect NETWORKMANAGER_SSID password NETWORKMANAGER_PASSWORD ;[ $? -eq 0 ] && break;sleep 1;done
 
 sudo pacman --needed --noconfirm -Syyuu git
 

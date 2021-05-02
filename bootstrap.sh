@@ -6,7 +6,6 @@ if [ $# -ne 1 ]; then
 fi
 
 HASH=$(echo "$1" | sha512sum - | awk '{ print $1 }')
-echo $HASH
 HASH=${HASH:0:64}
 if [ $HASH != '37b58cddf70324beb55651768cf5e41dd9feea7f99c0ee83b4db8df13dbbc58b' ]; then
     echo 'wrong argument'
@@ -32,14 +31,6 @@ echo "$ROOT_PASSWORD"
 echo "$USER_PASSWORD"
 echo "$NETWORK"
 echo "$NETWORK_PASSWORD"
-
-NETWORK_SETUP=''
-if [ ! -z "$NETWORK" ]; then
-    NETWORK_SETUP='nmtui'
-    if [ ! -z "$NETWORK_PASSWORD" ]; then
-        NETWORK_SETUP="while :;do nmcli device wifi connect $NETWORK password ${NETWORK_PASSWORD};[ \$? -eq 0 ] \&\& break;sleep 1;done"
-    fi
-fi
 
 systemctl stop reflector.service
 timedatectl set-ntp true
@@ -88,7 +79,14 @@ useradd -m -g users -G audio,video,power,storage,wheel,scanner -p '$USER_PASSWOR
 
 cat <<EOF2 | sudo -u '$USERNAME' sh
 curl -L https://raw.githubusercontent.com/devrtc0/archlinux/master/01_system.sh > /home/$USERNAME/01_system.sh
-sed -i 's/^#NETWORKMANAGER$/$NETWORK_SETUP/' /home/$USERNAME/01_system.sh
+
+if [ ! -z "$NETWORK" ]; then
+    if [ -z "$NETWORK_PASSWORD"]; then
+        sed -i -e '/^###NETWORKMANAGER###/c\nmtui' /home/$USERNAME/01_system.sh
+    else
+        sed -i -e 's/^###NETWORKMANAGER###//;s/NETWORKMANAGER_SSID/$NETWORK/;s/NETWORKMANAGER_PASSWORD/$NETWORK_PASSWORD/' /home/$USERNAME/01_system.sh
+    fi
+fi
 
 mkdir -p /home/$USERNAME/.config/fish
 echo 'sh /home/$USERNAME/01_system.sh' > /home/$USERNAME/.config/fish/config.fish
