@@ -78,13 +78,13 @@ cat <<EOF2 > /etc/hosts
 127.0.1.1   $HOSTNAME.localdomain $HOSTNAME
 EOF2
 
-pacman --noconfirm -S networkmanager fish curl
+pacman --noconfirm --needed -S networkmanager fish curl
 
 echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel
 echo 'root:$ROOT_PASSWORD' | chpasswd -e
 useradd -m -g users -G audio,video,power,storage,wheel,scanner -p '$USER_PASSWORD' -s /bin/fish $USERNAME
 
-cat <<EOF2 | sudo -u '$USERNAME'
+cat <<EOF2 | sudo -u '$USERNAME' sh
 curl -L https://raw.githubusercontent.com/devrtc0/archlinux/master/01_system.sh > /home/$USERNAME/01_system.sh
 sed -i 's/^#NETWORKMANAGER$/$NETWORK_SETUP/' /home/$USERNAME/01_system.sh
 
