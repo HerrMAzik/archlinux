@@ -5,7 +5,6 @@
 ! systemctl is-enabled NetworkManager.service > /dev/null && sudo systemctl enable --now NetworkManager.service
 systemctl is-enabled NetworkManager-wait-online.service > /dev/null && sudo systemctl disable --now NetworkManager-wait-online.service
 
-nmtui
 #NETWORKMANAGER
 #nmtui OR nmcli device wifi connect SSID-Name password wireless-password
 
