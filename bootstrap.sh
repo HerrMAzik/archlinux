@@ -17,12 +17,19 @@ curl -L https://raw.githubusercontent.com/devrtc0/archlinux/master/configuration
 
 source ./configuration
 
-[ -z "$KERNEL"] && echo "KERNEL" && break
-[ -z "$DEVICE"] && echo "DEVICE" && break
-[ -z "$USERNAME"] && echo "USERNAME" && break
-[ -z "$HOSTNAME"] && echo "HOSTNAME" && break
-[ -z "$ROOT_PASSWORD"] && echo "ROOT_PASSWORD" && break
-[ -z "$USER_PASSWORD"] && echo "USER_PASSWORD" && break
+[ -z "$KERNEL" ] && echo "KERNEL" && break
+[ -z "$DEVICE" ] && echo "DEVICE" && break
+[ -z "$USERNAME" ] && echo "USERNAME" && break
+[ -z "$HOSTNAME" ] && echo "HOSTNAME" && break
+[ -z "$ROOT_PASSWORD" ] && echo "ROOT_PASSWORD" && break
+[ -z "$USER_PASSWORD" ] && echo "USER_PASSWORD" && break
+
+echo "$KERNEL"
+echo "$DEVICE"
+echo "$USERNAME"
+echo "$HOSTNAME"
+echo "$ROOT_PASSWORD"
+echo "$USER_PASSWORD"
 
 NETWORK_SETUP=''
 if [ ! -z "$NETWORK" ]; then
