@@ -17,12 +17,12 @@ curl -L https://raw.githubusercontent.com/devrtc0/archlinux/master/configuration
 
 source ./configuration
 
-[ -z "$KERNEL" ] && echo "KERNEL" && break
-[ -z "$DEVICE" ] && echo "DEVICE" && break
-[ -z "$USERNAME" ] && echo "USERNAME" && break
-[ -z "$HOSTNAME" ] && echo "HOSTNAME" && break
-[ -z "$ROOT_PASSWORD" ] && echo "ROOT_PASSWORD" && break
-[ -z "$USER_PASSWORD" ] && echo "USER_PASSWORD" && break
+[ -z "$KERNEL" ] && echo "KERNEL" && exit -1
+[ -z "$DEVICE" ] && echo "DEVICE" && exit -1
+[ -z "$USERNAME" ] && echo "USERNAME" && exit -1
+[ -z "$HOSTNAME" ] && echo "HOSTNAME" && exit -1
+[ -z "$ROOT_PASSWORD" ] && echo "ROOT_PASSWORD" && exit -1
+[ -z "$USER_PASSWORD" ] && echo "USER_PASSWORD" && exit -1
 
 echo "$KERNEL"
 echo "$DEVICE"
