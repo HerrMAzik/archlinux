@@ -50,10 +50,10 @@ cat << EOF2 > /etc/hosts
 EOF2
 
 pacman --noconfirm -S networkmanager fish
-mkinitcpio -P
+
 echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel
-echo "root:$ROOT_PASSWORD" | chpasswd -e
-useradd -m -g users -G audio,video,power,storage,wheel,scanner -p $USER_PASSWORD -s /bin/fish $USERNAME
+echo 'root:$ROOT_PASSWORD' | chpasswd -e
+useradd -m -g users -G audio,video,power,storage,wheel,scanner -p '$USER_PASSWORD' -s /bin/fish $USERNAME
 
 curl -L https://raw.githubusercontent.com/devrtc0/archlinux/master/01_system.sh > /home/$USERNAME/01_system.sh
 chown $USERNAME:users /home/$USERNAME/01_system.sh
