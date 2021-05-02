@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
-sudo echo 'Preparing:'
-
-! type git >/dev/null && echo 'install git at first by running 01_system.sh' && exit -1
-test ! -d $HOME/repo/archlinux && echo 'run 01_system.sh before configuring' && exit -1
+! type git >/dev/null && echo sudo pacman -Sy git --noconfirm --needed || exit -1
+[ ! -d $HOME/repo/archlinux ] && git clone https://github.com/devrtc0/archlinux.git $HOME/repo/archlinux || exit -1
 
 test -z $XDG_CONFIG_HOME && XDG_CONFIG_HOME="$HOME/.config"
 test -z $ARCHLINUX && ARCHLINUX=$HOME/repo/archlinux
