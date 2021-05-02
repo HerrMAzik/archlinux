@@ -12,7 +12,7 @@ timedatectl set-ntp true
 
 sgdisk --zap-all $DEVICE
 sgdisk -o $DEVICE
-sgdisk -n 1:0:+256M -t 1:ef00 -N 2 -t 2:8300
+sgdisk -n 1:0:+256M -t 1:ef00 -N 2 -t 2:8300 $DEVICE
 yes | mkfs.fat -F32 "${DEVICE}1"
 yes | mkfs.ext4 -L system "${DEVICE}2"
 mount "${DEVICE}2" /mnt
