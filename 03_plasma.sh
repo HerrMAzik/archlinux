@@ -18,7 +18,7 @@ kwriteconfig5 --file $HOME/.config/kxkbrc --group Layout --key LayoutList "us,ru
 kwriteconfig5 --file $HOME/.config/kxkbrc --group Layout --key LayoutLoopCount "1111111"
 sed -i 's/LayoutLoopCount=1111111/LayoutLoopCount=-1/' $HOME/.config/kxkbrc
 kwriteconfig5 --file $HOME/.config/kxkbrc --group Layout --key Model "pc105"
-kwriteconfig5 --file $HOME/.config/kxkbrc --group Layout --key Options "grp:toggle"
+# kwriteconfig5 --file $HOME/.config/kxkbrc --group Layout --key Options "grp:toggle"
 kwriteconfig5 --file $HOME/.config/kxkbrc --group Layout --key ResetOldOptions "true"
 kwriteconfig5 --file $HOME/.config/kxkbrc --group Layout --key ShowFlag "true"
 kwriteconfig5 --file $HOME/.config/kxkbrc --group Layout --key ShowLabel "false"
