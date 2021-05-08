@@ -36,7 +36,7 @@ if [ ! -f $HOME/.dots.secret ]; then
 fi
 
 if [ ! -d "$(chezmoi source-path)" ]; then
-    git clone https://github.com/devrtc0/dots.git "$(chezmoi source-path)"
+    git clone -b gnome https://github.com/devrtc0/dots.git "$(chezmoi source-path)"
     chmod 0700 $(chezmoi source-path)
     sh -c "cd $(chezmoi source-path); git crypt unlock $HOME/.dots.secret"
 
