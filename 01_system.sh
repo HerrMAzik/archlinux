@@ -41,12 +41,14 @@ cat <<EOF2 | sed 's/\s/\n/g' | pacman --needed --noconfirm -S -
         unzip unrar zip p7zip pigz pbzip2 xz
         $ucode chezmoi systemd-swap man
         ttf-jetbrains-mono ttf-dejavu ttf-opensans
+        noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji
         xdg-user-dirs ntfs-3g exfat-utils bluez-utils xorg-xinput
 
-        gnome-shell gnome-terminal gdm evince file-roller nautilus celluloid flameshot gnome-control-center gnome-calculator gnome-backgrounds eog
+        gnome-shell gnome-terminal gdm gnome-control-center
+        gnome-calculator gnome-backgrounds
+        file-roller nautilus eog celluloid flameshot evince
 
-        pulseaudio-bluetooth
-        zbar
+        pulseaudio-bluetooth zbar
         jdk-openjdk openjdk-doc openjdk-src
         mpv youtube-dl firefox vivaldi vivaldi-ffmpeg-codecs
         ncdu qbittorrent
