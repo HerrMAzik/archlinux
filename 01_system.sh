@@ -42,7 +42,9 @@ cat <<EOF2 | sed 's/\s/\n/g' | pacman --needed --noconfirm -S -
         $ucode chezmoi systemd-swap man
         ttf-jetbrains-mono ttf-dejavu ttf-opensans
         xdg-user-dirs ntfs-3g exfat-utils bluez-utils xorg-xinput
-        gnome-shell gnome-terminal gdm
+
+        gnome-shell gnome-terminal gdm evince file-roller nautilus celluloid flameshot gnome-control-center gnome-calculator gnome-backgrounds eog
+
         pulseaudio-bluetooth
         zbar
         jdk-openjdk openjdk-doc openjdk-src
