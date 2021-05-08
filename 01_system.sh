@@ -10,7 +10,7 @@ systemctl is-enabled NetworkManager-wait-online.service > /dev/null && sudo syst
 sudo pacman --needed --noconfirm -Syyuu git
 
 mkdir -p "$HOME/repo"
-[ ! -d "$HOME/repo/archlinux" ] && git clone https://github.com/devrtc0/archlinux.git "$HOME/repo/archlinux"
+[ ! -d "$HOME/repo/archlinux" ] && git clone -b gnome https://github.com/devrtc0/archlinux.git "$HOME/repo/archlinux"
 
 [ -z "$CONFIGDIR" ] && CONFIGDIR="$HOME/repo/archlinux"
 sh -c "cd ${CONFIGDIR}; git pull --ff-only"
@@ -37,16 +37,14 @@ while : ; do
 cat <<EOF2 | sed 's/\s/\n/g' | pacman --needed --noconfirm -S -
         unzip unrar zip p7zip pigz pbzip2 xz
         $ucode chezmoi systemd-swap man
-        noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji
         ttf-jetbrains-mono ttf-dejavu ttf-opensans
         xdg-user-dirs ntfs-3g exfat-utils bluez-utils xorg-xinput
-        plasma-desktop plasma-nm sddm sddm-kcm konsole okular ark powerdevil dolphin
-        bluedevil plasma-browser-integration kcalc kscreen kdialog
-        pulseaudio-bluetooth plasma-pa
-        gwenview kolourpaint spectacle zbar
-        breeze-gtk kde-gtk-config
+        gnome-shell gdm
+        pulseaudio-bluetooth
+        zbar
         jdk-openjdk openjdk-doc openjdk-src
-        mpv youtube-dl firefox chromium ncdu qbittorrent
+        mpv youtube-dl firefox vivaldi vivaldi-ffmpeg-codecs
+        ncdu qbittorrent
         neovim code qtcreator telegram-desktop
         pass oath-toolkit keepassxc keybase kbfs gnupg
         mc curl wget htop jq expect
@@ -71,7 +69,7 @@ cp -f "$CONFIGDIR/etc/systemd/swap.conf.d/swap.conf" /etc/systemd/swap.conf.d/sw
 mkdir -p /etc/systemd/system.conf.d
 cp -f "$CONFIGDIR/etc/systemd/system.conf.d/timeout.conf" /etc/systemd/system.conf.d/timeout.conf
 
-systemctl enable fstrim.timer systemd-swap.service bluetooth.service sddm.service
+systemctl enable fstrim.timer systemd-swap.service bluetooth.service gdm.service
 mkinitcpio -P
 
 find /boot/loader/entries/ -type f -iname '*.conf' -exec sh -c 'grep -E "^initrd.*-ucode.img" {} || sed -i -e "/^linux.*vmlinuz-linux/a initrd \/${ucode}.img" {}' \;
