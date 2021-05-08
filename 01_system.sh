@@ -37,16 +37,19 @@ while : ; do
 cat <<EOF2 | sed 's/\s/\n/g' | pacman --needed --noconfirm -S -
         unzip unrar zip p7zip pigz pbzip2 xz
         $ucode chezmoi systemd-swap man
-        noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji
         ttf-jetbrains-mono ttf-dejavu ttf-opensans
+        noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji
         xdg-user-dirs ntfs-3g exfat-utils bluez-utils xorg-xinput
-        plasma-desktop plasma-nm sddm sddm-kcm konsole okular ark powerdevil dolphin
+
+        plasma-desktop plasma-nm sddm sddm-kcm konsole okular ark
         bluedevil plasma-browser-integration kcalc kscreen kdialog
-        pulseaudio-bluetooth plasma-pa
-        gwenview kolourpaint spectacle zbar
-        breeze-gtk kde-gtk-config
+        gwenview kolourpaint spectacle plasma-pa
+        breeze-gtk kde-gtk-config dolphin powerdevil
+
+        pulseaudio-bluetooth zbar
         jdk-openjdk openjdk-doc openjdk-src
-        mpv youtube-dl firefox chromium ncdu qbittorrent
+        firefox vivaldi vivaldi-ffmpeg-codecs
+        mpv youtube-dl ncdu qbittorrent
         neovim code qtcreator telegram-desktop
         pass oath-toolkit keepassxc keybase kbfs gnupg
         mc curl wget htop jq expect
