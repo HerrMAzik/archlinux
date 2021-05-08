@@ -103,6 +103,7 @@ arch-chroot /mnt /bin/sh <<EOF
 
 cat <<EOF2 > /boot/loader/loader.conf
 default arch.conf
+timeout 0
 editor 0
 EOF2
 
