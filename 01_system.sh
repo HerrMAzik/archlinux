@@ -8,7 +8,7 @@ systemctl is-enabled NetworkManager-wait-online.service > /dev/null && sudo syst
 ###NETWORKMANAGER###while :;do nmcli device wifi connect NETWORKMANAGER_SSID password NETWORKMANAGER_PASSWORD ;[ $? -eq 0 ] && break;sleep 1;done
 
 wget -q --spider http://google.com
-[ $? -nq 0 ] && echo 'no connection' && exit -1
+[ $? -ne 0 ] && echo 'no connection' && exit -1
 
 sudo pacman --needed --noconfirm -Syyuu git
 
