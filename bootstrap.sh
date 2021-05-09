@@ -71,7 +71,7 @@ cat <<EOF2 > /etc/hosts
 127.0.1.1   $HOSTNAME.localdomain $HOSTNAME
 EOF2
 
-pacman --noconfirm --needed -S networkmanager fish curl nano
+pacman --noconfirm --needed -S networkmanager fish curl nano wget
 
 echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel
 echo 'root:$ROOT_PASSWORD' | chpasswd -e
