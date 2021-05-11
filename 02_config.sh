@@ -1,14 +1,17 @@
 #!/usr/bin/env bash
 
-! type git >/dev/null && echo sudo pacman -Sy git --noconfirm --needed || exit -1
-[ ! -d $HOME/repo/archlinux ] && git clone -b gnome https://github.com/devrtc0/archlinux.git $HOME/repo/archlinux || exit -1
+! type git >/dev/null && echo sudo pacman -Sy git --noconfirm --needed
+[ ! -d $HOME/repo/archlinux ] && git clone -b gnome https://github.com/devrtc0/archlinux.git $HOME/repo/archlinux
 
 test -z $XDG_CONFIG_HOME && XDG_CONFIG_HOME="$HOME/.config"
 test -z $ARCHLINUX && ARCHLINUX=$HOME/repo/archlinux
+
+# yay
+! type yay >/dev/null 2>&1 && sh $ARCHLINUX/yay.sh
+
 SANCTUM_SANCTORUM="$HOME/repo/man.kdbx"
 
 rm -rf ~/.bash{rc,_{logout,profile}}
-
 mkdir -p $HOME/repo
 
 . ./sanctum.sanctorum.sh
@@ -101,9 +104,6 @@ VIM_PLUG=$HOME/.local/share/nvim/site/autoload/plug.vim
 nvim +PlugInstall +UpdateRemotePlugins +qa
 
 rustup default stable
-
-# yay
-! type yay >/dev/null 2>&1 && sh $ARCHLINUX/yay.sh
 
 if [ ! -d $HOME/.mozilla/firefox/*devrtc0 ]; then
     firefox -CreateProfile devrtc0
