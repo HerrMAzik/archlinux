@@ -2,9 +2,9 @@
 
 test -z $SANCTUM_SANCTORUM && echo 'envvar SANCTUM_SANCTORUM is not set' && exit -1
 
-! type gpg >/dev/null && sudo pacman -Sy gnupg --noconfirm --needed || exit -1
-! type curl >/dev/null && sudo pacman -Sy curl --noconfirm --needed || exit -1
-! type jq >/dev/null && sudo pacman -Sy jq --noconfirm --needed || exit -1
+! type gpg >/dev/null && sudo pacman -Sy gnupg --noconfirm --needed
+! type curl >/dev/null && sudo pacman -Sy curl --noconfirm --needed
+! type jq >/dev/null && sudo pacman -Sy jq --noconfirm --needed
 
 # cat 'text' | gpg --symmetric --cipher-algo AES256 --pinentry-mode=loopback --passphrase 'passphrase' | base64 | tr -d '\n'
 
