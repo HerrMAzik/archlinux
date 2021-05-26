@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ $# -ne 1 ]; then
+if [ $# -ne 2 ]; then
     echo 'wrong arguments number'
     exit -1
 fi
@@ -8,11 +8,13 @@ fi
 HASH=$(echo "$1" | sha512sum - | awk '{ print $1 }')
 HASH=${HASH:0:64}
 if [ $HASH != '37b58cddf70324beb55651768cf5e41dd9feea7f99c0ee83b4db8df13dbbc58b' ]; then
-    echo 'wrong argument'
+    echo 'wrong argument #1'
     exit -1
 fi
 
-curl -L https://raw.githubusercontent.com/devrtc0/archlinux/master/configuration | base64 --decode | gpg --passphrase "$1" --decrypt --batch --quiet --output ./configuration
+curl -L "https://raw.githubusercontent.com/devrtc0/archlinux/master/$2" | base64 --decode | gpg --passphrase "$1" --decrypt --batch --quiet --output ./configuration
+
+[ $? -ne 0 ] && exit -1
 
 source ./configuration
 
