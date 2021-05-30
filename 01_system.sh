@@ -46,15 +46,14 @@ cat <<EOF2 | sed 's/\s/\n/g' | pacman --needed --noconfirm -S -
         gwenview kolourpaint spectacle plasma-pa
         breeze-gtk kde-gtk-config dolphin powerdevil
 
-        pulseaudio-bluetooth zbar
+        pulseaudio-bluetooth
         jdk-openjdk openjdk-doc openjdk-src
-        firefox vivaldi vivaldi-ffmpeg-codecs
+        firefox
         mpv youtube-dl ncdu qbittorrent
-        neovim code qtcreator telegram-desktop
+        neovim micro code qtcreator telegram-desktop
         pass oath-toolkit keepassxc keybase kbfs gnupg
-        mc curl wget htop jq expect
-        exa ripgrep fd bat skim
-        gcc gdb cmake rustup
+        mc curl wget htop jq expect zbar
+        gcc gdb cmake
         git-crypt asp
 EOF2
     [ $? -eq 0 ] && break
