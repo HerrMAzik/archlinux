@@ -9,6 +9,9 @@ SANCTUM_SANCTORUM="$HOME/repo/man.kdbx"
 
 rm -rf ~/.bash{rc,_{logout,profile}}
 
+# yay
+! type yay >/dev/null 2>&1 && sh $ARCHLINUX/yay.sh
+
 mkdir -p $HOME/repo
 
 . ./sanctum.sanctorum.sh
@@ -94,16 +97,10 @@ fi
 
 code --install-extension bmalehorn.vscode-fish
 code --install-extension mechatroner.rainbow-csv
-code --install-extension gulajavaministudio.mayukaithemevsc
 
 VIM_PLUG=$HOME/.local/share/nvim/site/autoload/plug.vim
 [ ! -f $VIM_PLUG ] && curl -fLo $VIM_PLUG --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 nvim +PlugInstall +UpdateRemotePlugins +qa
-
-rustup default stable
-
-# yay
-! type yay >/dev/null 2>&1 && sh $ARCHLINUX/yay.sh
 
 if [ ! -d $HOME/.mozilla/firefox/*devrtc0 ]; then
     firefox -CreateProfile devrtc0
