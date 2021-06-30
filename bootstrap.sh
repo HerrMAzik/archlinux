@@ -25,14 +25,14 @@ source ./configuration
 [ -z "$ROOT_PASSWORD" ] && echo "ROOT_PASSWORD" && exit -1
 [ -z "$USER_PASSWORD" ] && echo "USER_PASSWORD" && exit -1
 
-echo "$KERNEL"
-echo "$DEVICE"
-echo "$USERNAME"
-echo "$HOSTNAME"
-echo "$ROOT_PASSWORD"
-echo "$USER_PASSWORD"
-echo "$NETWORK"
-echo "$NETWORK_PASSWORD"
+echo "kernel $KERNEL"
+echo "device $DEVICE"
+echo "username $USERNAME"
+echo "hostname $HOSTNAME"
+echo "root password $ROOT_PASSWORD"
+echo "user pazzword $USER_PASSWORD"
+echo "network name $NETWORK"
+echo "network password $NETWORK_PASSWORD"
 
 systemctl stop reflector.service
 timedatectl set-ntp true
