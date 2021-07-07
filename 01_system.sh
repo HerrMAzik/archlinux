@@ -36,7 +36,7 @@ while : ; do
 
 cat <<EOF2 | sed 's/\s/\n/g' | pacman --needed --noconfirm -S -
         unzip unrar zip p7zip pigz pbzip2 xz
-        $ucode chezmoi systemd-swap man
+        $ucode chezmoi zram-generator man
         ttf-jetbrains-mono ttf-dejavu ttf-opensans
         noto-fonts noto-fonts-extra noto-fonts-cjk noto-fonts-emoji
         xdg-user-dirs ntfs-3g exfat-utils bluez-utils xorg-xinput
@@ -73,7 +73,7 @@ cp -f "$CONFIGDIR/etc/systemd/swap.conf.d/swap.conf" /etc/systemd/swap.conf.d/sw
 mkdir -p /etc/systemd/system.conf.d
 cp -f "$CONFIGDIR/etc/systemd/system.conf.d/timeout.conf" /etc/systemd/system.conf.d/timeout.conf
 
-systemctl enable fstrim.timer systemd-swap.service bluetooth.service sddm.service
+systemctl enable fstrim.timer bluetooth.service sddm.service
 mkinitcpio -P
 
 find /boot/loader/entries/ -type f -iname '*.conf' -exec sh -c 'grep -E "^initrd.*-ucode.img" {} || sed -i -e "/^linux.*vmlinuz-linux/a initrd \/${ucode}.img" {}' \;

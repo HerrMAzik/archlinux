@@ -30,7 +30,7 @@ echo "device $DEVICE"
 echo "username $USERNAME"
 echo "hostname $HOSTNAME"
 echo "root password $ROOT_PASSWORD"
-echo "user pazzword $USER_PASSWORD"
+echo "user password $USER_PASSWORD"
 echo "network name $NETWORK"
 echo "network password $NETWORK_PASSWORD"
 
