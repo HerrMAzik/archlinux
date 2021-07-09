@@ -53,7 +53,7 @@ cat <<EOF2 | sed 's/\s/\n/g' | pacman --needed --noconfirm -S -
         neovim micro code qtcreator telegram-desktop
         pass oath-toolkit keepassxc keybase kbfs gnupg
         mc curl wget htop jq expect zbar
-        gcc gdb cmake
+        gcc gdb cmake rustup
         git-crypt asp
 EOF2
     [ $? -eq 0 ] && break
@@ -67,8 +67,8 @@ sed -i 's/relatime/noatime/' /etc/fstab
 mkdir -p /etc/sysctl.d
 cp -f "$CONFIGDIR/etc/sysctl.d/90-swappiness.conf" /etc/sysctl.d/90-swappiness.conf
 
-mkdir -p /etc/systemd/swap.conf.d
-cp -f "$CONFIGDIR/etc/systemd/swap.conf.d/swap.conf" /etc/systemd/swap.conf.d/swap.conf
+mkdir -p /etc/systemd
+cp -f "$CONFIGDIR/etc/systemd/zram-generator.conf" /etc/systemd/zram-generator.conf
 
 mkdir -p /etc/systemd/system.conf.d
 cp -f "$CONFIGDIR/etc/systemd/system.conf.d/timeout.conf" /etc/systemd/system.conf.d/timeout.conf
